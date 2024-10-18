@@ -325,6 +325,11 @@ const QVariantList& FirmwarePlugin::toolIndicators(const Vehicle*)
     return _toolIndicatorList;
 }
 
+const QVariantList& FirmwarePlugin::anotherToolIndicators(const Vehicle*)
+{
+	return _anotherToolIndicatorList;
+}
+
 const QVariantList& FirmwarePlugin::modeIndicators(const Vehicle*)
 {
     //-- Default list of indicators for all vehicles.

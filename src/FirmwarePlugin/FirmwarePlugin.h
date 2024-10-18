@@ -302,6 +302,11 @@ public:
     /// @return A list of QUrl with the indicators
     virtual const QVariantList& toolIndicators(const Vehicle* vehicle);
 
+	/// Returns the list of toolbar another tool indicators associated with a vehicle
+	///     signals anotherToolIndicatorsChanged
+	/// @return A list of QUrl with the indicators
+    virtual const QVariantList& anotherToolIndicators(const Vehicle* vehicle);
+
     /// Returns the list of toolbar mode indicators associated with a vehicle
     ///     signals modeIndicatorsChanged
     /// @return A list of QUrl with the indicators
@@ -363,6 +368,7 @@ public:
 
 signals:
     void toolIndicatorsChanged(void);
+	void anotherToolIndicatorsChanged(void);
     void modeIndicatorsChanged(void);
 
 protected:
@@ -385,6 +391,7 @@ protected:
 
 protected:
     QVariantList _toolIndicatorList;
+	QVariantList _anotherToolIndicatorList;
     QVariantList _modeIndicatorList;
 
     static QVariantList _cameraList;    ///< Standard QGC camera list

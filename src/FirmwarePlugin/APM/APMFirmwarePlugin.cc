@@ -666,6 +666,19 @@ const QVariantList& APMFirmwarePlugin::toolIndicators(const Vehicle* vehicle)
     return _toolIndicatorList;
 }
 
+const QVariantList& APMFirmwarePlugin::anotherToolIndicators(const Vehicle* vehicle)
+{
+	if (_anotherToolIndicatorList.size() == 0) {
+        // First call the base class to get the standard QGC list
+        _anotherToolIndicatorList = FirmwarePlugin::anotherToolIndicators(vehicle);
+		
+		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/APMVehicleControl.qml")));
+		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/APMVehicleCamera.qml")));
+	}
+
+	return _anotherToolIndicatorList;
+}
+
 bool APMFirmwarePlugin::isGuidedMode(const Vehicle* vehicle) const
 {
     return vehicle->flightMode() == "Guided";

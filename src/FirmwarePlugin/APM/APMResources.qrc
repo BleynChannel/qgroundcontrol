@@ -30,6 +30,7 @@
         <file alias="APMTuningComponentCopter.qml">../../AutoPilotPlugins/APM/APMTuningComponentCopter.qml</file>
         <file alias="APMTuningComponentSub.qml">../../AutoPilotPlugins/APM/APMTuningComponentSub.qml</file>
         <file alias="APMRemoteSupportComponent.qml">../../AutoPilotPlugins/APM/APMRemoteSupportComponent.qml</file>
+		<file alias="QGroundControl/Controls/APMIconButton.qml">APMIconButton.qml</file>
         <file alias="QGroundControl/ArduPilot/APMSensorParams.qml">APMSensorParams.qml</file>
         <file alias="QGroundControl/ArduPilot/APMSensorIdDecoder.qml">APMSensorIdDecoder.qml</file>
         <file alias="QGroundControl/ArduPilot/qmldir">QGroundControl.ArduPilot.qmldir</file>
@@ -39,6 +40,10 @@
         <file alias="APMFlightModeIndicator.qml">APMFlightModeIndicator.qml</file>
         <file alias="APMMainStatusIndicatorContentItem.qml">APMMainStatusIndicatorContentItem.qml</file>
     </qresource>
+	<qresource prefix="/toolbar">
+		<file alias="APMVehicleControl.qml">APMVehicleControl.qml</file>
+		<file alias="APMVehicleCamera.qml">APMVehicleCamera.qml</file>
+	</qresource>
     <qresource prefix="/json">
         <file alias="APM-MavCmdInfoCommon.json">APM-MavCmdInfoCommon.json</file>
         <file alias="APM-MavCmdInfoFixedWing.json">APM-MavCmdInfoFixedWing.json</file>

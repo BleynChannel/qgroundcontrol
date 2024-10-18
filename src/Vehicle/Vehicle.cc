@@ -3252,6 +3252,15 @@ const QVariantList& Vehicle::toolIndicators()
     return emptyList;
 }
 
+const QVariantList& Vehicle::anotherToolIndicators()
+{
+    if(_firmwarePlugin) {
+        return _firmwarePlugin->anotherToolIndicators(this);
+    }
+    static QVariantList emptyList;
+    return emptyList;
+}
+
 const QVariantList& Vehicle::modeIndicators()
 {
     if(_firmwarePlugin) {

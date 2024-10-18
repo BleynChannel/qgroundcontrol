@@ -259,31 +259,31 @@
       <extracomment>.mavCmdInfo[HomeRaw].category, .mavCmdInfo[MAV_CMD_NAV_WAYPOINT].category, .mavCmdInfo[MAV_CMD_NAV_RETURN_TO_LAUNCH].category, .mavCmdInfo[MAV_CMD_NAV_LAND].category, .mavCmdInfo[MAV_CMD_NAV_TAKEOFF].category, .mavCmdInfo[MAV_CMD_NAV_SPLINE_WAYPOINT].category, .mavCmdInfo[MAV_CMD_NAV_VTOL_TAKEOFF].category, .mavCmdInfo[MAV_CMD_NAV_VTOL_LAND].category, .mavCmdInfo[MAV_CMD_CONDITION_DELAY].category, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Basic</source>
-      <translation>Базовый</translation>
+      <translation type="unfinished">Основные</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[HomeRaw].param5.label, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Latitude</source>
-      <translation>Широта</translation>
+      <translation type="unfinished">Широта</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[HomeRaw].param6.label, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Longitude</source>
-      <translation>Долгота</translation>
+      <translation type="unfinished">Долгота</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_NAV_WAYPOINT].friendlyName, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Waypoint</source>
-      <translation>Точка маршрута</translation>
+      <translation type="unfinished">Точка маршрута</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_NAV_WAYPOINT].description, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Travel to a position in 3D space.</source>
-      <translation>Перемещение в определенное положение в трехмерном пространстве.</translation>
+      <translation type="unfinished">Переместиться в точку в трехмерном пространстве.</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_NAV_WAYPOINT].param1.label, .mavCmdInfo[MAV_CMD_NAV_SPLINE_WAYPOINT].param1.label, .mavCmdInfo[MAV_CMD_NAV_DELAY].param1.label, </extracomment>
@@ -439,31 +439,31 @@
       <extracomment>.mavCmdInfo[MAV_CMD_NAV_TAKEOFF].friendlyName, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Takeoff</source>
-      <translation>Снимать</translation>
+      <translation type="unfinished">Взлет</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_NAV_TAKEOFF].description, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Launch from the ground and travel towards the specified takeoff position.</source>
-      <translation>Запустите самолет с земли и направьтесь к указанной точке взлета.</translation>
+      <translation type="unfinished">Запуск с земли и полет в сторону указанной точки взлета.</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_NAV_LAND_LOCAL].friendlyName, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Land local</source>
-      <translation>Земля местная</translation>
+      <translation type="unfinished">Местная посадка</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_NAV_TAKEOFF_LOCAL].friendlyName, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Takeoff local</source>
-      <translation>Взлет местный</translation>
+      <translation type="unfinished">Местный взлет</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_NAV_FOLLOW].friendlyName, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Nav follow</source>
-      <translation>Навигация следовать</translation>
+      <translation type="unfinished">Следовать навигации</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_NAV_CONTINUE_AND_CHANGE_ALT].friendlyName, </extracomment>
@@ -649,31 +649,31 @@
       <extracomment>.mavCmdInfo[MAV_CMD_NAV_GUIDED_ENABLE].param1.enumStrings, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>On,Off</source>
-      <translation>Вкл,Выкл</translation>
+      <translation type="unfinished">Вкл,Выкл</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_NAV_DELAY].friendlyName, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Delay until</source>
-      <translation>Задержка до</translation>
+      <translation type="unfinished">Задержка до</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_NAV_DELAY].description, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Delay until the specified time is reached.</source>
-      <translation>Задержка до достижения указанного времени.</translation>
+      <translation type="unfinished">Задержка до достижения указанного времени.</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_NAV_DELAY].param2.label, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Hour (utc)</source>
-      <translation>Час (UTC)</translation>
+      <translation type="unfinished">Час (utc)</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_NAV_DELAY].param3.label, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Min (utc)</source>
-      <translation>Мин (UTC)</translation>
+      <translation type="unfinished">Минута (utc)</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_NAV_DELAY].param4.label, </extracomment>
@@ -829,61 +829,61 @@
       <extracomment>.mavCmdInfo[MAV_CMD_DO_JUMP].param2.label, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Repeat</source>
-      <translation>Повторить</translation>
+      <translation type="unfinished">Повторить</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_DO_CHANGE_SPEED].friendlyName, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Change speed</source>
-      <translation>Изменить скорость</translation>
+      <translation type="unfinished">Изменить скорость</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_DO_CHANGE_SPEED].description, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Change speed and/or throttle set points.</source>
-      <translation>Измените заданные значения скорости и/или дроссельной заслонки.</translation>
+      <translation type="unfinished">Изменить скорость и/или точки установки дросселя.</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_DO_CHANGE_SPEED].param1.label, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Type</source>
-      <translation>Тип</translation>
+      <translation type="unfinished">Тип</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_DO_CHANGE_SPEED].param1.enumStrings, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Airspeed,Ground Speed,Ascend Speed,Descend Speed</source>
-      <translation>Скорость полета, скорость относительно земли, скорость подъема, скорость снижения</translation>
+      <translation type="unfinished">Скорость полета, Скорость по земле, Скорость набора высоты, Скорость снижения</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_DO_CHANGE_SPEED].param2.label, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Speed</source>
-      <translation>Скорость</translation>
+      <translation type="unfinished">Скорость</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_DO_CHANGE_SPEED].param3.label, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Throttle</source>
-      <translation>Дроссельная заслонка</translation>
+      <translation type="unfinished">Газ</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_DO_SET_HOME].friendlyName, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Set launch location</source>
-      <translation>Установить место запуска</translation>
+      <translation type="unfinished">Установить стартовую позицию</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_DO_SET_HOME].description, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Changes the launch location either to the current location or a specified location.</source>
-      <translation>Изменяет место запуска либо на текущее местоположение, либо на указанное местоположение.</translation>
+      <translation type="unfinished">Изменяет стартовую позицию на текущую или указанную.</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_DO_SET_HOME].param1.enumStrings, </extracomment>
       <location filename="../src/MissionManager/MavCmdInfoCommon.json"/>
       <source>Vehicle position,Specified position</source>
-      <translation>Положение транспортного средства,Указанное положение</translation>
+      <translation type="unfinished">Позиция транспортного средства,Указанная позиция</translation>
     </message>
     <message>
       <extracomment>.mavCmdInfo[MAV_CMD_DO_SET_PARAMETER].friendlyName, </extracomment>

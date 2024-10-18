@@ -60,6 +60,7 @@ Item {
     readonly property string setEstimatorOriginTitle:       qsTr("Set Estimator origin")
     readonly property string setFlightMode:                 qsTr("Set Flight Mode")
     readonly property string changeHeadingTitle:            qsTr("Change Heading")
+    readonly property string securityVehicleSetupTitle:		"Security Vehicle Setup" //TODO: Change to qsTr
 
     readonly property string armMessage:                        qsTr("Arm the vehicle.")
     readonly property string forceArmMessage:                   qsTr("WARNING: This will force arming of the vehicle bypassing any safety checks.")
@@ -88,6 +89,7 @@ Item {
     readonly property string setEstimatorOriginMessage:         qsTr("Make the specified location the estimator origin.")
     readonly property string setFlightModeMessage:              qsTr("Set the vehicle flight mode to %1").arg(_actionData)
     readonly property string changeHeadingMessage:              qsTr("Set the vehicle heading towards the specified location.")
+	readonly property string securityVehicleSetupMessage: 		"Write password for deactivate security on Vehicle Setup" //TODO: Change to qsTr
 
     readonly property int actionRTL:                        1
     readonly property int actionLand:                       2
@@ -119,6 +121,7 @@ Item {
     readonly property int actionSetEstimatorOrigin:         28
     readonly property int actionSetFlightMode:              29
     readonly property int actionChangeHeading:              30
+	readonly property int actionSecurityVehicleSetup: 		31
 
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property var    _flyViewSettings:           QGroundControl.settingsManager.flyViewSettings
@@ -377,6 +380,10 @@ Item {
         confirmAction(actionVtolTransitionToMRFlight)
     }
 
+	function securityVehicleSetupRequest() {
+		confirmAction(actionSecurityVehicleSetup)
+	}
+
     function closeAll() {
         confirmDialog.visible =     false
         actionList.visible =        false
@@ -552,6 +559,11 @@ Item {
             confirmDialog.title = changeHeadingTitle
             confirmDialog.message = changeHeadingMessage
             break
+		case actionSecurityVehicleSetup:
+			confirmDialog.title = securityVehicleSetupTitle
+			confirmDialog.message = securityVehicleSetupMessage
+			confirmDialog.formNumberFieldEnable = true
+			break
         default:
             console.warn("Unknown actionCode", actionCode)
             return
@@ -560,7 +572,7 @@ Item {
     }
 
     // Executes the specified action
-    function executeAction(actionCode, actionData, sliderOutputValue, optionChecked) {
+    function executeAction(actionCode, actionData, sliderOutputValue, formNumber, optionChecked) {
         var i;
         var rgVehicle;
         switch (actionCode) {
@@ -664,6 +676,13 @@ Item {
         case actionChangeHeading:
             _activeVehicle.guidedModeChangeHeading(actionData)
             break
+		case actionSecurityVehicleSetup:
+			if (formNumber === "5325") {
+				mainWindow.showVehicleSetupTool()
+			} else {
+				mainWindow.showMessageDialog("Incorrect password", "") //! qsTr
+			}
+			break
         default:
             console.warn(qsTr("Internal error: unknown actionCode"), actionCode)
             break

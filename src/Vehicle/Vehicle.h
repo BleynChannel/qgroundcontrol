@@ -209,6 +209,7 @@ public:
     Q_PROPERTY(int                  telemetryRNoise             READ telemetryRNoise                                                NOTIFY telemetryRNoiseChanged)
     Q_PROPERTY(QVariant          mainStatusIndicatorContentItem READ mainStatusIndicatorContentItem                                 CONSTANT)
     Q_PROPERTY(QVariantList         toolIndicators              READ toolIndicators                                                 NOTIFY toolIndicatorsChanged)
+    Q_PROPERTY(QVariantList         anotherToolIndicators       READ anotherToolIndicators                                          NOTIFY toolIndicatorsChanged)
     Q_PROPERTY(QVariantList         modeIndicators              READ modeIndicators                                                 NOTIFY modeIndicatorsChanged)
     Q_PROPERTY(bool              initialPlanRequestComplete     READ initialPlanRequestComplete                                     NOTIFY initialPlanRequestCompleteChanged)
     Q_PROPERTY(QVariantList         staticCameraList            READ staticCameraList                                               CONSTANT)
@@ -761,6 +762,7 @@ public:
 
     QVariant                    mainStatusIndicatorContentItem  ();
     const QVariantList&         toolIndicators                  ();
+	const QVariantList&			anotherToolIndicators			();
     const QVariantList&         modeIndicators                  ();
     const QVariantList&         staticCameraList                () const;
 

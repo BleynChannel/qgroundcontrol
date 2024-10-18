@@ -293,7 +293,8 @@ ApplicationWindow {
                             onClicked: {
                                 if (!mainWindow.preventViewSwitch()) {
                                     mainWindow.closeIndicatorDrawer()
-                                    mainWindow.showVehicleSetupTool()
+									globals.guidedControllerFlyView.securityVehicleSetupRequest()
+                                    // mainWindow.showVehicleSetupTool()
                                 }
                             }
                         }

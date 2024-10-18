@@ -13,6 +13,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import QGroundControl
+import QGroundControl.Palette
 import QGroundControl.FactSystem
 import QGroundControl.FactControls
 import QGroundControl.Controls
@@ -40,7 +41,7 @@ SettingsPage {
         headingDescription: _videoAutoStreamConfig ? qsTr("Mavlink camera stream is automatically configured") : ""
         enabled:            !_videoAutoStreamConfig
 
-        LabelledFactComboBox {
+		LabelledFactComboBox {
             Layout.fillWidth:   true
             label:              qsTr("Source")
             indexModel:         false
@@ -50,16 +51,116 @@ SettingsPage {
     }
 
     SettingsGroupLayout {
+		id: connectionGroup
         Layout.fillWidth:   true
         heading:            qsTr("Connection")
         visible:            !_videoAutoStreamConfig && (_isTCP || _isRTSP | _requiresUDPPort)
 
-        LabelledFactTextField {
-            Layout.fillWidth:           true
-            textFieldPreferredWidth:    _urlFieldWidth
-            label:                      qsTr("RTSP URL")
-            fact:                       _videoSettings.rtspUrl
-            visible:                    _isRTSP && _videoSettings.rtspUrl.visible
+		property list<string> rtspUrls //TODO: Remove this and use _videoReceiver.uris
+
+		onRtspUrlsChanged: {
+			_videoSettings.rtspUrl.value = rtspUrls.length > 0 ? rtspUrls.join(';') : ""
+		}
+
+		Component.onCompleted: {
+			var url = _videoSettings.rtspUrl.valueString
+			connectionGroup.rtspUrls = url.length > 0 ? url.split(';') : []
+		}
+
+		function changeRtspUrl(index, value) {
+			if (index >= rtspUrls.length) {
+				rtspUrls.push(value)
+			} else {
+				rtspUrls[index] = value
+			}
+		}
+
+		function removeRtspUrl(index) {
+			rtspUrls.splice(index, 1)
+		}
+
+		Repeater {
+            model: connectionGroup.rtspUrls
+            
+            delegate: RowLayout {
+				required property int index
+				required property string modelData
+
+                Layout.fillWidth:   true
+
+                QGCLabel {
+                    Layout.fillWidth:   true
+                    text:               modelData
+                }
+                QGCColoredImage {
+                    height:                 ScreenTools.minTouchPixels
+                    width:                  height
+                    sourceSize.height:      height
+                    fillMode:               Image.PreserveAspectFit
+                    smooth:                 true
+                    color:                  qgcPalEdit.text
+                    source:                 "/res/pencil.svg"
+
+                    QGCPalette {
+                        id: qgcPalEdit
+                        colorGroupEnabled: parent.enabled
+                    }
+
+                    QGCMouseArea {
+                        fillItem: parent
+                        onClicked: {
+                            sourceDialogComponent.createObject(mainWindow, {
+								changeRtspUrl: connectionGroup.changeRtspUrl,
+								index: index,
+								editing: true,
+								editingUrl: modelData
+							}).open()
+                        }
+                    }
+                }
+                QGCColoredImage {
+                    height:                 ScreenTools.minTouchPixels
+                    width:                  height
+                    sourceSize.height:      height
+                    fillMode:               Image.PreserveAspectFit
+                    mipmap:                 true
+                    smooth:                 true
+                    color:                  qgcPalDelete.text
+                    source:                 "/res/TrashDelete.svg"
+
+                    QGCPalette {
+                        id: qgcPalDelete
+                        colorGroupEnabled: parent.enabled
+                    }
+
+                    QGCMouseArea {
+                        fillItem:   parent
+                        onClicked:  mainWindow.showMessageDialog(
+                                        "Delete Source", 
+                                        qsTr("Are you sure you want to delete '%1'?").arg(modelData), 
+                                        Dialog.Ok | Dialog.Cancel, 
+                                        function () {
+											connectionGroup.removeRtspUrl(index)
+                                        })
+                    }
+                }
+            }
+        }
+
+		LabelledButton {
+            label:      		"Add new RTSP URL" //! qsTr
+            buttonText: 		qsTr("Add")
+            Layout.fillWidth:   true
+			visible:            _isRTSP && _videoSettings.rtspUrl.visible
+
+            onClicked: {
+				sourceDialogComponent.createObject(mainWindow, {
+					changeRtspUrl: connectionGroup.changeRtspUrl,
+					index: connectionGroup.rtspUrls.length,
+					editing: false,
+					editingUrl: ""
+				}).open()
+            }
         }
 
         LabelledFactTextField {
@@ -75,6 +176,45 @@ SettingsPage {
             label:              qsTr("UDP Port")
             fact:               _videoSettings.udpPort
             visible:            _requiresUDPPort && _videoSettings.udpPort.visible
+        }
+    }
+
+	Component {
+        id: sourceDialogComponent
+
+        QGCPopupDialog {
+            title:          editing ? "Edit Video Source" : "Add New Video Source" //! qsTr
+            buttons:        Dialog.Save | Dialog.Cancel
+            acceptAllowed:  sourceField.text !== ""
+
+            property var 	changeRtspUrl
+			property int	index
+			property bool	editing
+			property string	editingUrl
+
+            onAccepted: {
+                if (changeRtspUrl) {
+					changeRtspUrl(index, sourceField.text)
+				}
+            }
+
+            ColumnLayout {
+                spacing: ScreenTools.defaultFontPixelHeight / 2
+
+                RowLayout {
+                    Layout.fillWidth:   true
+                    spacing:            ScreenTools.defaultFontPixelWidth
+
+                    QGCLabel { text: qsTr("RTSP URL") }
+					QGCTextField {
+                        id:                 		sourceField
+                        Layout.fillWidth:   		true
+						Layout.preferredWidth:    	_urlFieldWidth
+                        text:               		editingUrl
+                        placeholderText:    		"Enter url" //! qsTr
+                    }
+                }
+            }
         }
     }
 

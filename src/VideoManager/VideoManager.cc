@@ -378,6 +378,12 @@ VideoManager::grabImage(const QString& imageFile)
     _videoReceiverData[0].receiver->takeScreenshot(_imageFile);
 }
 
+void
+VideoManager::changeCurrentUri(unsigned index)
+{
+    _changeCurrentUri(0, index);
+}
+
 //-----------------------------------------------------------------------------
 double VideoManager::aspectRatio() const
 {
@@ -751,6 +757,28 @@ VideoManager::_updateSettings(unsigned id)
 }
 
 //-----------------------------------------------------------------------------
+
+bool
+VideoManager::_changeCurrentUri(unsigned id, unsigned index) {
+	if (id > (_videoReceiverData.size() - 1)) {
+		qCDebug(VideoManagerLog) << "Unsupported receiver id" << id;
+		return false;
+	}
+
+	if (index > (_videoReceiverData[id].uris.size() - 1)) {
+		qCDebug(VideoManagerLog) << "Unsupported stream index" << index;
+		return false;
+	}
+
+	_videoReceiverData[id].uriIndex = index;
+
+	_restartVideo(id);
+
+	return true;
+}
+
+//-----------------------------------------------------------------------------
+
 bool
 VideoManager::_updateVideoUri(unsigned id, const QString& uri)
 {
@@ -766,6 +794,10 @@ VideoManager::_updateVideoUri(unsigned id, const QString& uri)
     qCDebug(VideoManagerLog) << "New Video URI " << uri;
 
     _videoReceiverData[id].uri = uri;
+	_videoReceiverData[id].uris = uri.split(";", Qt::SkipEmptyParts);
+	_videoReceiverData[id].uriIndex = 0; // Reset to first stream
+
+	videoReceiverUrisChanged();
 
     return true;
 }
@@ -821,12 +853,12 @@ VideoManager::_startReceiver(unsigned id)
        So we should allow for some negotiation time for rtsp */
     const unsigned timeout = (source == VideoSettings::videoSourceRTSP ? rtsptimeout : 2);
 
-    if (_videoReceiverData[id].uri.isEmpty()) {
+    if (_videoReceiverData[id].uri.isEmpty() || _videoReceiverData[id].uris.isEmpty()) {
         qCDebug(VideoManagerLog) << "VideoUri is NULL" << id;
         return;
     }
 
-    _videoReceiverData[id].receiver->start(_videoReceiverData[id].uri, timeout, _videoReceiverData[id].lowLatencyStreaming ? -1 : 0);
+    // _videoReceiverData[id].receiver->start(_videoReceiverData[id].uris[_videoReceiverData[id].uriIndex], timeout, _videoReceiverData[id].lowLatencyStreaming ? -1 : 0);
 }
 
 //----------------------------------------------------------------------------------------

@@ -49,6 +49,7 @@ class VideoManager : public QGCTool
     Q_PROPERTY(bool             decoding                READ    decoding                                    NOTIFY decodingChanged)
     Q_PROPERTY(bool             recording               READ    recording                                   NOTIFY recordingChanged)
     Q_PROPERTY(QSize            videoSize               READ    videoSize                                   NOTIFY videoSizeChanged)
+	Q_PROPERTY(QStringList      videoReceiverUris       READ    videoReceiverUris                           NOTIFY videoReceiverUrisChanged)
 
 public:
     VideoManager(QGCApplication* app, QGCToolbox* toolbox);
@@ -73,6 +74,7 @@ public:
     bool decoding() const { return _decoding; }
     bool recording() const { return _recording; }
     QSize videoSize() const { return QSize((_videoSize >> 16) & 0xFFFF, _videoSize & 0xFFFF); }
+	QStringList videoReceiverUris() const { return _videoReceiverData[0].uris; }; //TODO: add multiple streams
 
     virtual bool gstreamerEnabled() const;
     virtual bool uvcEnabled() const;
@@ -87,6 +89,8 @@ public:
     Q_INVOKABLE void stopRecording();
 
     Q_INVOKABLE void grabImage(const QString& imageFile = QString());
+
+	Q_INVOKABLE void changeCurrentUri(unsigned index);
 
 signals:
     void hasVideoChanged            ();
@@ -103,6 +107,7 @@ signals:
     void recordingChanged           ();
     void recordingStarted           ();
     void videoSizeChanged           ();
+	void videoReceiverUrisChanged   ();
 
 protected slots:
     void _videoSourceChanged        ();
@@ -116,6 +121,7 @@ protected:
 
     void _initVideo       ();
     bool _updateSettings  (unsigned id);
+	bool _changeCurrentUri(unsigned id, unsigned index);
     bool _updateVideoUri  (unsigned id, const QString& uri);
     void _cleanupOldVideos();
     void _restartAllVideos();
@@ -131,6 +137,8 @@ protected:
         VideoReceiver* receiver = nullptr;
         void* sink = nullptr;
         QString uri;
+		QStringList uris; // For multiple streams
+		unsigned uriIndex = 0; // For multiple streams
         bool started = false;
         bool lowLatencyStreaming = false;
         size_t index = 0;

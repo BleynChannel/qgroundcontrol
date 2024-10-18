@@ -9,6 +9,7 @@ FlyViewMissionCompleteDialog    1.0 FlyViewMissionCompleteDialog.qml
 FlyViewPreFlightChecklistPopup  1.0 FlyViewPreFlightChecklistPopup.qml
 FlyViewToolBar                  1.0 FlyViewToolBar.qml
 FlyViewToolBarIndicators        1.0 FlyViewToolBarIndicators.qml
+FlyViewAnotherToolBarIndicators 1.0 FlyViewAnotherToolBarIndicators.qml
 FlyViewToolStrip                1.0 FlyViewToolStrip.qml
 FlyViewToolStripActionList      1.0 FlyViewToolStripActionList.qml
 FlyViewTopRightColumnLayout     1.0 FlyViewTopRightColumnLayout.qml
