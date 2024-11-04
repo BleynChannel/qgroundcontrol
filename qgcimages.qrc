@@ -214,6 +214,14 @@
         <file alias="ZoomMinus.svg">src/FlightMap/Images/ZoomMinus.svg</file>
         <file alias="ZoomPlus.svg">src/FlightMap/Images/ZoomPlus.svg</file>
         <file alias="Viewer3D/City3DMapIcon.svg">src/Viewer3D/Images/city_3d_map_icon.svg</file>
+		<file alias="Flashlight.svg">src/UI/toolbar/Images/Flashlight.svg</file>
 		<file alias="Start.svg">src/UI/toolbar/Images/Start.svg</file>
+		<file alias="Weight.svg">src/UI/toolbar/Images/Weight.svg</file>
+		<file alias="Reset.svg">src/UI/toolbar/Images/Reset.svg</file>
+		<file alias="Temperature.svg">src/UI/toolbar/Images/Temperature.svg</file>
+		<file alias="Fan.svg">src/UI/toolbar/Images/Fan.svg</file>
+		<file alias="Power.svg">src/UI/toolbar/Images/Power.svg</file>
+		<file alias="Valve.svg">src/UI/toolbar/Images/Valve.svg</file>
+		<file alias="Frequency.svg">src/UI/toolbar/Images/Frequency.svg</file>
     </qresource>
 </RCC>

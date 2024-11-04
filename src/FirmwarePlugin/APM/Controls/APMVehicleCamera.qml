@@ -16,11 +16,11 @@ Item {
     property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
 
 	Rectangle {
-		anchors.fill: controlsRow
-		color: "transparent"
-		border.color: qgcPal.button
-		border.width: 1
-		radius: ScreenTools.defaultFontPixelWidth / 2
+		anchors.fill: 	controlsRow
+		color: 			"transparent"
+		border.color: 	qgcPal.button
+		border.width: 	ScreenTools.defaultFontPointSize / 3
+		radius: 		ScreenTools.defaultFontPixelWidth / 2
 	}
 
 	Row {
@@ -48,6 +48,7 @@ Item {
 				anchors.bottom: parent.bottom
 				iconSource: 	"/qmlimages/CameraIcon.svg"
 				iconColor: 		controlsRow._activeCamera === index ? qgcPal.colorGreen : qgcPal.button
+				border.width:	0
 
 				onClicked: controlsRow.setActiveCamera(index)
 			}

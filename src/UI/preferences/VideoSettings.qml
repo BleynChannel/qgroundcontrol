@@ -81,6 +81,7 @@ SettingsPage {
 
 		Repeater {
             model: connectionGroup.rtspUrls
+			visible: _isRTSP && _videoSettings.rtspUrl.visible
             
             delegate: RowLayout {
 				required property int index
@@ -89,8 +90,10 @@ SettingsPage {
                 Layout.fillWidth:   true
 
                 QGCLabel {
-                    Layout.fillWidth:   true
-                    text:               modelData
+                    Layout.fillWidth:   	true
+                    text:               	modelData
+					Layout.preferredWidth:	_urlFieldWidth
+					elide: 					Text.ElideRight
                 }
                 QGCColoredImage {
                     height:                 ScreenTools.minTouchPixels

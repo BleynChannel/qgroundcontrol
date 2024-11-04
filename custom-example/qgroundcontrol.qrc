@@ -62,6 +62,7 @@
 		<file alias="LogDownloadPage.qml">../src/AnalyzeView/LogDownloadPage.qml</file>
 		<file alias="LogReplaySettings.qml">../src/UI/preferences/LogReplaySettings.qml</file>
 		<file alias="MainRootWindow.qml">../src/UI/MainRootWindow.qml</file>
+		<file alias="SubVehicleView.qml">../src/UI/SubVehicleView.qml</file>
 		<file alias="MapSettings.qml">../src/UI/preferences/MapSettings.qml</file>
 		<file alias="MAVLinkConsolePage.qml">../src/AnalyzeView/MAVLinkConsolePage.qml</file>
 		<file alias="MAVLinkInspectorPage.qml">../src/AnalyzeView/MAVLinkInspectorPage.qml</file>
@@ -419,6 +420,7 @@
 		<file alias="VTOLLandingPattern.FactMetaData.json">../src/MissionManager/VTOLLandingPattern.FactMetaData.json</file>
 		<file alias="Viewer3D.SettingsGroup.json">../src/Settings/Viewer3D.SettingsGroup.json</file>
 		<file alias="GimbalController.SettingsGroup.json">../src/Settings/GimbalController.SettingsGroup.json</file>
+		<file alias="Mqtt.SettingsGroup.json">../src/Settings/Mqtt.SettingsGroup.json</file>
 	</qresource>
 	<qresource prefix="/MockLink">
 		<file alias="APMArduSubMockLink.params">../src/Comms/MockLink/APMArduSubMockLink.params</file>

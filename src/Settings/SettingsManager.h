@@ -32,6 +32,7 @@
 #include "RemoteIDSettings.h"
 #include "Viewer3DSettings.h"
 #include "CustomMavlinkActionsSettings.h"
+#include "MqttSettings.h"
 
 /// Provides access to all app settings
 class SettingsManager : public QGCTool
@@ -63,6 +64,7 @@ public:
 #endif
     Q_PROPERTY(QObject* remoteIDSettings                READ remoteIDSettings               CONSTANT)
     Q_PROPERTY(QObject* customMavlinkActionsSettings    READ customMavlinkActionsSettings   CONSTANT)
+    Q_PROPERTY(QObject* mqttSettings					READ mqttSettings					CONSTANT)
 
 
     // Override from QGCTool
@@ -90,6 +92,7 @@ public:
 #endif
     RemoteIDSettings*               remoteIDSettings            (void) { return _remoteIDSettings; }
     CustomMavlinkActionsSettings*   customMavlinkActionsSettings(void) { return _customMavlinkActionsSettings; }
+    MqttSettings*                   mqttSettings                (void) { return _mqttSettings; }
 
 private:
     AppSettings*                    _appSettings;
@@ -114,4 +117,5 @@ private:
 #endif
     RemoteIDSettings*               _remoteIDSettings;
     CustomMavlinkActionsSettings*   _customMavlinkActionsSettings;
+    MqttSettings*                   _mqttSettings;
 };

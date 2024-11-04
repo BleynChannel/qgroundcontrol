@@ -45,6 +45,8 @@ qt_add_library(Settings STATIC
     MapsSettings.h
     Viewer3DSettings.cc
     Viewer3DSettings.h
+	MqttSettings.cc
+	MqttSettings.h
 )
 
 target_link_libraries(Settings

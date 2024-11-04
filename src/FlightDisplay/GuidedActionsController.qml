@@ -60,7 +60,7 @@ Item {
     readonly property string setEstimatorOriginTitle:       qsTr("Set Estimator origin")
     readonly property string setFlightMode:                 qsTr("Set Flight Mode")
     readonly property string changeHeadingTitle:            qsTr("Change Heading")
-    readonly property string securityVehicleSetupTitle:		"Security Vehicle Setup" //TODO: Change to qsTr
+    readonly property string securityVehicleSetupTitle:		"Security Vehicle Setup" //! qsTr
 
     readonly property string armMessage:                        qsTr("Arm the vehicle.")
     readonly property string forceArmMessage:                   qsTr("WARNING: This will force arming of the vehicle bypassing any safety checks.")
@@ -89,7 +89,7 @@ Item {
     readonly property string setEstimatorOriginMessage:         qsTr("Make the specified location the estimator origin.")
     readonly property string setFlightModeMessage:              qsTr("Set the vehicle flight mode to %1").arg(_actionData)
     readonly property string changeHeadingMessage:              qsTr("Set the vehicle heading towards the specified location.")
-	readonly property string securityVehicleSetupMessage: 		"Write password for deactivate security on Vehicle Setup" //TODO: Change to qsTr
+	readonly property string securityVehicleSetupMessage: 		"Write password for deactivate security on Vehicle Setup" //! qsTr
 
     readonly property int actionRTL:                        1
     readonly property int actionLand:                       2

@@ -22,7 +22,7 @@ import QGroundControl.Controllers
 Rectangle {
     id:     _root
     width:  parent.width
-    height: Window.height > Window.width ? column.height + 1 : ScreenTools.toolbarHeight * 2
+    height: column.height + column.anchors.bottomMargin
     color:  qgcPal.toolbarBackground
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
@@ -30,8 +30,8 @@ Rectangle {
     property color  _mainStatusBGColor: qgcPal.brandingPurple
 
     function dropMessageIndicatorTool() {
-        toolIndicators.dropMessageIndicatorTool();
-		anotherToolIndicators.dropMessageIndicatorTool();
+        toolIndicatorsRepeater.dropMessageIndicatorTool();
+		indicatorFlow.dropMessageIndicatorTool();
     }
 
     QGCPalette { id: qgcPal }
@@ -46,132 +46,95 @@ Rectangle {
         visible:        qgcPal.globalTheme === QGCPalette.Light
     }
 
-    Column {
+    Flow {
 		id: column
 		anchors.bottomMargin:   1
 		anchors.top:            parent.top
 		anchors.left:           parent.left
 		anchors.right:          parent.right
-		// spacing:                ScreenTools.defaultFontPixelWidth / 2
+		spacing:                ScreenTools.defaultFontPixelWidth / 2
+		padding:                ScreenTools.defaultFontPixelWidth / 2
 
-		Item {
-			id: 			mainStatusRow
-			anchors.left:   parent.left
-			anchors.right:  parent.right
-			height:			ScreenTools.toolbarHeight
+		property int itemHeight: ScreenTools.toolbarHeight - column.padding
 
-			Rectangle {
-				anchors.fill: viewButtonRow
-				
-				gradient: Gradient {
-					orientation: Gradient.Horizontal
-					GradientStop { position: 0;                                     color: _mainStatusBGColor }
-					GradientStop { position: currentButton.x + currentButton.width; color: _mainStatusBGColor }
-					GradientStop { position: 1;                                     color: _root.color }
-				}
-			}
-			
-			RowLayout {
-				id:             viewButtonRow
-				anchors.top:	parent.top
-				anchors.bottom: parent.bottom
-				spacing:                ScreenTools.defaultFontPixelWidth / 2
+		QGCToolBarButton {
+			id:                     currentButton
+			height:					column.itemHeight
+			icon.source:            "/res/QGCLogoFull"
+			logo:                   true
+			onClicked:              mainWindow.showToolSelectDialog()
+		}
 
-				QGCToolBarButton {
-					id:                     currentButton
-					Layout.preferredHeight: viewButtonRow.height
-					icon.source:            "/res/QGCLogoFull"
-					logo:                   true
-					onClicked:              mainWindow.showToolSelectDialog()
-				}
+		MainStatusIndicator {
+			height: column.itemHeight
+		}
 
-				MainStatusIndicator {
-					Layout.preferredHeight: viewButtonRow.height
-				}
+		QGCButton {
+			id:                 disconnectButton
+			height:				column.itemHeight
+			text:               qsTr("Disconnect")
+			onClicked:          _activeVehicle.closeVehicle()
+			visible:            _activeVehicle && _communicationLost
+		}
 
-				QGCButton {
-					id:                 disconnectButton
-					text:               qsTr("Disconnect")
-					onClicked:          _activeVehicle.closeVehicle()
-					visible:            _activeVehicle && _communicationLost
-				}
-			}
-
-			QGCFlickable {
-				id:                     toolsFlickable
-				anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
-				anchors.left:           viewButtonRow.right
-				anchors.top:            parent.top
-				anchors.bottom:         parent.bottom
-				anchors.right:          brandLogo.left
-				contentWidth:           toolIndicators.width
-				flickableDirection:     Flickable.HorizontalFlick
-
-				FlyViewToolBarIndicators { id: toolIndicators }
-			}
-
-			//-- Branding Logo
-			Image {
-				id: brandLogo
-				anchors.right:          parent.right
-				anchors.top:            parent.top
-				anchors.bottom:         parent.bottom
-				anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
-				visible:                _activeVehicle && !_communicationLost && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
-				fillMode:               Image.PreserveAspectFit
-				source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
-				mipmap:                 true
-
-				property bool   _outdoorPalette:        qgcPal.globalTheme === QGCPalette.Light
-				property bool   _corePluginBranding:    QGroundControl.corePlugin.brandImageIndoor.length != 0
-				property string _userBrandImageIndoor:  QGroundControl.settingsManager.brandImageSettings.userBrandImageIndoor.value
-				property string _userBrandImageOutdoor: QGroundControl.settingsManager.brandImageSettings.userBrandImageOutdoor.value
-				property bool   _userBrandingIndoor:    QGroundControl.settingsManager.brandImageSettings.visible && _userBrandImageIndoor.length != 0
-				property bool   _userBrandingOutdoor:   QGroundControl.settingsManager.brandImageSettings.visible && _userBrandImageOutdoor.length != 0
-				property string _brandImageIndoor:      brandImageIndoor()
-				property string _brandImageOutdoor:     brandImageOutdoor()
-
-				function brandImageIndoor() {
-					if (_userBrandingIndoor) {
-						return _userBrandImageIndoor
-					} else {
-						if (_userBrandingOutdoor) {
-							return _userBrandImageOutdoor
-						} else {
-							if (_corePluginBranding) {
-								return QGroundControl.corePlugin.brandImageIndoor
-							} else {
-								return _activeVehicle ? _activeVehicle.brandImageIndoor : ""
-							}
-						}
-					}
-				}
-
-				function brandImageOutdoor() {
-					if (_userBrandingOutdoor) {
-						return _userBrandImageOutdoor
-					} else {
-						if (_userBrandingIndoor) {
-							return _userBrandImageIndoor
-						} else {
-							if (_corePluginBranding) {
-								return QGroundControl.corePlugin.brandImageOutdoor
-							} else {
-								return _activeVehicle ? _activeVehicle.brandImageOutdoor : ""
-							}
-						}
-					}
-				}
+		Repeater {
+			id:     appRepeater
+			model:  QGroundControl.corePlugin.toolBarIndicators
+			Loader {
+				height: 		column.itemHeight
+				source:             modelData
+				visible:            item.showIndicator
 			}
 		}
 
-		Item {
-			id:                     anotherToolsItem
-			anchors.left:           parent.left
-			anchors.right:          parent.right
-			height:                 anotherToolIndicators.height
+		Repeater {
+			id:     toolIndicatorsRepeater
+			model:  _activeVehicle ? _activeVehicle.toolIndicators : []
 
-			FlyViewAnotherToolBarIndicators { id: anotherToolIndicators }
+			function dropMessageIndicatorTool() {
+				for (var i=0; i<count; i++) {
+					var thisTool = itemAt(i);
+					if (thisTool.item.dropMessageIndicator) {
+						thisTool.item.dropMessageIndicator();
+					}
+				}
+			}
+
+			Loader {
+				height: 		column.itemHeight
+				source:             modelData
+				visible:            item.showIndicator
+			}
+		}
+
+		Repeater {
+			model: _activeVehicle ? _activeVehicle.modeIndicators : []
+			Loader {
+				height: 		column.itemHeight
+				source:             modelData
+				visible:            item.showIndicator
+			}
+		}
+
+		Repeater {
+			id:			indicatorFlow
+
+			function dropMessageIndicatorTool() {
+				for (var i=0; i<count; i++) {
+					var thisTool = itemAt(i);
+					if (thisTool.item.dropMessageIndicator) {
+						thisTool.item.dropMessageIndicator();
+					}
+				}
+			}
+
+			model:  _activeVehicle ? _activeVehicle.anotherToolIndicators : []
+
+			Loader {
+				height: 			column.itemHeight
+				source:             modelData
+				visible:            item.showIndicator
+			}
 		}
 	}
 

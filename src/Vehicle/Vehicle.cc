@@ -2206,6 +2206,14 @@ void Vehicle::guidedModeOrbit(const QGeoCoordinate& centerCoord, double radius, 
     }
 }
 
+void Vehicle::setPointROI(const QGeoCoordinate& centerCoord)
+{
+	_isROIEnabled = true;
+	emit isROIEnabledChanged();
+	_roiCoord = centerCoord;
+	emit roiCoordChanged(centerCoord);
+}
+
 void Vehicle::guidedModeROI(const QGeoCoordinate& centerCoord)
 {
     if (!centerCoord.isValid()) {

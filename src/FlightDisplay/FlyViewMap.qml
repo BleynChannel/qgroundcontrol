@@ -497,15 +497,15 @@ FlightMap {
             }
         }
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: (position) => {
-                var roiEditMenu = popupMenuComponent.createObject(_root, { coord: roiLocationItem.coordinate, contentItemComponent: roiEditMenuComponent })
-                var clickPoint = mapToItem(_root, position.x, position.y)
-                roiEditMenu.setPosition(clickPoint.x, clickPoint.y)
-                roiEditMenu.open()
-            }
-        }
+        // MouseArea {
+        //     anchors.fill: parent
+        //     onClicked: (position) => {
+        //         var roiEditMenu = popupMenuComponent.createObject(_root, { coord: roiLocationItem.coordinate, contentItemComponent: roiEditMenuComponent })
+        //         var clickPoint = mapToItem(_root, position.x, position.y)
+        //         roiEditMenu.setPosition(clickPoint.x, clickPoint.y)
+        //         roiEditMenu.open()
+        //     }
+        // }
 
         sourceItem: MissionItemIndexLabel {
             checked:    true
@@ -583,94 +583,94 @@ FlightMap {
         }
     }
 
-    Component {
-        id: mapClickMenuComponent
+    // Component {
+    //     id: mapClickMenuComponent
 
-        ColumnLayout {
-            id: mainLayout
-            spacing: ScreenTools.defaultFontPixelWidth / 2
+    //     ColumnLayout {
+    //         id: mainLayout
+    //         spacing: ScreenTools.defaultFontPixelWidth / 2
 
-            QGCButton {
-                Layout.fillWidth:   true
-                text:               qsTr("Go to location")
-                visible:            globals.guidedControllerFlyView.showGotoLocation
-                onClicked: {
-                    if (popup.opened) {
-                        popup.close()
-                    }
-                    gotoLocationItem.show(mapClickCoord)
-                    globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionGoto, mapClickCoord, gotoLocationItem)
-                }
-            }
+    //         QGCButton {
+    //             Layout.fillWidth:   true
+    //             text:               qsTr("Go to location")
+    //             visible:            globals.guidedControllerFlyView.showGotoLocation
+    //             onClicked: {
+    //                 if (popup.opened) {
+    //                     popup.close()
+    //                 }
+    //                 gotoLocationItem.show(mapClickCoord)
+    //                 globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionGoto, mapClickCoord, gotoLocationItem)
+    //             }
+    //         }
 
-            QGCButton {
-                Layout.fillWidth:   true
-                text:               qsTr("Orbit at location")
-                visible:            globals.guidedControllerFlyView.showOrbit
-                onClicked: {
-                    if (popup.opened) {
-                        popup.close()
-                    }
-                    orbitMapCircle.show(mapClickCoord)
-                    globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionOrbit, mapClickCoord, orbitMapCircle)
-                }
-            }
+    //         QGCButton {
+    //             Layout.fillWidth:   true
+    //             text:               qsTr("Orbit at location")
+    //             visible:            globals.guidedControllerFlyView.showOrbit
+    //             onClicked: {
+    //                 if (popup.opened) {
+    //                     popup.close()
+    //                 }
+    //                 orbitMapCircle.show(mapClickCoord)
+    //                 globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionOrbit, mapClickCoord, orbitMapCircle)
+    //             }
+    //         }
 
-            QGCButton {
-                Layout.fillWidth:   true
-                text:               qsTr("ROI at location")
-                visible:            globals.guidedControllerFlyView.showROI
-                onClicked: {
-                    if (popup.opened) {
-                        popup.close()
-                    }
-                    globals.guidedControllerFlyView.executeAction(globals.guidedControllerFlyView.actionROI, mapClickCoord, 0, false)
-                }
-            }
+    //         QGCButton {
+    //             Layout.fillWidth:   true
+    //             text:               qsTr("ROI at location")
+    //             visible:            globals.guidedControllerFlyView.showROI
+    //             onClicked: {
+    //                 if (popup.opened) {
+    //                     popup.close()
+    //                 }
+    //                 globals.guidedControllerFlyView.executeAction(globals.guidedControllerFlyView.actionROI, mapClickCoord, 0, false)
+    //             }
+    //         }
 
-            QGCButton {
-                Layout.fillWidth:   true
-                text:               qsTr("Set home here")
-                visible:            globals.guidedControllerFlyView.showSetHome
-                onClicked: {
-                    if (popup.opened) {
-                        popup.close()
-                    }
-                    globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionSetHome, mapClickCoord)
-                }
-            }
+    //         QGCButton {
+    //             Layout.fillWidth:   true
+    //             text:               qsTr("Set home here")
+    //             visible:            globals.guidedControllerFlyView.showSetHome
+    //             onClicked: {
+    //                 if (popup.opened) {
+    //                     popup.close()
+    //                 }
+    //                 globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionSetHome, mapClickCoord)
+    //             }
+    //         }
 
-            QGCButton {
-                Layout.fillWidth:   true
-                text:               qsTr("Set Estimator Origin")
-                visible:            globals.guidedControllerFlyView.showSetEstimatorOrigin
-                onClicked: {
-                    if (popup.opened) {
-                        popup.close()
-                    }
-                    globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionSetEstimatorOrigin, mapClickCoord)
-                }
-            }
+    //         QGCButton {
+    //             Layout.fillWidth:   true
+    //             text:               qsTr("Set Estimator Origin")
+    //             visible:            globals.guidedControllerFlyView.showSetEstimatorOrigin
+    //             onClicked: {
+    //                 if (popup.opened) {
+    //                     popup.close()
+    //                 }
+    //                 globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionSetEstimatorOrigin, mapClickCoord)
+    //             }
+    //         }
 
-            QGCButton {
-                Layout.fillWidth:   true
-                text:               qsTr("Set Heading")
-                visible:            globals.guidedControllerFlyView.showChangeHeading
-                onClicked: {
-                    if (popup.opened) {
-                        popup.close()
-                    }
-                    globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionChangeHeading, mapClickCoord)
-                }
-            }
+    //         QGCButton {
+    //             Layout.fillWidth:   true
+    //             text:               qsTr("Set Heading")
+    //             visible:            globals.guidedControllerFlyView.showChangeHeading
+    //             onClicked: {
+    //                 if (popup.opened) {
+    //                     popup.close()
+    //                 }
+    //                 globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionChangeHeading, mapClickCoord)
+    //             }
+    //         }
 
-            ColumnLayout {
-                spacing: 0
-                QGCLabel { text: qsTr("Lat: %1").arg(mapClickCoord.latitude.toFixed(6)) }
-                QGCLabel { text: qsTr("Lon: %1").arg(mapClickCoord.longitude.toFixed(6)) }
-            }
-        }
-    }
+    //         ColumnLayout {
+    //             spacing: 0
+    //             QGCLabel { text: qsTr("Lat: %1").arg(mapClickCoord.latitude.toFixed(6)) }
+    //             QGCLabel { text: qsTr("Lon: %1").arg(mapClickCoord.longitude.toFixed(6)) }
+    //         }
+    //     }
+    // }
 
     Component {
         id: roiEditPositionDialogComponent
@@ -718,9 +718,12 @@ FlightMap {
             orbitMapCircle.hide()
             gotoLocationItem.hide()
             var clickCoord = _root.toCoordinate(Qt.point(position.x, position.y), false /* clipToViewPort */)
-            var mapClickMenu = popupMenuComponent.createObject(_root, { coord: clickCoord, contentItemComponent: mapClickMenuComponent })
-            mapClickMenu.setPosition(position.x, position.y)
-            mapClickMenu.open()
+			// _activeVehicle.setPointROI(clickCoord)
+			_activeVehicle.guidedModeROI(clickCoord)
+			// globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionROI, clickCoord)
+            // var mapClickMenu = popupMenuComponent.createObject(_root, { coord: clickCoord, contentItemComponent: mapClickMenuComponent })
+            // mapClickMenu.setPosition(position.x, position.y)
+            // mapClickMenu.open()
         }
     }
 

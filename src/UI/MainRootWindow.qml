@@ -836,4 +836,9 @@ ApplicationWindow {
          flightID:                   UTMSPStateStorage.flightID
          anchors.fill:               parent
     }
+
+	// SubVehicleView {
+	// 	id: 		subVehicleView
+	// 	visible:	true		//!Debug
+	// }
 }
