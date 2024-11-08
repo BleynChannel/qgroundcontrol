@@ -12,13 +12,13 @@ APMIconButton {
 	iconSource: 	"/qmlimages/Weight.svg"
 	iconColor: 		_telemetry.vehicleWeight ? qgcPal.colorGreen : qgcPal.colorRed
 	border.color:	qgcPal.button
-	labelText:		"Weight" //! qsTr
+	enabled:		false //! WIP
+	labelText:		"Масса (WIP)" //! qsTr
 
 	property var	_telemetry:	QGroundControl.vehicleTelemetry
 
 	function onWeightButton() {
 		_telemetry.vehicleWeight = !_telemetry.vehicleWeight
-		console.log("Weight status: ", _telemetry.vehicleWeight)
 	}
 
 	onClicked: onWeightButton()

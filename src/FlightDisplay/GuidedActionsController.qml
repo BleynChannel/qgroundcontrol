@@ -60,7 +60,7 @@ Item {
     readonly property string setEstimatorOriginTitle:       qsTr("Set Estimator origin")
     readonly property string setFlightMode:                 qsTr("Set Flight Mode")
     readonly property string changeHeadingTitle:            qsTr("Change Heading")
-    readonly property string securityVehicleSetupTitle:		"Security Vehicle Setup" //! qsTr
+    readonly property string securityVehicleSetupTitle:		"Настройки безопасности транспорта" //! qsTr
 
     readonly property string armMessage:                        qsTr("Arm the vehicle.")
     readonly property string forceArmMessage:                   qsTr("WARNING: This will force arming of the vehicle bypassing any safety checks.")
@@ -89,7 +89,7 @@ Item {
     readonly property string setEstimatorOriginMessage:         qsTr("Make the specified location the estimator origin.")
     readonly property string setFlightModeMessage:              qsTr("Set the vehicle flight mode to %1").arg(_actionData)
     readonly property string changeHeadingMessage:              qsTr("Set the vehicle heading towards the specified location.")
-	readonly property string securityVehicleSetupMessage: 		"Write password for deactivate security on Vehicle Setup" //! qsTr
+	readonly property string securityVehicleSetupMessage: 		"Заполните пароль для деактивации безопасности при настройке транспортного средства" //! qsTr
 
     readonly property int actionRTL:                        1
     readonly property int actionLand:                       2
@@ -122,6 +122,7 @@ Item {
     readonly property int actionSetFlightMode:              29
     readonly property int actionChangeHeading:              30
 	readonly property int actionSecurityVehicleSetup: 		31
+	readonly property int actionGpsEditLocation:			32
 
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property var    _flyViewSettings:           QGroundControl.settingsManager.flyViewSettings
@@ -155,6 +156,7 @@ Item {
     property bool showGripper:              _initialConnectComplete ? _activeVehicle.hasGripper : false
     property bool showSetEstimatorOrigin:   _activeVehicle && !(_activeVehicle.sensorsPresentBits & Vehicle.SysStatusSensorGPS)
     property bool showChangeHeading:        _guidedActionsEnabled && _vehicleFlying
+	property bool showGpsEditLocation:		_guidedActionsEnabled
 
     property string changeSpeedTitle:   _fixedWing ? changeAirspeedTitle : changeCruiseSpeedTitle
     property string changeSpeedMessage: _fixedWing ? changeAirspeedMessage : changeCruiseSpeedMessage
@@ -648,6 +650,7 @@ Item {
             _activeVehicle.vtolInFwdFlight = false
             break
         case actionROI:
+			// _activeVehicle.setPointROI(actionData)
             _activeVehicle.guidedModeROI(actionData)
             break
         case actionChangeSpeed:
@@ -680,9 +683,11 @@ Item {
 			if (formNumber === "5325") {
 				mainWindow.showVehicleSetupTool()
 			} else {
-				mainWindow.showMessageDialog("Incorrect password", "") //! qsTr
+				mainWindow.showMessageDialog("Неверный пароль", "Вход в систему запрещен. Попробуйте другой пароль") //! qsTr
 			}
 			break
+		case actionGpsEditLocation:
+			_activeVehicle.guidedModeGPS(actionData)
         default:
             console.warn(qsTr("Internal error: unknown actionCode"), actionCode)
             break

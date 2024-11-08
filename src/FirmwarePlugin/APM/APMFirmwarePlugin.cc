@@ -669,29 +669,48 @@ const QVariantList& APMFirmwarePlugin::toolIndicators(const Vehicle* vehicle)
     return _toolIndicatorList;
 }
 
-const QVariantList& APMFirmwarePlugin::anotherToolIndicators(const Vehicle* vehicle)
+const QVariantList& APMFirmwarePlugin::vehicleToolIndicators(const Vehicle* vehicle)
 {
-	if (_anotherToolIndicatorList.size() == 0) {
+	if (_vehicleToolIndicatorList.size() == 0) {
         // First call the base class to get the standard QGC list
-        _anotherToolIndicatorList = FirmwarePlugin::anotherToolIndicators(vehicle);
-		
-		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/APMVehicleCamera.qml")));
-		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/LightControl.qml")));
-		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/EngineControl.qml")));
-		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/WeightControl.qml")));
-		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/ResetControl.qml")));
-		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/FanControl.qml")));
-		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/ValveControl.qml")));
-		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/VehicleBatteryIndicator.qml")));
-		// _anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/APM/Indicators/APMBatteryIndicator.qml")));
-		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/TemperatureIndicator.qml")));
-		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/PowerIndicator.qml")));
-		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/SignalIndicator.qml")));
-		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/FrequrenceIndicator.qml")));
-		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/UploadROI.qml")));
+        _vehicleToolIndicatorList = FirmwarePlugin::vehicleToolIndicators(vehicle);
+
+		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/Camera.qml")));
+		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/LightControl.qml")));
+		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/EngineControl.qml")));
+		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/WeightControl.qml")));
+		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/ResetControl.qml")));
+		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/FanControl.qml")));
+		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/ValveControl.qml")));
+		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/VehicleBatteryIndicator.qml")));
+		// _vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/APM/Indicators/APMBatteryIndicator.qml")));
+		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/TemperatureIndicator.qml")));
+		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/PowerIndicator.qml")));
+		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/SignalIndicator.qml")));
+		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/FrequrenceIndicator.qml")));
 	}
 
-	return _anotherToolIndicatorList;
+	return _vehicleToolIndicatorList;
+}
+
+const QVariantList& APMFirmwarePlugin::droneToolIndicators(const Vehicle* vehicle)
+{
+	if (_droneToolIndicatorList.size() == 0) {
+        // First call the base class to get the standard QGC list
+        _droneToolIndicatorList = FirmwarePlugin::droneToolIndicators(vehicle);
+
+		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/TakeoffControl.qml")));
+		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/LandControl.qml")));
+		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/WindingControl.qml")));
+		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/ControlMode.qml")));
+		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/HeightIndicator.qml")));
+		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/LinkPowerIndicator.qml")));
+		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/BatteryIndicator.qml")));
+		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/RotateControl.qml")));
+		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/UploadROI.qml")));
+	}
+
+	return _droneToolIndicatorList;
 }
 
 bool APMFirmwarePlugin::isGuidedMode(const Vehicle* vehicle) const

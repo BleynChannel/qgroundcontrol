@@ -30,7 +30,7 @@ Flow {
 
     Repeater {
         id:     toolIndicatorsRepeater
-        model:  _activeVehicle ? _activeVehicle.anotherToolIndicators : []
+        model:  _activeVehicle ? _activeVehicle.vehicleToolIndicators : []
 
         function dropMessageIndicatorTool() {
             for (var i=0; i<count; i++) {

@@ -22,7 +22,7 @@ import QGroundControl.Controllers
 Rectangle {
     id:     _root
     width:  parent.width
-    height: column.height + column.anchors.bottomMargin
+    height: column.height + column.anchors.topMargin + column.anchors.bottomMargin
     color:  qgcPal.toolbarBackground
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
@@ -31,7 +31,8 @@ Rectangle {
 
     function dropMessageIndicatorTool() {
         toolIndicatorsRepeater.dropMessageIndicatorTool();
-		indicatorFlow.dropMessageIndicatorTool();
+		vehicleIndicatorFlow.dropMessageIndicatorTool();
+		droneIndicatorFlow.dropMessageIndicatorTool();
     }
 
     QGCPalette { id: qgcPal }
@@ -45,95 +46,147 @@ Rectangle {
         color:          "black"
         visible:        qgcPal.globalTheme === QGCPalette.Light
     }
-
-    Flow {
-		id: column
-		anchors.bottomMargin:   1
+	
+	Column {
+		id:     				column
+		anchors.topMargin:		ScreenTools.defaultFontPixelWidth / 2
+		anchors.bottomMargin:   ScreenTools.defaultFontPixelWidth / 2 + 1
+		anchors.leftMargin:		ScreenTools.defaultFontPixelWidth / 2
+		anchors.rightMargin:	ScreenTools.defaultFontPixelWidth / 2
 		anchors.top:            parent.top
 		anchors.left:           parent.left
 		anchors.right:          parent.right
-		spacing:                ScreenTools.defaultFontPixelWidth / 2
-		padding:                ScreenTools.defaultFontPixelWidth / 2
+		spacing:        		ScreenTools.defaultFontPixelWidth / 2
 
 		property int itemHeight: ScreenTools.toolbarHeight - column.padding
 
-		QGCToolBarButton {
-			id:                     currentButton
-			height:					column.itemHeight
-			icon.source:            "/res/QGCLogoFull"
-			logo:                   true
-			onClicked:              mainWindow.showToolSelectDialog()
-		}
+		Row {
+			anchors.left:       parent.left
+			anchors.right:      parent.right
+			spacing:        	ScreenTools.defaultFontPixelWidth / 2
 
-		MainStatusIndicator {
-			height: column.itemHeight
-		}
-
-		QGCButton {
-			id:                 disconnectButton
-			height:				column.itemHeight
-			text:               qsTr("Disconnect")
-			onClicked:          _activeVehicle.closeVehicle()
-			visible:            _activeVehicle && _communicationLost
-		}
-
-		Repeater {
-			id:     appRepeater
-			model:  QGroundControl.corePlugin.toolBarIndicators
-			Loader {
-				height: 		column.itemHeight
-				source:             modelData
-				visible:            item.showIndicator
+			QGCToolBarButton {
+				id:                     currentButton
+				height:					column.itemHeight
+				icon.source:            "/res/QGCLogoFull"
+				logo:                   true
+				onClicked:              mainWindow.showToolSelectDialog()
 			}
-		}
 
-		Repeater {
-			id:     toolIndicatorsRepeater
-			model:  _activeVehicle ? _activeVehicle.toolIndicators : []
+			MainStatusIndicator {
+				height: column.itemHeight
+			}
 
-			function dropMessageIndicatorTool() {
-				for (var i=0; i<count; i++) {
-					var thisTool = itemAt(i);
-					if (thisTool.item.dropMessageIndicator) {
-						thisTool.item.dropMessageIndicator();
-					}
+			QGCButton {
+				id:                 disconnectButton
+				height:				column.itemHeight
+				text:               qsTr("Disconnect")
+				onClicked:          _activeVehicle.closeVehicle()
+				visible:            _activeVehicle && _communicationLost
+			}
+
+			Repeater {
+				id:     appRepeater
+				model:  QGroundControl.corePlugin.toolBarIndicators
+				Loader {
+					height: 		column.itemHeight
+					source:             modelData
+					visible:            item.showIndicator
 				}
 			}
 
-			Loader {
-				height: 		column.itemHeight
-				source:             modelData
-				visible:            item.showIndicator
-			}
-		}
-
-		Repeater {
-			model: _activeVehicle ? _activeVehicle.modeIndicators : []
-			Loader {
-				height: 		column.itemHeight
-				source:             modelData
-				visible:            item.showIndicator
-			}
-		}
-
-		Repeater {
-			id:			indicatorFlow
-
-			function dropMessageIndicatorTool() {
-				for (var i=0; i<count; i++) {
-					var thisTool = itemAt(i);
-					if (thisTool.item.dropMessageIndicator) {
-						thisTool.item.dropMessageIndicator();
-					}
+			Repeater {
+				model: _activeVehicle ? _activeVehicle.modeIndicators : []
+				Loader {
+					height: 		column.itemHeight
+					source:             modelData
+					visible:            item.showIndicator
 				}
 			}
 
-			model:  _activeVehicle ? _activeVehicle.anotherToolIndicators : []
+			Repeater {
+				id:     toolIndicatorsRepeater
+				model:  _activeVehicle ? _activeVehicle.toolIndicators : []
 
-			Loader {
-				height: 			column.itemHeight
-				source:             modelData
-				visible:            item.showIndicator
+				function dropMessageIndicatorTool() {
+					for (var i=0; i<count; i++) {
+						var thisTool = itemAt(i);
+						if (thisTool.item.dropMessageIndicator) {
+							thisTool.item.dropMessageIndicator();
+						}
+					}
+				}
+
+				Loader {
+					height: 		column.itemHeight
+					source:         modelData
+					visible:        item.showIndicator
+				}
+			}
+		}
+
+		Flow {
+			id: 			vehicleToolindicatorsFlow
+			anchors.left:   parent.left
+			anchors.right:  parent.right
+			spacing:        ScreenTools.defaultFontPixelWidth / 2
+
+			Repeater {
+				id:			vehicleIndicatorFlow
+
+				function dropMessageIndicatorTool() {
+					for (var i=0; i<count; i++) {
+						var thisTool = itemAt(i);
+						if (thisTool.item.dropMessageIndicator) {
+							thisTool.item.dropMessageIndicator();
+						}
+					}
+				}
+
+				model:  _activeVehicle ? _activeVehicle.vehicleToolIndicators : []
+
+				Loader {
+					height: 			column.itemHeight
+					source:             modelData
+					visible:            item.showIndicator
+				}
+			}
+		}
+
+		// Divider
+		Rectangle {
+			color:          "black"
+			anchors.left:   parent.left
+			anchors.right:  parent.right
+			height:         1
+			visible:        qgcPal.globalTheme === QGCPalette.Light
+		}
+
+		Flow {
+			id: 			droneToolindicatorsFlow
+			anchors.left:   parent.left
+			anchors.right:  parent.right
+			spacing:        ScreenTools.defaultFontPixelWidth / 2
+
+			Repeater {
+				id:			droneIndicatorFlow
+
+				function dropMessageIndicatorTool() {
+					for (var i=0; i<count; i++) {
+						var thisTool = itemAt(i);
+						if (thisTool.item.dropMessageIndicator) {
+							thisTool.item.dropMessageIndicator();
+						}
+					}
+				}
+
+				model:  _activeVehicle ? _activeVehicle.droneToolIndicators : []
+
+				Loader {
+					height: 			column.itemHeight
+					source:             modelData
+					visible:            item.showIndicator
+				}
 			}
 		}
 	}

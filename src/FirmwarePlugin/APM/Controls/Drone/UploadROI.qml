@@ -20,10 +20,10 @@ Item {
 		anchors.top:    parent.top
 		anchors.bottom: parent.bottom
 		width:          height * 1.5
-		text:           "Upload ROI" //! qsTr
+		text:           "Отправить поворот" //! qsTr
 		onClicked: {
-			// globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionROI, _activeVehicle.roiCoord)
-			_activeVehicle.guidedModeROI(_activeVehicle.roiCoord)
+            globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionROI, _activeVehicle.roiCoord)
+            // _activeVehicle.guidedModeROI(_activeVehicle.roiCoord)
 		}
 	}
 }

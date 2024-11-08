@@ -4,19 +4,27 @@ import QtQuick.Controls
 import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.ScreenTools
-// import QGroundControl.Palette
+import QGroundControl.Palette
 
 Rectangle {
 	id: 			control
 	width:			height
 	border.width: 	ScreenTools.defaultFontPointSize / 3
+	border.color:	qgcPal.button
 	color:			"transparent"
 	radius:			ScreenTools.defaultFontPixelWidth / 2
 
-	property alias titleText:	title.text
-	property alias titleColor:	title.color
-	property alias dataText:	data.text
-	property alias dataColor:	data.color
+	property alias titleText:		title.text
+	property alias titleColor:		title.color
+	property alias titleOpacity:	title.opacity
+	property alias dataText:		data.text
+	property alias dataColor:		data.color
+	property alias dataOpacity:		data.opacity
+
+	QGCPalette {
+        id:                 qgcPal
+        colorGroupEnabled:  true
+    }
 
 	Column {
 		anchors.left:			parent.left
@@ -29,9 +37,10 @@ Rectangle {
 			id: 					title
 			anchors.left: 			parent.left
 			anchors.right: 			parent.right
-			font.pointSize: 		ScreenTools.defaultFontPointSize
-			// color: 					titleColor
+			font.pointSize: 		ScreenTools.defaultFontPointSize * 0.9
+			color: 					qgcPal.buttonText
 			elide:					Text.ElideRight
+			wrapMode:				Text.WordWrap
 			horizontalAlignment:	Text.AlignHCenter
 		}
 
@@ -41,7 +50,8 @@ Rectangle {
 			anchors.left: 			parent.left
 			anchors.right: 			parent.right
 			font.pointSize: 		ScreenTools.defaultFontPointSize * 0.85
-			// color: 					dataColor
+			opacity:				0.75
+			color: 					qgcPal.buttonText
 			elide:					Text.ElideRight
 			horizontalAlignment:	Text.AlignHCenter
 		}

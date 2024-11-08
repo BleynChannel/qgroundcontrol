@@ -301,10 +301,7 @@ void QGCApplication::setLanguage()
 
 QGCApplication::~QGCApplication()
 {
-	if (_devilspieProcess != nullptr) {
-		_devilspieProcess->close();
-		delete _devilspieProcess;
-	}
+
 }
 
 void QGCApplication::init()
@@ -406,9 +403,6 @@ void QGCApplication::init()
     } else {
         AudioOutput::instance()->setMuted(true);
     }
-
-	_devilspieProcess = new QProcess(this);
-	_devilspieProcess->start("devilspie ~/qground.ds");
 }
 
 void QGCApplication::_initForNormalAppBoot()

@@ -12,13 +12,13 @@ APMIconButton {
 	iconSource: 	"/qmlimages/Reset.svg"
 	iconColor: 		_telemetry.vehicleReset ? qgcPal.colorGreen : qgcPal.colorRed
 	border.color:	qgcPal.button
-	labelText:		"Reset" //! qsTr
+	enabled:		false //! WIP
+	labelText:		"Сброс (WIP)" //! qsTr
 
 	property var	_telemetry:	QGroundControl.vehicleTelemetry
 
 	function onResetButton() {
 		_telemetry.vehicleReset = !_telemetry.vehicleReset
-		console.log("Reset status: ", _telemetry.vehicleReset)
 	}
 
 	onClicked: onResetButton()

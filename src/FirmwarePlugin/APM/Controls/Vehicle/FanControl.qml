@@ -12,13 +12,13 @@ APMIconButton {
 	iconSource: 	"/qmlimages/Fan.svg"
 	iconColor: 		_telemetry.vehicleFan ? qgcPal.colorGreen : qgcPal.colorRed
 	border.color:	qgcPal.button
-	labelText:		"Fan" //! qsTr
+	enabled:		false //! WIP
+	labelText:		"Вентелятор (WIP)" //! qsTr
 
 	property var	_telemetry:	QGroundControl.vehicleTelemetry
 
 	function onFanButton() {
 		_telemetry.vehicleFan = !_telemetry.vehicleFan
-		console.log("Fan status: ", _telemetry.vehicleFan)
 	}
 
 	onClicked: onFanButton()

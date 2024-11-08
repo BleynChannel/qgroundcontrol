@@ -12,8 +12,8 @@ APMTextBlock {
 	border.color:	qgcPal.button
 	titleColor:		qgcPal.buttonText
 	dataColor:		qgcPal.buttonText
-	titleText: 		"Frequrence" //! qsTr
-	dataText: 		_telemetry.vehicleFrequrence + " Hz"
+	titleText: 		"Температура" //! qsTr
+	dataText: 		_telemetry.vehicleTemperature + " °C"
 
 	property var	_telemetry:	QGroundControl.vehicleTelemetry
 }

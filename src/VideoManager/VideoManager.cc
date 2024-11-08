@@ -865,13 +865,18 @@ VideoManager::_startReceiver(unsigned id)
         return;
     }
 
-	QStringList arguments = QStringList();
-	arguments << "rtspsrc" << "*";
-	arguments << "latency=" + QString::number(_videoReceiverData[id].lowLatencyStreaming ? 17 : 100);
-	arguments << "timeout=" + QString::number(500000);
-	arguments << "!" << "queue" << "!" << "rtph264depay" << "!" << "h264parse" << "!" << "avdec_h264" << "!" << "autovideosink";
+    QStringList arguments = QStringList();
+    arguments << "rtspsrc" << "*";
+    arguments << "latency=" + QString::number(_videoReceiverData[id].lowLatencyStreaming ? 17 : 100);
+    arguments << "timeout=" + QString::number(500000);
+    arguments << "!" << "queue" << "!" << "rtph264depay" << "!" << "h264parse" << "!" << "avdec_h264" << "!" << "autovideosink";
 
-	arguments[1] = "location=" + _videoReceiverData[id].uris[_videoReceiverData[id].uriIndex];
+    arguments[1] = "location=" + _videoReceiverData[id].uris[_videoReceiverData[id].uriIndex];
+
+    // Example
+    // QStringList arguments = QStringList();
+    // arguments << "videotestsrc" << "pattern=smpte" << "!" << "xvimagesink";
+
 	_videoReceiverData[id].receiverProcess->start("gst-launch-1.0", arguments);
 	qCDebug(VideoManagerLog) << "Active:" << _videoReceiverData[id].receiverProcess->waitForStarted() << "Process:" << _videoReceiverData[id].receiverProcess->processId();
 
