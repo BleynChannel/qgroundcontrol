@@ -27,6 +27,7 @@
 #include "AirLinkManager.h"
 #endif
 #include "VehicleTelemetry.h"
+#include "Calibration.h"
 
 #if defined(QGC_CUSTOM_BUILD)
 #include CUSTOMHEADER
@@ -64,6 +65,7 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
     _utmspManager            = new UTMSPManager               (app, this);
 #endif
 	_vehicleTelemetry 		= new VehicleTelemetry			(app, this);
+	_сalibration 		    = new Calibration   			(app, this);
 }
 
 void QGCToolbox::setChildToolboxes(void)
@@ -91,6 +93,7 @@ void QGCToolbox::setChildToolboxes(void)
     _utmspManager->setToolbox(this);
 #endif
 	_vehicleTelemetry->setToolbox(this);
+	_сalibration->setToolbox(this);
 }
 
 void QGCToolbox::_scanAndLoadPlugins(QGCApplication* app)

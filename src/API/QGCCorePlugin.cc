@@ -54,14 +54,14 @@ public:
             delete pMAVLink;
         if(pConsole)
             delete pConsole;
-#if defined(QT_DEBUG)
+// #if defined(QT_DEBUG)
         if(pMockLink)
             delete pMockLink;
         if(pDebug)
             delete pDebug;
         if(pQmlTest)
             delete pQmlTest;
-#endif
+// #endif
         if(pRemoteID)
             delete pRemoteID;
         if(defaultOptions)
@@ -74,11 +74,11 @@ public:
     QmlComponentInfo* pMAVLink                  = nullptr;
     QmlComponentInfo* pConsole                  = nullptr;
     QmlComponentInfo* pHelp                     = nullptr;
-#if defined(QT_DEBUG)
+// #if defined(QT_DEBUG)
     QmlComponentInfo* pMockLink                 = nullptr;
     QmlComponentInfo* pDebug                    = nullptr;
     QmlComponentInfo* pQmlTest                  = nullptr;
-#endif
+// #endif
     QmlComponentInfo* pRemoteID                  = nullptr;
 
     QGCOptions*         defaultOptions          = nullptr;

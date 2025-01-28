@@ -34,6 +34,7 @@ class VideoManager;
 class UTMSPManager;
 class AirLinkManager;
 class VehicleTelemetry;
+class Calibration;
 
 Q_MOC_INCLUDE("ADSBVehicleManager.h")
 Q_MOC_INCLUDE("FactGroup.h")
@@ -54,6 +55,7 @@ Q_MOC_INCLUDE("UTMSPManager.h")
 Q_MOC_INCLUDE("AirLinkManager.h")
 #endif
 Q_MOC_INCLUDE("VehicleTelemetry.h")
+Q_MOC_INCLUDE("Calibration.h")
 
 class QGroundControlQmlGlobal : public QGCTool
 {
@@ -91,6 +93,7 @@ public:
     Q_PROPERTY(AirLinkManager*      airlinkManager          READ    airlinkManager          CONSTANT)
 #endif
 	Q_PROPERTY(VehicleTelemetry*    vehicleTelemetry        READ    vehicleTelemetry        CONSTANT)
+	Q_PROPERTY(Calibration*         сalibration             READ    сalibration             CONSTANT)
     Q_PROPERTY(bool                 airlinkSupported        READ    airlinkSupported        CONSTANT)
     Q_PROPERTY(QGCPalette*          globalPalette           MEMBER  _globalPalette          CONSTANT)   ///< This palette will always return enabled colors
     Q_PROPERTY(QmlUnitsConversion*  unitsConversion         READ    unitsConversion         CONSTANT)
@@ -190,6 +193,7 @@ public:
 
     AirLinkManager*         airlinkManager      ()  { return _airlinkManager; }
 	VehicleTelemetry*       vehicleTelemetry	()  { return _vehicleTelemetry; }
+	Calibration*            сalibration     	()  { return _сalibration; }
 #ifndef QGC_AIRLINK_DISABLED
     bool                    airlinkSupported    ()  { return true; }
 #else
@@ -278,6 +282,7 @@ private:
     AirLinkManager*         _airlinkManager         = nullptr;
     ADSBVehicleManager*     _adsbVehicleManager     = nullptr;
 	VehicleTelemetry*       _vehicleTelemetry       = nullptr;
+	Calibration*            _сalibration            = nullptr;
     QGCPalette*             _globalPalette          = nullptr;
     QmlUnitsConversion      _unitsConversion;
 #ifdef QGC_UTM_ADAPTER

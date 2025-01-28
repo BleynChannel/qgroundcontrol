@@ -11,7 +11,7 @@ APMTextBlock {
 	dataOpacity:		_opacity
 
 	property bool   _showHighlight:     enabled && (mouseArea.pressed || hoverArea.hovered)
-	property real	_opacity:			mouseArea.pressed ? .5 : enabled && hoverArea.hovered ? .7 : 1
+	property real	_opacity:			mouseArea.pressed ? .4 : enabled && hoverArea.hovered ? .6 : 1
 
 	signal clicked(var event)
 

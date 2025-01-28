@@ -95,6 +95,7 @@ void QGroundControlQmlGlobal::setToolbox(QGCToolbox* toolbox)
     _utmspManager            = toolbox->utmspManager();
 #endif
 	_vehicleTelemetry		= toolbox->vehicleTelemetry();
+	_сalibration    		= toolbox->сalibration();
 }
 
 void QGroundControlQmlGlobal::saveGlobalSetting (const QString& key, const QString& value)

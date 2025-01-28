@@ -57,6 +57,7 @@
 		<file alias="Vehicle/FrequrenceIndicator.qml">Controls/Vehicle/FrequrenceIndicator.qml</file>
 		<file alias="Drone/TakeoffControl.qml">Controls/Drone/TakeoffControl.qml</file>
 		<file alias="Drone/LandControl.qml">Controls/Drone/LandControl.qml</file>
+		<file alias="Drone/Calibration.qml">Controls/Drone/Calibration.qml</file>
 		<file alias="Drone/WindingControl.qml">Controls/Drone/WindingControl.qml</file>
 		<file alias="Drone/ControlMode.qml">Controls/Drone/ControlMode.qml</file>
 		<file alias="Drone/HeightIndicator.qml">Controls/Drone/HeightIndicator.qml</file>

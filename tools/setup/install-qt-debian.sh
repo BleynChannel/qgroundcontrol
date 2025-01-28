@@ -33,3 +33,15 @@ echo "LD_LIBRARY_PATH $LD_LIBRARY_PATH"
 echo "QT_ROOT_DIR $QT_ROOT_DIR"
 echo "QT_PLUGIN_PATH $QT_PLUGIN_PATH"
 echo "QML2_IMPORT_PATH $QML2_IMPORT_PATH"
+
+
+# Clone QtMqtt repository and install
+git clone https://github.com/qt/qtmqtt -b 6.6.3 /tmp/qt/qtmqtt
+#cd /tmp/qt/qtmqtt && git checkout 6.6.3
+mkdir /tmp/qt/qtmqtt/build
+cd /tmp/qt/qtmqtt/build
+
+${QT_ROOT_DIR}/bin/qt-configure-module ..
+cmake --build .
+cmake --install . --verbose
+cd /
