@@ -38,8 +38,8 @@ APMTextButton {
 
 	function calibrate()
 	{
-		// var handler = _calibration.execReadThread("rosrun calcu calcu.py");
-		var handler = _calibration.execReadThread("echo 'Hello, World!'");
+		var handler = _calibration.execReadThread("rosrun calcu calcu.py");
+		// var handler = _calibration.execReadThread("echo 'Hello, World!'");
 
 		calibrationDialogComponent.createObject(mainWindow, { handler: handler }).open()
 	}

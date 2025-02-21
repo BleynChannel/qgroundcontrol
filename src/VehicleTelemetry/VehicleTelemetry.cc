@@ -20,10 +20,10 @@ VehicleTelemetry::VehicleTelemetry(QGCApplication* app, QGCToolbox* toolbox)
 	QObject::connect(_mqttClient, &QMqttClient::errorChanged, this, &VehicleTelemetry::_errorChanged);
 	QObject::connect(_mqttClient, &QMqttClient::messageReceived, this, &VehicleTelemetry::_messageReceived);
 
-    QObject::connect(this, &VehicleTelemetry::_vfrTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VFR]); });
-    QObject::connect(this, &VehicleTelemetry::_vehicleFastTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VEHICLE_FAST]); });
-    QObject::connect(this, &VehicleTelemetry::_vehicleSlowTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VEHICLE_SLOW]); });
-    QObject::connect(this, &VehicleTelemetry::_nothingTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::NOTHING]); });
+    QObject::connect(this, &VehicleTelemetry::vfrTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VFR]); });
+    QObject::connect(this, &VehicleTelemetry::vehicleFastTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VEHICLE_FAST]); });
+    QObject::connect(this, &VehicleTelemetry::vehicleSlowTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VEHICLE_SLOW]); });
+    QObject::connect(this, &VehicleTelemetry::nothingTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::NOTHING]); });
 
 	_initTopics();
 }
@@ -98,6 +98,7 @@ VehicleTelemetry::_initTopics()
     _topics[VehicleTelemetry::VEHICLE_SLOW].message["beam"] = 0;
     _topics[VehicleTelemetry::VEHICLE_SLOW].message["battery_perc"] = 0;
     _topics[VehicleTelemetry::VEHICLE_SLOW].message["temp_motor"] = 0.f;
+	_topics[VehicleTelemetry::VEHICLE_SLOW].message["camera_select"] = 0;
 
     // Nothing Topic
     _topics[VehicleTelemetry::NOTHING].name = QString(NOTHING_TOPIC);
@@ -237,13 +238,13 @@ VehicleTelemetry::_messageReceived(const QByteArray &message, const QMqttTopicNa
 
 			// Emit signals
             if (topic->name == VFR_HUD_TOPIC) {
-                emit _vfrTopicChanged();
+                emit vfrTopicChanged();
             } else if (topic->name == VEHICLE_FAST_TOPIC) {
-                emit _vehicleFastTopicChanged();
+                emit vehicleFastTopicChanged();
             } else if (topic->name == VEHICLE_SLOW_TOPIC) {
-                emit _vehicleSlowTopicChanged();
+                emit vehicleSlowTopicChanged();
             } else if (topic->name == NOTHING_TOPIC) {
-                emit _nothingTopicChanged();
+                emit nothingTopicChanged();
 			}
 		} else {
 			// Handle the case when the JSON document is null (i.e., the message is not valid JSON)

@@ -148,7 +148,8 @@ Item {
     property bool showChangeAlt:            _guidedActionsEnabled && _vehicleFlying && _activeVehicle.guidedModeSupported && _vehicleArmed && !_missionActive
     property bool showChangeSpeed:          _guidedActionsEnabled && _vehicleFlying && _activeVehicle.guidedModeSupported && _vehicleArmed && !_missionActive && _speedLimitsAvailable
     property bool showOrbit:                _guidedActionsEnabled && _vehicleFlying && __orbitSupported && !_missionActive
-    property bool showROI:                  _guidedActionsEnabled && _vehicleFlying && __roiSupported && !_missionActive
+    // property bool showROI:                  _guidedActionsEnabled && _vehicleFlying && __roiSupported && !_missionActive
+    property bool showROI:                  true
     property bool showLandAbort:            _guidedActionsEnabled && _vehicleFlying && _fixedWingOnApproach
     property bool showGotoLocation:         _guidedActionsEnabled && _vehicleFlying
     property bool showSetHome:              _guidedActionsEnabled
