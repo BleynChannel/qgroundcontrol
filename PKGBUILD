@@ -90,7 +90,7 @@ sha256sums=('SKIP'
 prepare() {
   cd "$srcdir/${pkgname}-${pkgver}"
 
-  # git submodule init
+  git submodule init
 
   # git config submodule."src/GPS/Drivers".url "${srcdir}/${pkgname}"-GpsDrivers
   # git config submodule."libs/mavlink/include/mavlink/v2.0".url "${srcdir}/${pkgname}"-c_library_v2
