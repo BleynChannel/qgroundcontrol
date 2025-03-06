@@ -98,5 +98,5 @@ fi
 if [ "$action" = "deploy" ]; then
     # Deploy QGroundControl
     # mkdir -p ./build/Release
-    exec "./deploy/docker/run-docker-ubuntu.sh $build_type"
+    exec ./deploy/docker/run-docker-ubuntu.sh "$build_type"
 fi
