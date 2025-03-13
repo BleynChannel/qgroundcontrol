@@ -51,7 +51,8 @@ class VehicleTelemetry : public QGCTool
     Q_PROPERTY(bool				vehicleValve            READ	vehicleValve            WRITE	setVehicleValve             NOTIFY	nothingTopicChanged) //?
     Q_PROPERTY(int  			vehicleLeftFrequrence	READ	vehicleLeftFrequrence	WRITE	setVehicleLeftFrequrence	NOTIFY	vehicleFastTopicChanged)
     Q_PROPERTY(int  			vehicleRightFrequrence	READ	vehicleRightFrequrence	WRITE	setVehicleRightFrequrence	NOTIFY	vehicleFastTopicChanged)
-    Q_PROPERTY(int				vehicleCameraSelect     READ    vehicleCameraSelect     WRITE   setCameraSelect             NOTIFY  vehicleSlowTopicChanged)
+    Q_PROPERTY(int				vehicleCameraSelect     READ    vehicleCameraSelect     WRITE   setVehicleCameraSelect      NOTIFY  vehicleSlowTopicChanged)
+    Q_PROPERTY(int				vehicleAntennaPosition  READ    vehicleAntennaPosition  WRITE   setVehicleAntennaPosition   NOTIFY  vehicleSlowTopicChanged)
 
     Q_PROPERTY(bool				droneWinding            READ	droneWinding            WRITE	setDroneWinding             NOTIFY	nothingTopicChanged)
     Q_PROPERTY(int				droneControlMode        READ	droneControlMode        WRITE	setDroneControlMode         NOTIFY	nothingTopicChanged)
@@ -88,6 +89,7 @@ public:
     int 			vehicleLeftFrequrence		() const 		{ return _topics[VEHICLE_FAST].message["speed_motorL"].toInt(); }
     int 			vehicleRightFrequrence		() const 		{ return _topics[VEHICLE_FAST].message["speed_motorR"].toInt(); }
     int 			vehicleCameraSelect			() const 		{ return _topics[VEHICLE_SLOW].message["camera_select"].toInt(); }
+    int 			vehicleAntennaPosition      () const 		{ return _topics[VEHICLE_SLOW].message["ant_pos"].toInt(); }
 
     bool			droneWinding				() const 		{ return _topics[NOTHING].message["winding"].toBool(); }
     int				droneControlMode			() const 		{ return _topics[NOTHING].message["controlMode"].toInt(); }
@@ -109,7 +111,8 @@ public:
     void 	setVehicleValve             (bool value) 	{ _topics[NOTHING].message["valve"] = value; emit nothingTopicChanged(); }
     void 	setVehicleLeftFrequrence	(int value) 	{ _topics[VEHICLE_FAST].message["speed_motorL"] = value; emit vehicleFastTopicChanged(); }
     void 	setVehicleRightFrequrence	(int value) 	{ _topics[VEHICLE_FAST].message["speed_motorR"] = value; emit vehicleFastTopicChanged(); }
-    void 	setCameraSelect             (int value) 	{ _topics[VEHICLE_SLOW].message["camera_select"] = value; emit vehicleSlowTopicChanged(); }
+    void 	setVehicleCameraSelect      (int value) 	{ _topics[VEHICLE_SLOW].message["camera_select"] = value; emit vehicleSlowTopicChanged(); }
+    void 	setVehicleAntennaPosition   (int value) 	{ _topics[VEHICLE_SLOW].message["ant_pos"] = value; emit vehicleSlowTopicChanged(); }
 
     void 	setDroneWinding             (bool value) 			{ _topics[NOTHING].message["winding"] = value; emit nothingTopicChanged(); }
     void 	setDroneControlMode         (int value) 			{ _topics[NOTHING].message["controlMode"] = value; emit nothingTopicChanged(); }

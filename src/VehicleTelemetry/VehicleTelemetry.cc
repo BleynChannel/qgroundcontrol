@@ -99,6 +99,7 @@ VehicleTelemetry::_initTopics()
     _topics[VehicleTelemetry::VEHICLE_SLOW].message["battery_perc"] = 0;
     _topics[VehicleTelemetry::VEHICLE_SLOW].message["temp_motor"] = 0.f;
 	_topics[VehicleTelemetry::VEHICLE_SLOW].message["camera_select"] = 0;
+	_topics[VehicleTelemetry::VEHICLE_SLOW].message["ant_pos"] = 0;
 
     // Nothing Topic
     _topics[VehicleTelemetry::NOTHING].name = QString(NOTHING_TOPIC);

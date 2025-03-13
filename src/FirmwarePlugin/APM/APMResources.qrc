@@ -55,6 +55,8 @@
 		<file alias="Vehicle/PowerIndicator.qml">Controls/Vehicle/PowerIndicator.qml</file>
 		<file alias="Vehicle/SignalIndicator.qml">Controls/Vehicle/SignalIndicator.qml</file>
 		<file alias="Vehicle/FrequrenceIndicator.qml">Controls/Vehicle/FrequrenceIndicator.qml</file>
+		<file alias="Vehicle/AntennaControl.qml">Controls/Vehicle/AntennaControl.qml</file>
+		<file alias="Vehicle/AntennaControlPage.qml">Controls/Vehicle/AntennaControlPage.qml</file>
 		<file alias="Drone/TakeoffControl.qml">Controls/Drone/TakeoffControl.qml</file>
 		<file alias="Drone/LandControl.qml">Controls/Drone/LandControl.qml</file>
 		<file alias="Drone/Calibration.qml">Controls/Drone/Calibration.qml</file>
