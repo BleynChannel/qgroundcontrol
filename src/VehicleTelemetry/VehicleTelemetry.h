@@ -12,25 +12,11 @@
 
 Q_DECLARE_LOGGING_CATEGORY(VehicleTelemetryLog)
 
-// #define DECLARE_TOPICS(...) \
-// 	private: \
-// 	enum TopicType { __VA_ARGS__ }; \
-// 	struct Topic { \
-// 		QString	name; \
-// 		QJsonObject	message = QJsonObject(); \
-// 		int	qos = 0; \
-// 		bool retained = false; \
-// 		bool isChanged = false; \
-// 	}; \
-// 	QList<Topic> _topics = QList<Topic>(MAX_COUNT_TOPICS); \
-// 	// signals: \
-//     // void vfrTopicChanged(); \
-//     // void vehicleFastTopicChanged(); \
-//     // void vehicleSlowTopicChanged(); \
-//     // void nothingTopicChanged();
-
-#define MAX_COUNT_TOPICS        4
+#define MAX_COUNT_TOPICS        4 /*8*/
 #define VFR_HUD_TOPIC           "dron/VFR_HUD"
+// #define GPS_RAW_INT_TOPIC       "dron/GPS_RAW_INT"
+// #define GPS_FAKE_TOPIC          "GPS_FAKE"
+// #define BASE_COOR_TOPIC         "BASE_COOR"
 #define VEHICLE_FAST_TOPIC		"esp/rx/telem"
 #define VEHICLE_SLOW_TOPIC      "esp/rx/telem2"
 #define NOTHING_TOPIC           "nothing"
@@ -60,11 +46,14 @@ class VehicleTelemetry : public QGCTool
     Q_PROPERTY(bool				droneLinkPower          READ	droneLinkPower          WRITE	setDroneLinkPower           NOTIFY	nothingTopicChanged)
     Q_PROPERTY(int				droneBattery            READ	droneBattery            WRITE	setDroneBattery             NOTIFY	nothingTopicChanged)
     Q_PROPERTY(float			droneRotate             READ	droneRotate             WRITE	setDroneRotate              NOTIFY	vfrTopicChanged)
+    // Q_PROPERTY(int          	satellitesVisible       READ	satellitesVisible       WRITE	setSatellitesVisible        NOTIFY	gpsRawIntTopicChanged)
+    // Q_PROPERTY(bool         	fakeGPS                 READ	fakeGPS                 WRITE	setFakeGPS                  NOTIFY	gpsFakeTopicChanged)
+    // Q_PROPERTY(QGeoCoordinate	droneEditLocation       READ	droneEditLocation       WRITE	setDroneEditLocation        NOTIFY	baseCoorTopicChanged)
     Q_PROPERTY(QGeoCoordinate	droneEditLocation       READ	droneEditLocation       WRITE	setDroneEditLocation        NOTIFY	nothingTopicChanged)
 
 	struct Topic;
 
-    enum TopicType { VFR = 0, VEHICLE_FAST, VEHICLE_SLOW, NOTHING };
+    enum TopicType { VFR = 0, /*GPS_RAW_INT, GPS_FAKE, BASE_COOR,*/ VEHICLE_FAST, VEHICLE_SLOW, NOTHING };
 public:
 	VehicleTelemetry(QGCApplication* app, QGCToolbox* toolbox);
 	virtual ~VehicleTelemetry();
@@ -97,7 +86,11 @@ public:
     bool			droneLinkPower				() const 		{ return _topics[NOTHING].message["linkPower"].toBool(); }
     int				droneBattery				() const 		{ return _topics[NOTHING].message["battery"].toInt(); }
     float			droneRotate					() const 		{ return _topics[VFR].message["heading"].toDouble(); }
-	QGeoCoordinate	droneEditLocation			() const 		{ return _getDataCoordinate(_topics[NOTHING].message["gpsLocation"].toObject()); }
+    // int			    satellitesVisible			() const 		{ return _topics[GPS_RAW_INT].message["satellites_visible"].toInt(); }
+    // bool			fakeGPS 					() const 		{ return _topics[GPS_FAKE].message["FakeGPS"].toBool(); }
+    // QGeoCoordinate	droneEditLocation			() const 		{ return _getDataCoordinate(_topics[BASE_COOR].message["gpsLocation"].toObject()); }
+    QGeoCoordinate	droneEditLocation			() const 		{ return _getDataCoordinate(_topics[NOTHING].message["gpsLocation"].toObject()); }
+
 	
     void 	setVehicleFlashlight        (bool value) 	{ _topics[VEHICLE_SLOW].message["beam"] = value; emit vehicleSlowTopicChanged(); }
     void 	setVehicleEngine            (bool value) 	{ _topics[NOTHING].message["engine"] = value; emit nothingTopicChanged(); }
@@ -120,6 +113,9 @@ public:
     void 	setDroneLinkPower           (bool value) 			{ _topics[NOTHING].message["linkPower"] = value; emit nothingTopicChanged(); }
     void 	setDroneBattery             (int value) 			{ _topics[NOTHING].message["battery"] = value; emit nothingTopicChanged(); }
     void 	setDroneRotate              (float value) 			{ _topics[VFR].message["heading"] = value; emit vfrTopicChanged(); }
+    // void 	setSatellitesVisible        (bool value) 			{ _topics[GPS_RAW_INT].message["satellites_visible"] = value; emit gpsRawIntTopicChanged(); }
+    // void 	setFakeGPS                  (int value) 			{ _topics[GPS_FAKE].message["FakeGPS"] = value; emit gpsFakeTopicChanged(); }
+    // void 	setDroneEditLocation        (QGeoCoordinate value) 	{ _topics[BASE_COOR].message["gpsLocation"] = _setDataCoordinate(value); emit baseCoorTopicChanged(); }
 	void 	setDroneEditLocation        (QGeoCoordinate value) 	{ _topics[NOTHING].message["gpsLocation"] = _setDataCoordinate(value); emit nothingTopicChanged(); }
 
 private:
@@ -131,6 +127,9 @@ private:
 
 signals:
     void vfrTopicChanged();
+    // void gpsRawIntTopicChanged();
+    // void gpsFakeTopicChanged();
+    // void baseCoorTopicChanged();
     void vehicleFastTopicChanged();
     void vehicleSlowTopicChanged();
     void nothingTopicChanged();

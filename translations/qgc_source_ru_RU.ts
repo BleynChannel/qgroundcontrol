@@ -7011,7 +7011,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/FlightDisplay/FlyViewMap.qml" line="621"/>
       <source>ROI at location</source>
-      <translation>Окупаемость инвестиций на месте</translation>
+      <translation>редакторовать позицию машины</translation>
     </message>
     <message>
       <location filename="../src/FlightDisplay/FlyViewMap.qml" line="633"/>

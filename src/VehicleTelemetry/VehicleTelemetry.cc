@@ -16,14 +16,17 @@ VehicleTelemetry::VehicleTelemetry(QGCApplication* app, QGCToolbox* toolbox)
 	: QGCTool(app, toolbox)
 	, _mqttClient(new QMqttClient())
 {
-	QObject::connect(_mqttClient, &QMqttClient::stateChanged, this, &VehicleTelemetry::_stateChanged);
-	QObject::connect(_mqttClient, &QMqttClient::errorChanged, this, &VehicleTelemetry::_errorChanged);
+	QObject::connect(_mqttClient, &QMqttClient::stateChanged,    this, &VehicleTelemetry::_stateChanged);
+	QObject::connect(_mqttClient, &QMqttClient::errorChanged,    this, &VehicleTelemetry::_errorChanged);
 	QObject::connect(_mqttClient, &QMqttClient::messageReceived, this, &VehicleTelemetry::_messageReceived);
 
-    QObject::connect(this, &VehicleTelemetry::vfrTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VFR]); });
-    QObject::connect(this, &VehicleTelemetry::vehicleFastTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VEHICLE_FAST]); });
-    QObject::connect(this, &VehicleTelemetry::vehicleSlowTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VEHICLE_SLOW]); });
-    QObject::connect(this, &VehicleTelemetry::nothingTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::NOTHING]); });
+    QObject::connect(this, &VehicleTelemetry::vfrTopicChanged, 			[this]() { _updateTelemetry(_topics[VehicleTelemetry::VFR]); });
+	/*QObject::connect(this, &VehicleTelemetry::gpsRawIntTopicChanged,    [this]() { _updateTelemetry(_topics[VehicleTelemetry::GPS_RAW_INT]); });
+    QObject::connect(this, &VehicleTelemetry::gpsFakeTopicChanged,      [this]() { _updateTelemetry(_topics[VehicleTelemetry::GPS_FAKE]); });
+	QObject::connect(this, &VehicleTelemetry::baseCoorTopicChanged,     [this]() { _updateTelemetry(_topics[VehicleTelemetry::BASE_COOR]); });*/
+    QObject::connect(this, &VehicleTelemetry::vehicleFastTopicChanged,  [this]() { _updateTelemetry(_topics[VehicleTelemetry::VEHICLE_FAST]); });
+    QObject::connect(this, &VehicleTelemetry::vehicleSlowTopicChanged,  [this]() { _updateTelemetry(_topics[VehicleTelemetry::VEHICLE_SLOW]); });
+    QObject::connect(this, &VehicleTelemetry::nothingTopicChanged, 		[this]() { _updateTelemetry(_topics[VehicleTelemetry::NOTHING]); });
 
 	_initTopics();
 }
@@ -81,6 +84,14 @@ VehicleTelemetry::_initTopics()
     _topics[VehicleTelemetry::VFR].name = QString(VFR_HUD_TOPIC);
     _topics[VehicleTelemetry::VFR].message["heading"] = 0.f;
 
+	// GPS_RAW_INT Topic
+	/*_topics[VehicleTelemetry::GPS_RAW_INT].name = QString(GPS_RAW_INT_TOPIC);
+    _topics[VehicleTelemetry::GPS_RAW_INT].message["satellites_visible"] = 0;
+
+	//GPS_FAKE Topic
+	_topics[VehicleTelemetry::GPS_FAKE].name = QString(GPS_FAKE_TOPIC);
+    _topics[VehicleTelemetry::GPS_FAKE].message["FakeGPS"] = false;*/
+
     // Vehicle Fast Topic
     _topics[VehicleTelemetry::VEHICLE_FAST].name = QString(VEHICLE_FAST_TOPIC);
     _topics[VehicleTelemetry::VEHICLE_FAST].message["engine"] = false;
@@ -108,7 +119,9 @@ VehicleTelemetry::_initTopics()
     _topics[VehicleTelemetry::NOTHING].message["height"] = 0.f;
     _topics[VehicleTelemetry::NOTHING].message["linkPower"] = false;
     _topics[VehicleTelemetry::NOTHING].message["battery"] = 0;
-	_topics[VehicleTelemetry::NOTHING].message["gpsLocation"] = _setDataCoordinate(QGeoCoordinate());
+
+	/*_topics[VehicleTelemetry::BASE_COOR].name = QString(BASE_COOR_TOPIC);
+	_topics[VehicleTelemetry::BASE_COOR].message["gpsLocation"] = _setDataCoordinate(QGeoCoordinate());*/
 }
 
 QGeoCoordinate
@@ -154,6 +167,18 @@ VehicleTelemetry::_stateChanged(QMqttClient::ClientState state)
         if (!_mqttClient->subscribe(QString(VFR_HUD_TOPIC))) {
             qCWarning(VehicleTelemetryLog) << "Failed to subscribe to '" << VFR_HUD_TOPIC << "'";
         }
+
+		/*if (!_mqttClient->subscribe(QString(GPS_RAW_INT_TOPIC))) {
+            qCWarning(VehicleTelemetryLog) << "Failed to subscribe to '" << GPS_RAW_INT_TOPIC << "'";
+        }
+
+		if (!_mqttClient->subscribe(QString(GPS_FAKE_TOPIC))) {
+            qCWarning(VehicleTelemetryLog) << "Failed to subscribe to '" << GPS_FAKE_TOPIC << "'";
+        }
+
+		if (!_mqttClient->subscribe(QString(BASE_COOR_TOPIC))) {
+            qCWarning(VehicleTelemetryLog) << "Failed to subscribe to '" << BASE_COOR_TOPIC << "'";
+        }*/
 
         if (!_mqttClient->subscribe(QString(VEHICLE_FAST_TOPIC))) {
             qCWarning(VehicleTelemetryLog) << "Failed to subscribe to '" << VEHICLE_FAST_TOPIC << "'";
@@ -240,7 +265,13 @@ VehicleTelemetry::_messageReceived(const QByteArray &message, const QMqttTopicNa
 			// Emit signals
             if (topic->name == VFR_HUD_TOPIC) {
                 emit vfrTopicChanged();
-            } else if (topic->name == VEHICLE_FAST_TOPIC) {
+            } /*else if (topic->name == GPS_RAW_INT_TOPIC) {
+                emit gpsRawIntTopicChanged();
+            } else if (topic->name == GPS_FAKE_TOPIC) {
+                emit gpsFakeTopicChanged();
+            } else if (topic->name == BASE_COOR_TOPIC) {
+                emit baseCoorTopicChanged();
+            }*/ else if (topic->name == VEHICLE_FAST_TOPIC) {
                 emit vehicleFastTopicChanged();
             } else if (topic->name == VEHICLE_SLOW_TOPIC) {
                 emit vehicleSlowTopicChanged();

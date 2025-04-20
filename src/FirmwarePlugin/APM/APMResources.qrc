@@ -62,6 +62,7 @@
 		<file alias="Drone/Calibration.qml">Controls/Drone/Calibration.qml</file>
 		<file alias="Drone/WindingControl.qml">Controls/Drone/WindingControl.qml</file>
 		<file alias="Drone/ControlMode.qml">Controls/Drone/ControlMode.qml</file>
+        <file alias="Drone/SatellitesVisible.qml">Controls/Drone/SatellitesVisible.qml</file>
 		<file alias="Drone/HeightIndicator.qml">Controls/Drone/HeightIndicator.qml</file>
 		<file alias="Drone/LinkPowerIndicator.qml">Controls/Drone/LinkPowerIndicator.qml</file>
 		<file alias="Drone/BatteryIndicator.qml">Controls/Drone/BatteryIndicator.qml</file>
