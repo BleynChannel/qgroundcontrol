@@ -37,7 +37,6 @@ echo "QML2_IMPORT_PATH $QML2_IMPORT_PATH"
 
 # Clone QtMqtt repository and install
 git clone https://github.com/qt/qtmqtt -b 6.6.3 /tmp/qt/qtmqtt
-#cd /tmp/qt/qtmqtt && git checkout 6.6.3
 mkdir /tmp/qt/qtmqtt/build
 cd /tmp/qt/qtmqtt/build
 
