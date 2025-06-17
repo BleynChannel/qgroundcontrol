@@ -14,6 +14,14 @@ Item {
 	visible: 		QGroundControl.videoManager.videoReceiverUris.length > 0
 
     property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+	property var 	_telemetry:	QGroundControl.vehicleTelemetry
+
+	Connections {
+		target: _telemetry
+		function onVehicleSlowTopicChanged() {
+			QGroundControl.videoManager.changeCurrentUri(_telemetry.vehicleCameraSelect)
+		}
+	}
 
 	Rectangle {
 		anchors.fill: 	controlsRow
@@ -31,13 +39,6 @@ Item {
 		rightPadding:   ScreenTools.defaultFontPixelWidth * 2
         spacing:        ScreenTools.defaultFontPixelWidth
 
-		property int _activeCamera: 0
-
-		function setActiveCamera(index) {
-			_activeCamera = index
-			QGroundControl.videoManager.changeCurrentUri(index)
-		}
-
 		Repeater {
 			model: QGroundControl.videoManager.videoReceiverUris.map((uri, index) => { return index })
 
@@ -47,10 +48,10 @@ Item {
 				anchors.top:    parent.top
 				anchors.bottom: parent.bottom
 				iconSource: 	"/qmlimages/CameraIcon.svg"
-				iconColor: 		controlsRow._activeCamera === index ? qgcPal.colorGreen : qgcPal.button
+				iconColor: 		_telemetry.vehicleCameraSelect === index ? qgcPal.colorGreen : qgcPal.button
 				border.width:	0
 
-				onClicked: controlsRow.setActiveCamera(index)
+				onClicked: _telemetry.vehicleCameraSelect = index
 			}
 		}
 	}

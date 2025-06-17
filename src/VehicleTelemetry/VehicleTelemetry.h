@@ -24,10 +24,10 @@ Q_DECLARE_LOGGING_CATEGORY(VehicleTelemetryLog)
 // 	}; \
 // 	QList<Topic> _topics = QList<Topic>(MAX_COUNT_TOPICS); \
 // 	// signals: \
-//     // void _vfrTopicChanged(); \
-//     // void _vehicleFastTopicChanged(); \
-//     // void _vehicleSlowTopicChanged(); \
-//     // void _nothingTopicChanged();
+//     // void vfrTopicChanged(); \
+//     // void vehicleFastTopicChanged(); \
+//     // void vehicleSlowTopicChanged(); \
+//     // void nothingTopicChanged();
 
 #define MAX_COUNT_TOPICS        4
 #define VFR_HUD_TOPIC           "dron/VFR_HUD"
@@ -39,26 +39,27 @@ class VehicleTelemetry : public QGCTool
 {
 	Q_OBJECT
 
-    Q_PROPERTY(int				vehicleFlashlight       READ	vehicleFlashlight       WRITE	setVehicleFlashlight        NOTIFY	_vehicleSlowTopicChanged)
-    Q_PROPERTY(bool				vehicleEngine           READ	vehicleEngine           WRITE	setVehicleEngine            NOTIFY	_nothingTopicChanged) //?
-    Q_PROPERTY(bool				vehicleWeight           READ	vehicleWeight           WRITE	setVehicleWeight            NOTIFY	_nothingTopicChanged) //?
-    Q_PROPERTY(bool				vehicleReset            READ	vehicleReset            WRITE	setVehicleReset             NOTIFY	_nothingTopicChanged) //?
-    Q_PROPERTY(int				vehicleBattery          READ	vehicleBattery          WRITE	setVehicleBattery           NOTIFY	_vehicleSlowTopicChanged)
-    Q_PROPERTY(int  			vehicleTemperature      READ	vehicleTemperature      WRITE	setVehicleTemperature       NOTIFY	_vehicleSlowTopicChanged)
-    Q_PROPERTY(bool				vehicleFan              READ	vehicleFan              WRITE	setVehicleFan               NOTIFY	_nothingTopicChanged) //?
-    Q_PROPERTY(int  			vehiclePower            READ	vehiclePower            WRITE	setVehiclePower             NOTIFY	_vehicleFastTopicChanged)
-    Q_PROPERTY(int				vehicleSignal           READ	vehicleSignal           WRITE	setVehicleSignal            NOTIFY	_vehicleFastTopicChanged)
-    Q_PROPERTY(bool				vehicleValve            READ	vehicleValve            WRITE	setVehicleValve             NOTIFY	_nothingTopicChanged) //?
-    Q_PROPERTY(int  			vehicleLeftFrequrence	READ	vehicleLeftFrequrence	WRITE	setVehicleLeftFrequrence	NOTIFY	_vehicleFastTopicChanged)
-    Q_PROPERTY(int  			vehicleRightFrequrence	READ	vehicleRightFrequrence	WRITE	setVehicleRightFrequrence	NOTIFY	_vehicleFastTopicChanged)
+    Q_PROPERTY(int				vehicleFlashlight       READ	vehicleFlashlight       WRITE	setVehicleFlashlight        NOTIFY	vehicleSlowTopicChanged)
+    Q_PROPERTY(bool				vehicleEngine           READ	vehicleEngine           WRITE	setVehicleEngine            NOTIFY	nothingTopicChanged) //?
+    Q_PROPERTY(bool				vehicleWeight           READ	vehicleWeight           WRITE	setVehicleWeight            NOTIFY	nothingTopicChanged) //?
+    Q_PROPERTY(bool				vehicleReset            READ	vehicleReset            WRITE	setVehicleReset             NOTIFY	nothingTopicChanged) //?
+    Q_PROPERTY(int				vehicleBattery          READ	vehicleBattery          WRITE	setVehicleBattery           NOTIFY	vehicleSlowTopicChanged)
+    Q_PROPERTY(int  			vehicleTemperature      READ	vehicleTemperature      WRITE	setVehicleTemperature       NOTIFY	vehicleSlowTopicChanged)
+    Q_PROPERTY(bool				vehicleFan              READ	vehicleFan              WRITE	setVehicleFan               NOTIFY	nothingTopicChanged) //?
+    Q_PROPERTY(int  			vehiclePower            READ	vehiclePower            WRITE	setVehiclePower             NOTIFY	vehicleFastTopicChanged)
+    Q_PROPERTY(int				vehicleSignal           READ	vehicleSignal           WRITE	setVehicleSignal            NOTIFY	vehicleFastTopicChanged)
+    Q_PROPERTY(bool				vehicleValve            READ	vehicleValve            WRITE	setVehicleValve             NOTIFY	nothingTopicChanged) //?
+    Q_PROPERTY(int  			vehicleLeftFrequrence	READ	vehicleLeftFrequrence	WRITE	setVehicleLeftFrequrence	NOTIFY	vehicleFastTopicChanged)
+    Q_PROPERTY(int  			vehicleRightFrequrence	READ	vehicleRightFrequrence	WRITE	setVehicleRightFrequrence	NOTIFY	vehicleFastTopicChanged)
+    Q_PROPERTY(int				vehicleCameraSelect     READ    vehicleCameraSelect     WRITE   setCameraSelect             NOTIFY  vehicleSlowTopicChanged)
 
-    Q_PROPERTY(bool				droneWinding            READ	droneWinding            WRITE	setDroneWinding             NOTIFY	_nothingTopicChanged)
-    Q_PROPERTY(int				droneControlMode        READ	droneControlMode        WRITE	setDroneControlMode         NOTIFY	_nothingTopicChanged)
-    Q_PROPERTY(float			droneHeight             READ	droneHeight             WRITE	setDroneHeight              NOTIFY	_nothingTopicChanged)
-    Q_PROPERTY(bool				droneLinkPower          READ	droneLinkPower          WRITE	setDroneLinkPower           NOTIFY	_nothingTopicChanged)
-    Q_PROPERTY(int				droneBattery            READ	droneBattery            WRITE	setDroneBattery             NOTIFY	_nothingTopicChanged)
-    Q_PROPERTY(float			droneRotate             READ	droneRotate             WRITE	setDroneRotate              NOTIFY	_vfrTopicChanged)
-    Q_PROPERTY(QGeoCoordinate	droneEditLocation       READ	droneEditLocation       WRITE	setDroneEditLocation        NOTIFY	_nothingTopicChanged)
+    Q_PROPERTY(bool				droneWinding            READ	droneWinding            WRITE	setDroneWinding             NOTIFY	nothingTopicChanged)
+    Q_PROPERTY(int				droneControlMode        READ	droneControlMode        WRITE	setDroneControlMode         NOTIFY	nothingTopicChanged)
+    Q_PROPERTY(float			droneHeight             READ	droneHeight             WRITE	setDroneHeight              NOTIFY	nothingTopicChanged)
+    Q_PROPERTY(bool				droneLinkPower          READ	droneLinkPower          WRITE	setDroneLinkPower           NOTIFY	nothingTopicChanged)
+    Q_PROPERTY(int				droneBattery            READ	droneBattery            WRITE	setDroneBattery             NOTIFY	nothingTopicChanged)
+    Q_PROPERTY(float			droneRotate             READ	droneRotate             WRITE	setDroneRotate              NOTIFY	vfrTopicChanged)
+    Q_PROPERTY(QGeoCoordinate	droneEditLocation       READ	droneEditLocation       WRITE	setDroneEditLocation        NOTIFY	nothingTopicChanged)
 
 	struct Topic;
 
@@ -86,6 +87,7 @@ public:
     bool 			vehicleValve				() const 		{ return _topics[NOTHING].message["valve"].toBool(); }
     int 			vehicleLeftFrequrence		() const 		{ return _topics[VEHICLE_FAST].message["speed_motorL"].toInt(); }
     int 			vehicleRightFrequrence		() const 		{ return _topics[VEHICLE_FAST].message["speed_motorR"].toInt(); }
+    int 			vehicleCameraSelect			() const 		{ return _topics[VEHICLE_SLOW].message["camera_select"].toInt(); }
 
     bool			droneWinding				() const 		{ return _topics[NOTHING].message["winding"].toBool(); }
     int				droneControlMode			() const 		{ return _topics[NOTHING].message["controlMode"].toInt(); }
@@ -95,26 +97,27 @@ public:
     float			droneRotate					() const 		{ return _topics[VFR].message["heading"].toDouble(); }
 	QGeoCoordinate	droneEditLocation			() const 		{ return _getDataCoordinate(_topics[NOTHING].message["gpsLocation"].toObject()); }
 	
-    void 	setVehicleFlashlight        (bool value) 	{ _topics[VEHICLE_SLOW].message["beam"] = value; emit _vehicleSlowTopicChanged(); }
-    void 	setVehicleEngine            (bool value) 	{ _topics[NOTHING].message["engine"] = value; emit _nothingTopicChanged(); }
-    void 	setVehicleWeight            (bool value) 	{ _topics[NOTHING].message["weight"] = value; emit _nothingTopicChanged(); }
-    void 	setVehicleReset             (bool value) 	{ _topics[NOTHING].message["reset"] = value; emit _nothingTopicChanged(); }
-    void 	setVehicleBattery           (int value) 	{ _topics[VEHICLE_SLOW].message["battery_perc"] = value; emit _vehicleSlowTopicChanged(); }
-    void 	setVehicleTemperature       (int value) 	{ _topics[VEHICLE_SLOW].message["temp_motor"] = value; emit _vehicleSlowTopicChanged(); }
-    void 	setVehicleFan               (bool value) 	{ _topics[NOTHING].message["fan"] = value; emit _nothingTopicChanged(); }
-    void 	setVehiclePower             (int value) 	{ _topics[VEHICLE_FAST].message["power"] = value; emit _vehicleFastTopicChanged(); }
-    void 	setVehicleSignal            (int value) 	{ _topics[VEHICLE_FAST].message["rssi_rc"] = value; emit _vehicleFastTopicChanged(); }
-    void 	setVehicleValve             (bool value) 	{ _topics[NOTHING].message["valve"] = value; emit _nothingTopicChanged(); }
-    void 	setVehicleLeftFrequrence	(int value) 	{ _topics[VEHICLE_FAST].message["speed_motorL"] = value; emit _vehicleFastTopicChanged(); }
-    void 	setVehicleRightFrequrence	(int value) 	{ _topics[VEHICLE_FAST].message["speed_motorR"] = value; emit _vehicleFastTopicChanged(); }
+    void 	setVehicleFlashlight        (bool value) 	{ _topics[VEHICLE_SLOW].message["beam"] = value; emit vehicleSlowTopicChanged(); }
+    void 	setVehicleEngine            (bool value) 	{ _topics[NOTHING].message["engine"] = value; emit nothingTopicChanged(); }
+    void 	setVehicleWeight            (bool value) 	{ _topics[NOTHING].message["weight"] = value; emit nothingTopicChanged(); }
+    void 	setVehicleReset             (bool value) 	{ _topics[NOTHING].message["reset"] = value; emit nothingTopicChanged(); }
+    void 	setVehicleBattery           (int value) 	{ _topics[VEHICLE_SLOW].message["battery_perc"] = value; emit vehicleSlowTopicChanged(); }
+    void 	setVehicleTemperature       (int value) 	{ _topics[VEHICLE_SLOW].message["temp_motor"] = value; emit vehicleSlowTopicChanged(); }
+    void 	setVehicleFan               (bool value) 	{ _topics[NOTHING].message["fan"] = value; emit nothingTopicChanged(); }
+    void 	setVehiclePower             (int value) 	{ _topics[VEHICLE_FAST].message["power"] = value; emit vehicleFastTopicChanged(); }
+    void 	setVehicleSignal            (int value) 	{ _topics[VEHICLE_FAST].message["rssi_rc"] = value; emit vehicleFastTopicChanged(); }
+    void 	setVehicleValve             (bool value) 	{ _topics[NOTHING].message["valve"] = value; emit nothingTopicChanged(); }
+    void 	setVehicleLeftFrequrence	(int value) 	{ _topics[VEHICLE_FAST].message["speed_motorL"] = value; emit vehicleFastTopicChanged(); }
+    void 	setVehicleRightFrequrence	(int value) 	{ _topics[VEHICLE_FAST].message["speed_motorR"] = value; emit vehicleFastTopicChanged(); }
+    void 	setCameraSelect             (int value) 	{ _topics[VEHICLE_SLOW].message["camera_select"] = value; emit vehicleSlowTopicChanged(); }
 
-    void 	setDroneWinding             (bool value) 			{ _topics[NOTHING].message["winding"] = value; emit _nothingTopicChanged(); }
-    void 	setDroneControlMode         (int value) 			{ _topics[NOTHING].message["controlMode"] = value; emit _nothingTopicChanged(); }
-    void 	setDroneHeight              (float value) 			{ _topics[NOTHING].message["height"] = value; emit _nothingTopicChanged(); }
-    void 	setDroneLinkPower           (bool value) 			{ _topics[NOTHING].message["linkPower"] = value; emit _nothingTopicChanged(); }
-    void 	setDroneBattery             (int value) 			{ _topics[NOTHING].message["battery"] = value; emit _nothingTopicChanged(); }
-    void 	setDroneRotate              (float value) 			{ _topics[VFR].message["heading"] = value; emit _vfrTopicChanged(); }
-	void 	setDroneEditLocation        (QGeoCoordinate value) 	{ _topics[NOTHING].message["gpsLocation"] = _setDataCoordinate(value); emit _nothingTopicChanged(); }
+    void 	setDroneWinding             (bool value) 			{ _topics[NOTHING].message["winding"] = value; emit nothingTopicChanged(); }
+    void 	setDroneControlMode         (int value) 			{ _topics[NOTHING].message["controlMode"] = value; emit nothingTopicChanged(); }
+    void 	setDroneHeight              (float value) 			{ _topics[NOTHING].message["height"] = value; emit nothingTopicChanged(); }
+    void 	setDroneLinkPower           (bool value) 			{ _topics[NOTHING].message["linkPower"] = value; emit nothingTopicChanged(); }
+    void 	setDroneBattery             (int value) 			{ _topics[NOTHING].message["battery"] = value; emit nothingTopicChanged(); }
+    void 	setDroneRotate              (float value) 			{ _topics[VFR].message["heading"] = value; emit vfrTopicChanged(); }
+	void 	setDroneEditLocation        (QGeoCoordinate value) 	{ _topics[NOTHING].message["gpsLocation"] = _setDataCoordinate(value); emit nothingTopicChanged(); }
 
 private:
 	void _initTopics();
@@ -124,10 +127,10 @@ private:
 	QJsonObject 	_setDataCoordinate	(const QGeoCoordinate& value);
 
 signals:
-    void _vfrTopicChanged();
-    void _vehicleFastTopicChanged();
-    void _vehicleSlowTopicChanged();
-    void _nothingTopicChanged();
+    void vfrTopicChanged();
+    void vehicleFastTopicChanged();
+    void vehicleSlowTopicChanged();
+    void nothingTopicChanged();
 
 private slots:
 	void _configChanged		();

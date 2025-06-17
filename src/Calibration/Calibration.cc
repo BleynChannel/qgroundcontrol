@@ -199,18 +199,14 @@ void SessionWorker::reconnect()
 
 void SessionWorker::_connect()
 {
-	int code = SSH_AGAIN;
-	do {
-		try {		
-			session->connect();
-			session->userauthPublickeyAuto();
-			setConnected(true);
-			qCDebug(CalibrationLog) << "Session connected";
-		} catch (ssh::SshException e) {
-			qCCritical(CalibrationLog) << "Calibration::connect: " << e.getCode() << ": " << e.getError();
-			code = e.getCode();
-		}
-	} while (code != SSH_AGAIN);
+	try {		
+		session->connect();
+		session->userauthPublickeyAuto();
+		setConnected(true);
+		qCDebug(CalibrationLog) << "Session connected";
+	} catch (ssh::SshException e) {
+		qCCritical(CalibrationLog) << "Calibration::connect: " << e.getCode() << ": " << e.getError();
+	}
 }
 
 void SessionWorker::_disconnect()

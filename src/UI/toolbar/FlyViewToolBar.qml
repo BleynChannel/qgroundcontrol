@@ -155,11 +155,10 @@ Rectangle {
 
 		// Divider
 		Rectangle {
-			color:          "black"
+			color:          qgcPal.globalTheme === QGCPalette.Light ? "black" : "white"
 			anchors.left:   parent.left
 			anchors.right:  parent.right
 			height:         1
-			visible:        qgcPal.globalTheme === QGCPalette.Light
 		}
 
 		Flow {
