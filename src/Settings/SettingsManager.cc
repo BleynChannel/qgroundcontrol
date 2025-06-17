@@ -35,6 +35,7 @@ SettingsManager::SettingsManager(QGCApplication* app, QGCToolbox* toolbox)
 #endif
     , _remoteIDSettings             (nullptr)
     , _customMavlinkActionsSettings (nullptr)
+	, _mqttSettings                 (nullptr)
 {
 
 }
@@ -67,4 +68,5 @@ void SettingsManager::setToolbox(QGCToolbox *toolbox)
 #endif
     _remoteIDSettings =             new RemoteIDSettings            (this); 
     _customMavlinkActionsSettings = new CustomMavlinkActionsSettings(this);
+	_mqttSettings =                 new MqttSettings                (this);
 }

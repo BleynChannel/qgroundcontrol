@@ -81,6 +81,12 @@ VideoManager::~VideoManager()
             videoReceiver.receiver = nullptr;
         }
 
+		if (videoReceiver.receiverProcess != nullptr) {
+			videoReceiver.receiverProcess->kill();
+			delete videoReceiver.receiverProcess;
+			videoReceiver.receiverProcess = nullptr;
+		}
+		
         if (videoReceiver.sink != nullptr) {
 #ifdef QGC_GST_STREAMING
             // FIXME: AV: we need some interaface for video sink with .release() call
@@ -124,6 +130,7 @@ VideoManager::setToolbox(QGCToolbox *toolbox)
     int index = 0;
     for (VideoReceiverData &videoReceiver : _videoReceiverData) {
         videoReceiver.receiver = toolbox->corePlugin()->createVideoReceiver(this);
+		videoReceiver.receiverProcess = new QProcess(this);
         videoReceiver.index = index;
         index++;
     }
@@ -858,7 +865,18 @@ VideoManager::_startReceiver(unsigned id)
         return;
     }
 
+	QStringList arguments = QStringList();
+	arguments << "rtspsrc" << "*";
+	arguments << "latency=" + QString::number(_videoReceiverData[id].lowLatencyStreaming ? 17 : 100);
+	arguments << "timeout=" + QString::number(500000);
+	arguments << "!" << "queue" << "!" << "rtph264depay" << "!" << "h264parse" << "!" << "avdec_h264" << "!" << "autovideosink";
+
+	arguments[1] = "location=" + _videoReceiverData[id].uris[_videoReceiverData[id].uriIndex];
+	_videoReceiverData[id].receiverProcess->start("gst-launch-1.0", arguments);
+	qCDebug(VideoManagerLog) << "Active:" << _videoReceiverData[id].receiverProcess->waitForStarted() << "Process:" << _videoReceiverData[id].receiverProcess->processId();
+
     // _videoReceiverData[id].receiver->start(_videoReceiverData[id].uris[_videoReceiverData[id].uriIndex], timeout, _videoReceiverData[id].lowLatencyStreaming ? -1 : 0);
+	_videoReceiverData[id].started = true;
 }
 
 //----------------------------------------------------------------------------------------
@@ -876,6 +894,7 @@ VideoManager::_stopReceiver(unsigned id)
     }
 
     _videoReceiverData[id].receiver->stop();
+	_videoReceiverData[id].receiverProcess->close();
 }
 
 //----------------------------------------------------------------------------------------

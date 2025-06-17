@@ -13,6 +13,7 @@
 #include <QtCore/QSize>
 #include <QtCore/QRunnable>
 #include <QtCore/QLoggingCategory>
+#include <QProcess>
 
 #include "QGCToolbox.h"
 
@@ -135,6 +136,8 @@ protected:
 
     struct VideoReceiverData {
         VideoReceiver* receiver = nullptr;
+		// QList<QProcess*> receiverProcess; // For multiple streams // Variant 1
+		QProcess* receiverProcess = nullptr; // For multiple streams // Variant 2
         void* sink = nullptr;
         QString uri;
 		QStringList uris; // For multiple streams

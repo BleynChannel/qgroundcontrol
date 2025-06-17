@@ -224,6 +224,7 @@ public:
     Q_PROPERTY(GimbalController*    gimbalController            READ gimbalController                                               CONSTANT)
     Q_PROPERTY(bool                 hasGripper                  READ hasGripper                                                     CONSTANT)
     Q_PROPERTY(bool                 isROIEnabled                READ isROIEnabled                                                   NOTIFY isROIEnabledChanged)
+    Q_PROPERTY(QGeoCoordinate       roiCoord                    READ roiCoord                                                   	NOTIFY roiCoordChanged)
     Q_PROPERTY(CheckList            checkListState              READ checkListState             WRITE setCheckListState             NOTIFY checkListStateChanged)
     Q_PROPERTY(bool                 readyToFlyAvailable         READ readyToFlyAvailable                                            NOTIFY readyToFlyAvailableChanged)  ///< true: readyToFly signalling is available on this vehicle
     Q_PROPERTY(bool                 readyToFly                  READ readyToFly                                                     NOTIFY readyToFlyChanged)
@@ -347,6 +348,7 @@ public:
 
     /// Command vehicle to keep given point as ROI
     ///     @param centerCoord ROI coordinates
+	Q_INVOKABLE void setPointROI(const QGeoCoordinate& centerCoord);
     Q_INVOKABLE void guidedModeROI(const QGeoCoordinate& centerCoord);
     Q_INVOKABLE void stopGuidedModeROI();
 
@@ -799,6 +801,7 @@ public:
     float       mavlinkLossPercent      () const{ return _mavlinkLossPercent; }      /// Running loss rate
 
     bool        isROIEnabled            () const{ return _isROIEnabled; }
+	QGeoCoordinate roiCoord             () const{ return _roiCoord; }
 
     CheckList   checkListState          () { return _checkListState; }
     void        setCheckListState       (CheckList cl)  { _checkListState = cl; emit checkListStateChanged(); }
@@ -1292,6 +1295,8 @@ private:
     // We use this to limit above terrain altitude queries based on distance and altitude change
     QGeoCoordinate              _altitudeAboveTerrLastCoord;
     float                       _altitudeAboveTerrLastRelAlt = qQNaN();
+
+	QGeoCoordinate				_roiCoord;
 
 public:
     int32_t getMessageRate(uint8_t compId, uint16_t msgId);

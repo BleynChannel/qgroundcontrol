@@ -31,6 +31,7 @@
 #include <StatusTextHandler.h>
 #include "MAVLinkProtocol.h"
 #include "QGCLoggingCategory.h"
+#include "VehicleTelemetry.h"
 #include <DeviceInfo.h>
 
 #include <QtNetwork/QTcpSocket>
@@ -652,12 +653,14 @@ const QVariantList& APMFirmwarePlugin::toolIndicators(const Vehicle* vehicle)
         }
 
         // Find the generic battery indicator and replace with the custom one
-        for (int i=0; i<_toolIndicatorList.size(); i++) {
-            if (_toolIndicatorList.at(i).toUrl().toString().contains("BatteryIndicator.qml")) {
-                _toolIndicatorList[i] = QVariant::fromValue(QUrl::fromUserInput("qrc:/APM/Indicators/APMBatteryIndicator.qml"));
-                break;
-            }
-        }
+        // for (int i=0; i<_toolIndicatorList.size(); i++) {
+        //     if (_toolIndicatorList.at(i).toUrl().toString().contains("BatteryIndicator.qml")) {
+        //         _toolIndicatorList[i] = QVariant::fromValue(QUrl::fromUserInput("qrc:/APM/Indicators/APMBatteryIndicator.qml"));
+        //         break;
+        //     }
+        // }
+
+		// _toolIndicatorList.removeOne(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/BatteryIndicator.qml")));
 
         // Then add the forwarding support indicator
         _toolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/APMSupportForwardingIndicator.qml")));
@@ -672,8 +675,20 @@ const QVariantList& APMFirmwarePlugin::anotherToolIndicators(const Vehicle* vehi
         // First call the base class to get the standard QGC list
         _anotherToolIndicatorList = FirmwarePlugin::anotherToolIndicators(vehicle);
 		
-		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/APMVehicleControl.qml")));
 		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/APMVehicleCamera.qml")));
+		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/LightControl.qml")));
+		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/EngineControl.qml")));
+		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/WeightControl.qml")));
+		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/ResetControl.qml")));
+		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/FanControl.qml")));
+		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/ValveControl.qml")));
+		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/VehicleBatteryIndicator.qml")));
+		// _anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/APM/Indicators/APMBatteryIndicator.qml")));
+		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/TemperatureIndicator.qml")));
+		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/PowerIndicator.qml")));
+		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/SignalIndicator.qml")));
+		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/FrequrenceIndicator.qml")));
+		_anotherToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/UploadROI.qml")));
 	}
 
 	return _anotherToolIndicatorList;

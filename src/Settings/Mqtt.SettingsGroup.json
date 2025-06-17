@@ -1,0 +1,31 @@
+{
+    "version":      1,
+    "fileType":  "FactMetaData",
+    "QGC.MetaData.Facts":
+[
+{
+    "name":             "hostname",
+    "shortDesc": "Hostname of MQTT broker",
+    "type":             "string",
+    "default":     ""
+},
+{
+	"name":             "port",
+	"shortDesc": "Port of MQTT broker",
+	"type":             "uint16",
+	"default":     1883
+},
+{
+	"name":             "username",
+	"shortDesc": "Username for MQTT broker",
+	"type":             "string",
+	"default":     ""
+},
+{
+	"name":             "password",
+	"shortDesc": "Password for MQTT broker",
+	"type":             "string",
+	"default":     ""
+}
+]
+}

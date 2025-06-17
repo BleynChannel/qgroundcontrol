@@ -18,6 +18,7 @@
 #include <QtCore/QMetaMethod>
 #include <QtCore/QMetaObject>
 #include <QtCore/QTranslator>
+#include <QProcess>
 
 // These private headers are require to implement the signal compress support below
 #include <QtCore/private/qthread_p.h>
@@ -189,6 +190,7 @@ private:
     bool                _error                  = false;
     bool                _showErrorsInToolbar    = false;
     QElapsedTimer       _msecsElapsedTime;
+	QProcess*           _devilspieProcess		= nullptr;
 
     QList<QPair<QString /* title */, QString /* message */>> _delayedAppMessages;
 

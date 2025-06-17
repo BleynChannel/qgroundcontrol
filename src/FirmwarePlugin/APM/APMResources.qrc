@@ -30,7 +30,9 @@
         <file alias="APMTuningComponentCopter.qml">../../AutoPilotPlugins/APM/APMTuningComponentCopter.qml</file>
         <file alias="APMTuningComponentSub.qml">../../AutoPilotPlugins/APM/APMTuningComponentSub.qml</file>
         <file alias="APMRemoteSupportComponent.qml">../../AutoPilotPlugins/APM/APMRemoteSupportComponent.qml</file>
-		<file alias="QGroundControl/Controls/APMIconButton.qml">APMIconButton.qml</file>
+		<file alias="QGroundControl/Controls/APMIconButton.qml">Controls/APMIconButton.qml</file>
+		<file alias="QGroundControl/Controls/APMTextBlock.qml">Controls/APMTextBlock.qml</file>
+		<file alias="QGroundControl/Controls/APMTextButton.qml">Controls/APMTextButton.qml</file>
         <file alias="QGroundControl/ArduPilot/APMSensorParams.qml">APMSensorParams.qml</file>
         <file alias="QGroundControl/ArduPilot/APMSensorIdDecoder.qml">APMSensorIdDecoder.qml</file>
         <file alias="QGroundControl/ArduPilot/qmldir">QGroundControl.ArduPilot.qmldir</file>
@@ -41,8 +43,19 @@
         <file alias="APMMainStatusIndicatorContentItem.qml">APMMainStatusIndicatorContentItem.qml</file>
     </qresource>
 	<qresource prefix="/toolbar">
-		<file alias="APMVehicleControl.qml">APMVehicleControl.qml</file>
-		<file alias="APMVehicleCamera.qml">APMVehicleCamera.qml</file>
+		<file alias="APMVehicleCamera.qml">Controls/APMVehicleCamera.qml</file>
+		<file alias="EngineControl.qml">Controls/EngineControl.qml</file>
+		<file alias="FanControl.qml">Controls/FanControl.qml</file>
+		<file alias="LightControl.qml">Controls/LightControl.qml</file>
+		<file alias="ResetControl.qml">Controls/ResetControl.qml</file>
+		<file alias="ValveControl.qml">Controls/ValveControl.qml</file>
+		<file alias="WeightControl.qml">Controls/WeightControl.qml</file>
+		<file alias="VehicleBatteryIndicator.qml">Controls/VehicleBatteryIndicator.qml</file>
+		<file alias="TemperatureIndicator.qml">Controls/TemperatureIndicator.qml</file>
+		<file alias="PowerIndicator.qml">Controls/PowerIndicator.qml</file>
+		<file alias="SignalIndicator.qml">Controls/SignalIndicator.qml</file>
+		<file alias="FrequrenceIndicator.qml">Controls/FrequrenceIndicator.qml</file>
+		<file alias="UploadROI.qml">Controls/UploadROI.qml</file>
 	</qresource>
     <qresource prefix="/json">
         <file alias="APM-MavCmdInfoCommon.json">APM-MavCmdInfoCommon.json</file>

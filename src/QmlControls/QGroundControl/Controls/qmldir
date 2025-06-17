@@ -11,6 +11,8 @@ CameraCalcGrid                          1.0 CameraCalcGrid.qml
 ContentAreaCalc                         1.0 ContentAreaCalc.qml
 APMSubMotorDisplay                      1.0 APMSubMotorDisplay.qml
 APMIconButton                           1.0 APMIconButton.qml
+APMTextBlock                            1.0 APMTextBlock.qml
+APMTextButton                           1.0 APMTextButton.qml
 CameraSection                           1.0 CameraSection.qml
 ClickableColor                          1.0 ClickableColor.qml
 DeadMouseArea                           1.0 DeadMouseArea.qml
