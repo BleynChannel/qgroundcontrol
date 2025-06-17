@@ -33,6 +33,7 @@ depends=('bzip2'
          'xz'
          'zlib'
          'icu'
+         'gstreamer'
          'qt6-connectivity'
          'qt6-charts'
          'qt6-5compat'
@@ -51,6 +52,7 @@ depends=('bzip2'
         #  'qt6-graphicaleffects'
         #  'qt6-x11extras'
          'qt6-mqtt'
+         'libssh'
          'speech-dispatcher'
 )
 
@@ -105,7 +107,7 @@ prepare() {
   # git config submodule."libs/libssh".url "${srcdir}/${pkgname}"-libssh
   # git config submodule."src/FirmwarePlugin/APM/ArduPilot-Parameter-Repository".url "${srcdir}/${pkgname}"-ArduPilot-Parameter-Repository
 
-  # git -c protocol.file.allow=always submodule update --init --recursive
+  git -c protocol.file.allow=always submodule update --init --recursive
 
   # git config --global --add safe.directory "${srcdir}/${pkgname}-${pkgver}"
 }
@@ -116,7 +118,7 @@ build() {
   
   cmake -S "${srcdir}/${pkgname}-${pkgver}" -B . -G Ninja -DCMAKE_BUILD_TYPE=Debug ;
 	cmake --build . --target all --config Debug ;
-	# cmake --install . --config Debug
+	cmake --install . --config Debug
 }
 
 package() {

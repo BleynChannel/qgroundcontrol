@@ -25,6 +25,6 @@ RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
 RUN git config --global --add safe.directory /project/source
 
 WORKDIR /project/build
-CMD cmake -S /project/source -B . -G Ninja -DCMAKE_BUILD_TYPE=Debug ; \
-	cmake --build . --target all --config Debug ; \
-	cmake --install . --config Debug
+CMD cmake -S /project/source -B . -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE ; \
+	cmake --build . --target all --config $BUILD_TYPE ; \
+	cmake --install . --config $BUILD_TYPE
