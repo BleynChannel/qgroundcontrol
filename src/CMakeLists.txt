@@ -56,6 +56,7 @@ add_subdirectory(VehicleSetup)
 add_subdirectory(VideoManager)
 add_subdirectory(Viewer3D)
 add_subdirectory(VehicleTelemetry)
+add_subdirectory(Calibration)
 
 #######################################################
 #               Linking Libraries
@@ -102,6 +103,7 @@ target_link_libraries(QGC
         VideoManager
         VideoReceiver
 		VehicleTelemetry
+        Calibration
     PUBLIC
         Qt6::Core
         Qt6::CorePrivate

@@ -96,6 +96,7 @@ target_link_libraries(QmlControls
         Vehicle
         VideoManager
 		VehicleTelemetry
+        Calibration
 )
 
 target_include_directories(QmlControls PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

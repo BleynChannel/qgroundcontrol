@@ -19,6 +19,9 @@
 [submodule "libs/qmdnsengine"]
 	path = libs/qmdnsengine
 	url = https://github.com/nitroshare/qmdnsengine.git
+[submodule "libs/libssh"]
+	path = libs/libssh
+	url = https://git.libssh.org/projects/libssh.git
 [submodule "resources/SDL_GameControllerDB"]
 	path = resources/SDL_GameControllerDB
 	url = https://github.com/mdqinc/SDL_GameControllerDB.git

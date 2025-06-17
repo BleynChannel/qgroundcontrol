@@ -1,5 +1,5 @@
-FROM sergeyshow/astra-linux
-#FROM ubuntu:22.04
+#FROM sergeyshow/astra-linux
+FROM ubuntu:22.04
 
 ARG QT_VERSION=6.6.3
 ARG QT_MODULES="qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtconnectivity qtquick3d qtsensors"

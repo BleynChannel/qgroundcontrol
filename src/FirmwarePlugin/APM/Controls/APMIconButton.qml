@@ -20,7 +20,7 @@ Rectangle {
 	property alias iconSource: 		iconImage.source
 	property alias iconColor:  		iconImage.color
 	
-	property real  _opacity:		mouseArea.pressed ? .5 : enabled && hoverArea.hovered ? .7 : 1
+	property real  _opacity:		mouseArea.pressed ? .4 : enabled && hoverArea.hovered ? .6 : 1
 	
 	signal clicked(var event)
 

@@ -31,7 +31,6 @@
 #include <StatusTextHandler.h>
 #include "MAVLinkProtocol.h"
 #include "QGCLoggingCategory.h"
-#include "VehicleTelemetry.h"
 #include <DeviceInfo.h>
 
 #include <QtNetwork/QTcpSocket>
@@ -701,12 +700,14 @@ const QVariantList& APMFirmwarePlugin::droneToolIndicators(const Vehicle* vehicl
 
 		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/TakeoffControl.qml")));
 		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/LandControl.qml")));
+		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/Calibration.qml")));
 		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/WindingControl.qml")));
 		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/ControlMode.qml")));
 		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/HeightIndicator.qml")));
 		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/LinkPowerIndicator.qml")));
-		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/BatteryIndicator.qml")));
+		// _droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/BatteryIndicator.qml")));
 		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/RotateControl.qml")));
+        _droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/APM/Indicators/APMBatteryIndicator.qml")));
 		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/UploadROI.qml")));
 	}
 
