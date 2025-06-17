@@ -687,6 +687,7 @@ const QVariantList& APMFirmwarePlugin::vehicleToolIndicators(const Vehicle* vehi
 		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/PowerIndicator.qml")));
 		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/SignalIndicator.qml")));
 		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/FrequrenceIndicator.qml")));
+		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/AntennaControl.qml")));
 	}
 
 	return _vehicleToolIndicatorList;
