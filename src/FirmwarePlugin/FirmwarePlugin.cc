@@ -325,9 +325,14 @@ const QVariantList& FirmwarePlugin::toolIndicators(const Vehicle*)
     return _toolIndicatorList;
 }
 
-const QVariantList& FirmwarePlugin::anotherToolIndicators(const Vehicle*)
+const QVariantList& FirmwarePlugin::vehicleToolIndicators(const Vehicle*)
 {
-	return _anotherToolIndicatorList;
+	return _vehicleToolIndicatorList;
+}
+
+const QVariantList& FirmwarePlugin::droneToolIndicators(const Vehicle*)
+{
+	return _droneToolIndicatorList;
 }
 
 const QVariantList& FirmwarePlugin::modeIndicators(const Vehicle*)

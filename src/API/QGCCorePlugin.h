@@ -180,6 +180,8 @@ public:
     /// Returns the list of first run prompt ids which need to be displayed according to current settings
     Q_INVOKABLE QVariantList firstRunPromptsToShow(void);
 
+    Q_INVOKABLE void startDevilspie();
+
     bool showTouchAreas() const { return _showTouchAreas; }
     bool showAdvancedUI() const { return _showAdvancedUI; }
     void setShowTouchAreas(bool show);
@@ -208,6 +210,7 @@ protected:
     QGCCameraManager*       _cameraManager  = nullptr;
     MavlinkCameraControl*  _currentCamera  = nullptr;
     QVariantList            _toolBarIndicatorList;
+    QProcess*               _devilspieProcess  = nullptr;
 
 private:
     QGCCorePlugin_p*    _p;

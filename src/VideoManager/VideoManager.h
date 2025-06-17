@@ -136,8 +136,7 @@ protected:
 
     struct VideoReceiverData {
         VideoReceiver* receiver = nullptr;
-		// QList<QProcess*> receiverProcess; // For multiple streams // Variant 1
-		QProcess* receiverProcess = nullptr; // For multiple streams // Variant 2
+		QProcess* receiverProcess = nullptr; // For multiple streams
         void* sink = nullptr;
         QString uri;
 		QStringList uris; // For multiple streams

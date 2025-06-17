@@ -93,6 +93,11 @@ QGCCorePlugin::~QGCCorePlugin()
     if(_p) {
         delete _p;
     }
+
+    if (_devilspieProcess != nullptr) {
+        _devilspieProcess->close();
+        delete _devilspieProcess;
+    }
 }
 
 QGCCorePlugin::QGCCorePlugin(QGCApplication *app, QGCToolbox* toolbox)
@@ -425,4 +430,11 @@ QString QGCCorePlugin::firstRunPromptResource(int id)
     }
 
     return QString();
+}
+
+void QGCCorePlugin::startDevilspie()
+{
+    // _devilspieProcess = new QProcess(this);
+    // _devilspieProcess->start("bash");
+    // _devilspieProcess->write("devilspie ~/qground.ds\n");
 }

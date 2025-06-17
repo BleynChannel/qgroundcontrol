@@ -12,13 +12,13 @@ APMIconButton {
 	iconSource: 	"/qmlimages/Valve.svg"
 	iconColor: 		_telemetry.vehicleValve ? qgcPal.colorGreen : qgcPal.colorRed
 	border.color:	qgcPal.button
-	labelText:		"Valve" //! qsTr
+	enabled:		false //! WIP
+	labelText:		"Клапан (WIP)" //! qsTr
 
 	property var	_telemetry:	QGroundControl.vehicleTelemetry
 
 	function onValveButton() {
 		_telemetry.vehicleValve = !_telemetry.vehicleValve
-		console.log("Valve status: ", _telemetry.vehicleValve)
 	}
 
 	onClicked: onValveButton()

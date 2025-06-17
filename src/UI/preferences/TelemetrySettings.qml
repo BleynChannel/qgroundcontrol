@@ -76,28 +76,28 @@ SettingsPage {
         heading:            "MQTT (WIP)" //! qsTr
 
 		LabelledFactTextField {
-			label:      				"MQTT Hostname" //! qsTr
+			label:      				"MQTT Название хоста" //! qsTr
 			textFieldPreferredWidth:    _urlFieldWidth
             fact:                       _mqttSettings.hostname
             visible:                    _mqttSettings.hostname.visible
 		}
 
 		LabelledFactTextField {
-			label:      				"MQTT Port" //! qsTr
+			label:      				"MQTT Порт" //! qsTr
 			textFieldPreferredWidth:    _urlFieldWidth
 			fact:                       _mqttSettings.port
 			visible:                    _mqttSettings.port.visible
 		}
 
 		LabelledFactTextField {
-			label:      				"MQTT Username" //! qsTr
+			label:      				"MQTT Имя пользователя" //! qsTr
 			textFieldPreferredWidth:    _urlFieldWidth
 			fact:                       _mqttSettings.username
 			visible:                    _mqttSettings.username.visible
 		}
 
 		LabelledFactTextField {
-			label:      				"MQTT Password" //! qsTr
+			label:      				"MQTT Пароль" //! qsTr
 			textFieldPreferredWidth:    _urlFieldWidth
 			fact:                       _mqttSettings.password
 			visible:                    _mqttSettings.password.visible

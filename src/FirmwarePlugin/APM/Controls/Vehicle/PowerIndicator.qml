@@ -12,7 +12,7 @@ APMTextBlock {
 	border.color:	qgcPal.button
 	titleColor:		qgcPal.buttonText
 	dataColor:		qgcPal.buttonText
-	titleText: 		"Power" //! qsTr
+	titleText: 		"Мощность" //! qsTr
 	dataText: 		_telemetry.vehiclePower + " kW"
 
 	property var	_telemetry:	QGroundControl.vehicleTelemetry

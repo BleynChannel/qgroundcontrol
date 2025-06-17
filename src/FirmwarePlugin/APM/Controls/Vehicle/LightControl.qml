@@ -10,15 +10,14 @@ APMIconButton {
 	anchors.top:    parent.top
 	anchors.bottom: parent.bottom
 	iconSource: 	"/qmlimages/Flashlight.svg"
-	iconColor: 		_telemetry.vehicleFlashlight ? qgcPal.colorGreen : qgcPal.colorRed
+    iconColor: 		_telemetry.vehicleFlashlight === 1 ? qgcPal.colorGreen : qgcPal.colorRed
 	border.color:	qgcPal.button
-	labelText:		"Light" //! qsTr
+	labelText:		"Свет" //! qsTr
 
 	property var	_telemetry:		QGroundControl.vehicleTelemetry
 
 	function onLightButton() {
 		_telemetry.vehicleFlashlight = !_telemetry.vehicleFlashlight
-		console.log("Light status: ", _telemetry.vehicleFlashlight)
 	}
 
 	onClicked: onLightButton()

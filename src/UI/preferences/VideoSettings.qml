@@ -151,7 +151,7 @@ SettingsPage {
         }
 
 		LabelledButton {
-            label:      		"Add new RTSP URL" //! qsTr
+            label:      		"Добавить новую RTSP ссылку" //! qsTr
             buttonText: 		qsTr("Add")
             Layout.fillWidth:   true
 			visible:            _isRTSP && _videoSettings.rtspUrl.visible
@@ -186,7 +186,7 @@ SettingsPage {
         id: sourceDialogComponent
 
         QGCPopupDialog {
-            title:          editing ? "Edit Video Source" : "Add New Video Source" //! qsTr
+            title:          editing ? "Изменить видео ресурс" : "Добавить новый видео ресурс" //! qsTr
             buttons:        Dialog.Save | Dialog.Cancel
             acceptAllowed:  sourceField.text !== ""
 
@@ -214,7 +214,7 @@ SettingsPage {
                         Layout.fillWidth:   		true
 						Layout.preferredWidth:    	_urlFieldWidth
                         text:               		editingUrl
-                        placeholderText:    		"Enter url" //! qsTr
+                        placeholderText:    		"Введите ссылку" //! qsTr
                     }
                 }
             }

@@ -52,6 +52,7 @@
 #include <StatusTextHandler.h>
 #include <MAVLinkSigning.h>
 #include "GimbalController.h"
+#include "VehicleTelemetry.h"
 
 #ifdef QGC_UTM_ADAPTER
 #include "UTMSPVehicle.h"
@@ -62,6 +63,7 @@
 #endif
 
 #include <QtCore/QDateTime>
+#include <QtMath>
 
 QGC_LOGGING_CATEGORY(VehicleLog, "VehicleLog")
 
@@ -265,6 +267,8 @@ void Vehicle::_commonInit()
     _firmwarePlugin = _firmwarePluginManager->firmwarePluginForAutopilot(_firmwareType, _vehicleType);
 
     connect(_firmwarePlugin, &FirmwarePlugin::toolIndicatorsChanged, this, &Vehicle::toolIndicatorsChanged);
+    connect(_firmwarePlugin, &FirmwarePlugin::vehicleToolIndicatorsChanged, this, &Vehicle::vehicleToolIndicatorsChanged);
+    connect(_firmwarePlugin, &FirmwarePlugin::droneToolIndicatorsChanged, this, &Vehicle::droneToolIndicatorsChanged);
     connect(_firmwarePlugin, &FirmwarePlugin::modeIndicatorsChanged, this, &Vehicle::modeIndicatorsChanged);
 
     connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateDistanceHeadingToHome);
@@ -1310,6 +1314,13 @@ void Vehicle::setActuatorsMetadata([[maybe_unused]] uint8_t compid,
     _actuators->load(metadataJsonFileName);
 }
 
+QGeoCoordinate Vehicle::calcRotateLocation(float angle, const QGeoCoordinate& origin)
+{
+	double radian = qDegreesToRadians(angle);
+	QGeoCoordinate rotateVector = QGeoCoordinate(qCos(radian), qSin(radian));
+	return origin.isValid() ? QGeoCoordinate(origin.latitude() + rotateVector.latitude(), origin.longitude() + rotateVector.longitude()) : rotateVector;
+}
+
 void Vehicle::_handleHeartbeat(mavlink_message_t& message)
 {
     if (message.compid != _defaultComponentId) {
@@ -2293,6 +2304,15 @@ void Vehicle::stopGuidedModeROI()
     }
 }
 
+void Vehicle::guidedModeGPS(const QGeoCoordinate& centerCoord)
+{
+	_gpsEditCoord = centerCoord;
+	emit gpsEditCoordChanged(centerCoord);
+
+    VehicleTelemetry* telemetry = qgcApp()->toolbox()->vehicleTelemetry();
+	telemetry->setDroneEditLocation(centerCoord);
+}
+
 void Vehicle::guidedModeChangeHeading(const QGeoCoordinate &headingCoord)
 {
     if (!changeHeadingSupported()) {
@@ -3260,10 +3280,19 @@ const QVariantList& Vehicle::toolIndicators()
     return emptyList;
 }
 
-const QVariantList& Vehicle::anotherToolIndicators()
+const QVariantList& Vehicle::vehicleToolIndicators()
 {
     if(_firmwarePlugin) {
-        return _firmwarePlugin->anotherToolIndicators(this);
+        return _firmwarePlugin->vehicleToolIndicators(this);
+    }
+    static QVariantList emptyList;
+    return emptyList;
+}
+
+const QVariantList& Vehicle::droneToolIndicators()
+{
+    if(_firmwarePlugin) {
+        return _firmwarePlugin->droneToolIndicators(this);
     }
     static QVariantList emptyList;
     return emptyList;

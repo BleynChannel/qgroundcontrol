@@ -12,8 +12,8 @@ APMTextBlock {
 	border.color:	qgcPal.button
 	titleColor:		qgcPal.buttonText
 	dataColor:		qgcPal.buttonText
-	titleText: 		"Battery" //! qsTr
-	dataText: 		_telemetry.vehicleBattery + "%"
+	titleText: 		"Заряд" //! qsTr
+	dataText: 		_telemetry.droneBattery + "%"
 
 	property var	_telemetry:	QGroundControl.vehicleTelemetry
 }

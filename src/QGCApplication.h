@@ -190,7 +190,6 @@ private:
     bool                _error                  = false;
     bool                _showErrorsInToolbar    = false;
     QElapsedTimer       _msecsElapsedTime;
-	QProcess*           _devilspieProcess		= nullptr;
 
     QList<QPair<QString /* title */, QString /* message */>> _delayedAppMessages;
 
