@@ -22,10 +22,10 @@
 [submodule "libs/libssh"]
 	path = libs/libssh
 	url = https://git.libssh.org/projects/libssh.git
-# [submodule "qtmqtt"]
-# 	path = libs/qtmqtt
-# 	url = https://github.com/qt/qtmqtt.git
-# 	branch = 6.6.3
+[submodule "qtmqtt"]
+	path = libs/qtmqtt
+	url = https://github.com/qt/qtmqtt.git
+	branch = 6.6.3
 [submodule "resources/SDL_GameControllerDB"]
 	path = resources/SDL_GameControllerDB
 	url = https://github.com/mdqinc/SDL_GameControllerDB.git
