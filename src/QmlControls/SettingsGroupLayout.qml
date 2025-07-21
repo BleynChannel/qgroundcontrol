@@ -6,14 +6,17 @@ import QGroundControl.ScreenTools
 import QGroundControl.Palette
 
 ColumnLayout {
-    id:             control    
-    spacing:        _margins / 2
-    implicitWidth:  _contentLayout.implicitWidth + (_margins * 2)
-    implicitHeight: _contentLayout.implicitHeight + (_margins * 2)
+    id:                 control    
+    spacing:            _margins / 2
+    implicitWidth:      _contentLayout.implicitWidth + (_margins * 2)
+    implicitHeight:     _contentLayout.implicitHeight + (_margins * 2)
 
     default property alias contentItem: _contentLayout.data
 
     property alias contentSpacing: _contentLayout.spacing
+
+    property string defaultBorderColor  : QGroundControl.globalPalette.groupBorder
+    property string outerBorderColor    : defaultBorderColor
 
     property string heading
     property string headingDescription
@@ -49,7 +52,7 @@ ColumnLayout {
         implicitWidth:      _contentLayout.implicitWidth + (showBorder ? _margins * 2 : 0)
         implicitHeight:     _contentLayout.implicitHeight + (showBorder ? _margins * 2: 0)
         color:              "transparent"
-        border.color:       QGroundControl.globalPalette.groupBorder
+        border.color:       outerBorderColor
         border.width:       showBorder ? 1 : 0
         radius:             ScreenTools.defaultFontPixelHeight / 2
 

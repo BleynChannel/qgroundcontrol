@@ -11,13 +11,14 @@
 #include "RadioConfigTest.h"
 #include "RadioComponentController.h"
 #include "MultiVehicleManager.h"
-#include "QGCApplication.h"
 #include "PX4/PX4AutoPilotPlugin.h"
 #include "APM/APMAutoPilotPlugin.h"
 #include "APM/APMRadioComponent.h"
 #include "PX4RadioComponent.h"
 #include "AutoPilotPlugin.h"
 #include "MultiSignalSpy.h"
+
+#include <QtTest/QTest>
 
 /// @file
 ///     @brief QRadioComponentController Widget unit test
@@ -194,7 +195,7 @@ void RadioConfigTest::_init(MAV_AUTOPILOT firmwareType)
 {
     _connectMockLink(firmwareType);
     
-    _autopilot = qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->autopilotPlugin();
+    _autopilot = MultiVehicleManager::instance()->activeVehicle()->autopilotPlugin();
     Q_ASSERT(_autopilot);
 
     // This test is so quick that it tends to finish before the mission item protocol completes. This causes an error to pop up.
@@ -227,7 +228,7 @@ void RadioConfigTest::_init(MAV_AUTOPILOT firmwareType)
     Q_CHECK_PTR(vehicleComponent);
 
     _calWidget->setContextPropertyObject("vehicleComponent", vehicleComponent);
-    _calWidget->setSource(QUrl::fromUserInput("qrc:/qml/RadioComponent.qml"));
+    _calWidget->setSource(QUrl::fromUserInput("qrc:/qml/QGroundControl/AutoPilotPlugins/Common/RadioComponent.qml"));
     
     // Nasty hack to get to controller
     _controller = RadioComponentController::_unitTestController;
@@ -247,9 +248,6 @@ void RadioConfigTest::cleanup(void)
 {
     Q_ASSERT(_calWidget);
     delete _calWidget;
-    
-    // Disconnecting the link will prompt for log file save
-    setExpectedFileDialog(getSaveFileName, QStringList());
     
     UnitTest::cleanup();
 }

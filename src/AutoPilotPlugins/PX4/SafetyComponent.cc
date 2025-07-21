@@ -14,7 +14,7 @@
 #include "SafetyComponent.h"
 
 SafetyComponent::SafetyComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent) :
-    VehicleComponent(vehicle, autopilot, parent),
+    VehicleComponent(vehicle, autopilot, AutoPilotPlugin::KnownSafetyVehicleComponent, parent),
     _name(tr("Safety"))
 {
 }
@@ -52,10 +52,10 @@ QStringList SafetyComponent::setupCompleteChangedTriggerList(void) const
 
 QUrl SafetyComponent::setupSource(void) const
 {
-    return QUrl::fromUserInput("qrc:/qml/SafetyComponent.qml");
+    return QUrl::fromUserInput("qrc:/qml/QGroundControl/AutoPilotPlugins/PX4/SafetyComponent.qml");
 }
 
 QUrl SafetyComponent::summaryQmlSource(void) const
 {
-    return QUrl::fromUserInput("qrc:/qml/SafetyComponentSummary.qml");
+    return QUrl::fromUserInput("qrc:/qml/QGroundControl/AutoPilotPlugins/PX4/SafetyComponentSummary.qml");
 }

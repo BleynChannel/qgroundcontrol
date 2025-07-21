@@ -8,19 +8,15 @@
  ****************************************************************************/
 
 #include "HorizontalFactValueGrid.h"
-#include "QGCCorePlugin.h"
 
-const QString HorizontalFactValueGrid::telemetryBarUserSettingsGroup    ("TelemetryBarUserSettings");
-const QString HorizontalFactValueGrid::telemetryBarDefaultSettingsGroup ("TelemetryBarDefaultSettings");
+// for activeVehicle telem table
+const QString HorizontalFactValueGrid::telemetryBarSettingsGroup("TelemetryBarUserSettings");
+
+// for multi-vehicle list telem tables
+const QString HorizontalFactValueGrid::vehicleCardSettingsGroup("VehicleCardUserSettings");
 
 HorizontalFactValueGrid::HorizontalFactValueGrid(QQuickItem* parent)
     : FactValueGrid(parent)
-{
-
-}
-
-HorizontalFactValueGrid::HorizontalFactValueGrid(const QString& defaultSettingsGroup)
-    : FactValueGrid(defaultSettingsGroup)
 {
 
 }

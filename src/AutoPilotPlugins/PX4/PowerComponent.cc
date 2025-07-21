@@ -15,9 +15,9 @@
 #include "ParameterManager.h"
 #include "Vehicle.h"
 
-PowerComponent::PowerComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent) :
-    VehicleComponent(vehicle, autopilot, parent),
-    _name(tr("Power"))
+PowerComponent::PowerComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent)
+    : VehicleComponent(vehicle, autopilot, AutoPilotPlugin::KnownPowerVehicleComponent, parent)
+    , _name(tr("Power"))
 {
 }
 
@@ -62,10 +62,10 @@ QStringList PowerComponent::setupCompleteChangedTriggerList(void) const
 
 QUrl PowerComponent::setupSource(void) const
 {
-    return QUrl::fromUserInput("qrc:/qml/PowerComponent.qml");
+    return QUrl::fromUserInput("qrc:/qml/QGroundControl/AutoPilotPlugins/PX4/PowerComponent.qml");
 }
 
 QUrl PowerComponent::summaryQmlSource(void) const
 {
-    return QUrl::fromUserInput("qrc:/qml/PowerComponentSummary.qml");
+    return QUrl::fromUserInput("qrc:/qml/QGroundControl/AutoPilotPlugins/PX4/PowerComponentSummary.qml");
 }
