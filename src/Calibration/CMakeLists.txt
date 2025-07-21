@@ -1,23 +1,20 @@
-find_package(Qt6 REQUIRED COMPONENTS Core)
+# Find libssh library
+find_library(SSH_LIBRARY NAMES ssh libssh REQUIRED)
+find_path(SSH_INCLUDE_DIR NAMES libssh/libssh.h REQUIRED)
 
-# include(FetchContent)
-# FetchContent_Declare(libssh
-#     GIT_REPOSITORY https://git.libssh.org/projects/libssh.git
-#     GIT_TAG master
-# )
-# FetchContent_MakeAvailable(libssh)
+# Add include directories
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${SSH_INCLUDE_DIR})
 
-qt_add_library(Calibration STATIC
-    Calibration.h
-    Calibration.cc
-)
+# Link against libssh library
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${SSH_LIBRARY})
 
-target_link_libraries(Calibration
+target_sources(${CMAKE_PROJECT_NAME}
     PRIVATE
-        Settings
-        ssh
-    PUBLIC
-        Qt6::Core
+        Calibration.h
+        Calibration.cc
 )
 
-target_include_directories(Calibration PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+
+# Добавляем путь к заголовочным файлам текущего каталога
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

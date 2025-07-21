@@ -70,6 +70,9 @@ qt_add_qml_module(QGroundControlControlsModule
         AltModeDialog.qml
         AppSettings.qml
         APMSubMotorDisplay.qml
+        APMIconButton.qml
+        APMTextBlock.qml
+        APMTextButton.qml
         AppMessages.qml
         AutotuneUI.qml
         AxisMonitor.qml

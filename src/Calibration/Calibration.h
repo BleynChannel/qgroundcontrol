@@ -4,25 +4,23 @@
 #include <QtCore/QObject>
 #include <QtCore/QLoggingCategory>
 
-#include "QGCToolbox.h"
-
 Q_DECLARE_LOGGING_CATEGORY(CalibrationLog)
 
 class SessionWorker;
 class ExecWorker;
 class ExecHandler;
 
-class Calibration : public QGCTool
+class Calibration : public QObject
 {
 	Q_OBJECT
 
     Q_PROPERTY(bool		connected	READ	connected	NOTIFY	connectedChanged)
 
 public:
-	Calibration(QGCApplication* app, QGCToolbox* toolbox);
-	virtual ~Calibration();
+	explicit Calibration(QObject *parent = nullptr);
+	~Calibration();
 
-	void setToolbox(QGCToolbox *toolbox) override;
+	static Calibration* instance();
 
 	Q_INVOKABLE void			connect();
 	Q_INVOKABLE void			disconnect();

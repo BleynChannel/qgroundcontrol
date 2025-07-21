@@ -352,6 +352,11 @@ bool VideoManager::isStreamSource() const
     return (videoSourceList.contains(videoSource) || autoStreamConfigured());
 }
 
+QStringList VideoManager::videoReceiverUris()
+{
+    return _videoReceivers[0]->uris(); //TODO: add multiple streams
+}
+
 void VideoManager::_videoSourceChanged()
 {
     bool changed = false;
@@ -677,7 +682,7 @@ void VideoManager::_startReceiver(VideoReceiver *receiver)
 
     QStringList arguments = QStringList();
     arguments << "rtspsrc" << "*";
-    arguments << "latency=" + QString::number(_videoReceiverData[id].lowLatencyStreaming ? 17 : 100);
+    arguments << "latency=" + QString::number(receiver->lowLatency() ? 17 : 100);
     arguments << "timeout=" + QString::number(500000);
     arguments << "!" << "queue" << "!" << "rtph264depay" << "!" << "h264parse" << "!" << "avdec_h264" << "!" << "autovideosink";
 

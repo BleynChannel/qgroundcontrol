@@ -12,18 +12,31 @@
 
 QGC_LOGGING_CATEGORY(VehicleTelemetryLog, "VehicleTelemetryLog")
 
-VehicleTelemetry::VehicleTelemetry(QGCApplication* app, QGCToolbox* toolbox)
-	: QGCTool(app, toolbox)
+Q_APPLICATION_STATIC(VehicleTelemetry, _vehicleTelemetryInstance);
+
+VehicleTelemetry::VehicleTelemetry(QObject *parent)
+	: QObject(parent)
 	, _mqttClient(new QMqttClient())
 {
+	(void) qmlRegisterUncreatableType<VehicleTelemetry>("QGroundControl.VehicleTelemetry", 1, 0, "VehicleTelemetry", "Reference only");
+
 	QObject::connect(_mqttClient, &QMqttClient::stateChanged, this, &VehicleTelemetry::_stateChanged);
 	QObject::connect(_mqttClient, &QMqttClient::errorChanged, this, &VehicleTelemetry::_errorChanged);
 	QObject::connect(_mqttClient, &QMqttClient::messageReceived, this, &VehicleTelemetry::_messageReceived);
 
-    QObject::connect(this, &VehicleTelemetry::vfrTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VFR]); });
-    QObject::connect(this, &VehicleTelemetry::vehicleFastTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VEHICLE_FAST]); });
-    QObject::connect(this, &VehicleTelemetry::vehicleSlowTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VEHICLE_SLOW]); });
-    QObject::connect(this, &VehicleTelemetry::nothingTopicChanged, [this]() { _updateTelemetry(_topics[VehicleTelemetry::NOTHING]); });
+    QObject::connect(this, &VehicleTelemetry::vfrTopicChanged, this, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VFR]); }, Qt::AutoConnection);
+    QObject::connect(this, &VehicleTelemetry::vehicleFastTopicChanged, this, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VEHICLE_FAST]); }, Qt::AutoConnection);
+    QObject::connect(this, &VehicleTelemetry::vehicleSlowTopicChanged, this, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VEHICLE_SLOW]); }, Qt::AutoConnection);
+    QObject::connect(this, &VehicleTelemetry::nothingTopicChanged, this, [this]() { _updateTelemetry(_topics[VehicleTelemetry::NOTHING]); }, Qt::AutoConnection);
+
+	_mqttSettings = SettingsManager::instance()->mqttSettings();
+	QObject::connect(_mqttSettings,   &MqttSettings::mqttConfiguredChanged, this, &VehicleTelemetry::_configChanged);
+
+	this->connect(
+		_mqttSettings->hostname()->rawValue().toString(), 
+		_mqttSettings->port()->rawValue().toInt(), 
+		_mqttSettings->username()->rawValue().toString(), 
+		_mqttSettings->password()->rawValue().toString());
 
 	_initTopics();
 }
@@ -34,21 +47,9 @@ VehicleTelemetry::~VehicleTelemetry()
 	delete _mqttClient;
 }
 
-void
-VehicleTelemetry::setToolbox(QGCToolbox *toolbox)
+VehicleTelemetry *VehicleTelemetry::instance()
 {
-	QGCTool::setToolbox(toolbox);
-	QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
-	qmlRegisterUncreatableType<VehicleTelemetry>("QGroundControl.VehicleTelemetry", 1, 0, "VehicleTelemetry", "Reference only");
-
-	_mqttSettings = toolbox->settingsManager()->mqttSettings();
-	QObject::connect(_mqttSettings,   &MqttSettings::mqttConfiguredChanged, this, &VehicleTelemetry::_configChanged);
-
-	this->connect(
-		_mqttSettings->hostname()->rawValue().toString(), 
-		_mqttSettings->port()->rawValue().toInt(), 
-		_mqttSettings->username()->rawValue().toString(), 
-		_mqttSettings->password()->rawValue().toString());
+	return _vehicleTelemetryInstance();
 }
 
 void

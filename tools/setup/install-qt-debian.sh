@@ -4,7 +4,7 @@ QT_VERSION="${QT_VERSION:-6.8.3}"
 QT_PATH="${QT_PATH:-/opt/Qt}"
 QT_HOST="${QT_HOST:-linux}"
 QT_TARGET="${QT_TARGET:-desktop}"
-QT_ARCH="${QT_ARCH:-linux_gcc_64}"
+QT_ARCH="${QT_ARCH:-gcc_64}"
 QT_MODULES="${QT_MODULES:-qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtconnectivity qtquick3d qtsensors}"
 
 set -e
@@ -19,7 +19,7 @@ echo "QT_MODULES $QT_MODULES"
 apt update
 apt install python3 python3-pip -y
 pip3 install setuptools wheel py7zr ninja cmake aqtinstall
-aqt install-qt ${QT_HOST} ${QT_TARGET} ${QT_VERSION} ${QT_ARCH} -O ${QT_PATH} -m ${QT_MODULES}
+aqt install-qt ${QT_HOST} ${QT_TARGET} ${QT_VERSION} linux_gcc_64 -O ${QT_PATH} -m ${QT_MODULES}
 export PATH=$(readlink -e ${QT_PATH}/${QT_VERSION}/${QT_ARCH}/bin/):$PATH
 export PKG_CONFIG_PATH=$(readlink -e ${QT_PATH}/${QT_VERSION}/${QT_ARCH}/lib/pkgconfig):$PKG_CONFIG_PATH
 export LD_LIBRARY_PATH=$(readlink -e ${QT_PATH}/${QT_VERSION}/${QT_ARCH}/lib):$LD_LIBRARY_PATH
@@ -36,7 +36,7 @@ echo "QML2_IMPORT_PATH $QML2_IMPORT_PATH"
 
 
 # Clone QtMqtt repository and install
-git clone https://github.com/qt/qtmqtt -b 6.6.3 /tmp/qt/qtmqtt
+git clone https://github.com/qt/qtmqtt -b ${QT_VERSION} /tmp/qt/qtmqtt
 mkdir /tmp/qt/qtmqtt/build
 cd /tmp/qt/qtmqtt/build
 

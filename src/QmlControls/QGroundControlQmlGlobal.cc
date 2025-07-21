@@ -57,6 +57,8 @@
 #ifdef QGC_UTM_ADAPTER
 #include "UTMSPManager.h"
 #endif
+#include "VehicleTelemetry.h"
+#include "Calibration.h"
 
 #include <QtCore/QSettings>
 #include <QtCore/QLineF>
@@ -118,6 +120,8 @@ QGroundControlQmlGlobal::QGroundControlQmlGlobal(QObject *parent)
     , _multiVehicleManager(MultiVehicleManager::instance())
     , _settingsManager(SettingsManager::instance())
     , _corePlugin(QGCCorePlugin::instance())
+    , _vehicleTelemetry(VehicleTelemetry::instance())
+    , _сalibration(Calibration::instance())
     , _globalPalette(new QGCPalette(this))
 #ifndef QGC_NO_SERIAL_LINK
     , _gpsRtkFactGroup(GPSManager::instance()->gpsRtk()->gpsRtkFactGroup())

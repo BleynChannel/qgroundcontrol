@@ -190,7 +190,7 @@ SettingsPage {
         QGCPopupDialog {
             title:          editing ? "Изменить видео ресурс" : "Добавить новый видео ресурс" //! qsTr
             buttons:        Dialog.Save | Dialog.Cancel
-            acceptAllowed:  sourceField.text !== ""
+            // acceptAllowed:  sourceField.text !== ""
 
             property var 	changeRtspUrl
 			property int	index

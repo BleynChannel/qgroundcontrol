@@ -1,8 +1,5 @@
 <RCC>
     <qresource prefix="/qml">
-		<file alias="QGroundControl/Controls/APMIconButton.qml">Controls/APMIconButton.qml</file>
-		<file alias="QGroundControl/Controls/APMTextBlock.qml">Controls/APMTextBlock.qml</file>
-		<file alias="QGroundControl/Controls/APMTextButton.qml">Controls/APMTextButton.qml</file>
         <file alias="QGroundControl/ArduPilot/APMSensorParams.qml">APMSensorParams.qml</file>
         <file alias="QGroundControl/ArduPilot/APMSensorIdDecoder.qml">APMSensorIdDecoder.qml</file>
         <file alias="QGroundControl/ArduPilot/qmldir">QGroundControl.ArduPilot.qmldir</file>

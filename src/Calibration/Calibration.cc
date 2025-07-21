@@ -3,8 +3,11 @@
 #include <QThread>
 #include <QtQml/QQmlEngine>
 #include <QGCLoggingCategory.h>
+#include <QApplicationStatic>
 
 QGC_LOGGING_CATEGORY(CalibrationLog, "CalibrationLog")
+
+Q_APPLICATION_STATIC(Calibration, _calibrationInstance);
 
 #define SSH_HOST "192.168.137.11"
 #define SSH_PORT 22
@@ -13,9 +16,11 @@ QGC_LOGGING_CATEGORY(CalibrationLog, "CalibrationLog")
 // #define SSH_PORT 22
 // #define SSH_USER "bleyn"
 
-Calibration::Calibration(QGCApplication* app, QGCToolbox* toolbox)
-	: QGCTool(app, toolbox)
+Calibration::Calibration(QObject *parent)
+	: QObject(parent)
 {
+	qmlRegisterUncreatableType<Calibration>("QGroundControl.Calibration", 1, 0, "Calibration", "Reference only");
+
 	session = new ssh::Session();
 	sessionThread = new QThread();
 
@@ -27,25 +32,32 @@ Calibration::Calibration(QGCApplication* app, QGCToolbox* toolbox)
 	} catch (ssh::SshException e) {
 		qCCritical(CalibrationLog) << "Calibration::Calibration: " << e.getCode() << ": " << e.getError();
 	}
+
+	// connect();
 }
 
 Calibration::~Calibration()
 {
-	QObject::connect(sessionThread, &QThread::finished, [this] {
-		delete sessionThread;
-		delete session;
-	});
-	disconnect();
+    disconnect();
+    
+    if (sessionThread) {
+        // Disconnect any existing connections
+        sessionThread->disconnect();
+        
+        // Schedule the thread for deletion
+        sessionThread->quit();
+        sessionThread->wait();
+        delete sessionThread;
+    }
+    
+    // Delete session explicitly since it's not a QObject
+    delete session;
+    session = nullptr;
 }
 
-void
-Calibration::setToolbox(QGCToolbox *toolbox)
+Calibration* Calibration::instance()
 {
-	QGCTool::setToolbox(toolbox);
-	QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
-	qmlRegisterUncreatableType<Calibration>("QGroundControl.Calibration", 1, 0, "Calibration", "Reference only");
-
-	// connect();
+	return _calibrationInstance();
 }
 
 void Calibration::connect()

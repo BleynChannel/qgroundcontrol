@@ -87,7 +87,7 @@ public:
     static bool gstreamerEnabled();
     static bool qtmultimediaEnabled();
     static bool uvcEnabled();
-    QStringList videoReceiverUris() const { return _videoReceiverData[0].uris; }; //TODO: add multiple streams
+    QStringList videoReceiverUris();
 
 	Q_INVOKABLE void changeCurrentUri(unsigned index);
 
@@ -118,7 +118,7 @@ private:
     bool _updateAutoStream(VideoReceiver *receiver);
     bool _updateUVC(VideoReceiver *receiver);
     bool _updateSettings(VideoReceiver *receiver);
-	bool _changeCurrentUri(unsigned id, unsigned index);
+	bool _changeCurrentUri(VideoReceiver *receiver, unsigned index);
     bool _updateVideoUri(VideoReceiver *receiver, const QString &uri);
     void _restartAllVideos();
     void _restartVideo(VideoReceiver *receiver);

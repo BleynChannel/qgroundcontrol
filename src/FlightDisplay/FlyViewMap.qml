@@ -707,6 +707,40 @@ FlightMap {
 
                     QGCButton {
                         Layout.fillWidth:   true
+                        text:               qsTr("Cancel ROI")
+                        onClicked: {
+                            _activeVehicle.stopGuidedModeROI()
+                            roiEditDropPanel.close()
+                        }
+                    }
+
+                    QGCButton {
+                        Layout.fillWidth:   true
+                        text:               qsTr("Edit Position")
+                        onClicked: {         
+                            roiEditPositionDialogComponent.createObject(mainWindow, { showSetPositionFromVehicle: false }).open()
+                            roiEditDropPanel.close()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: mapClickDropPanelComponent
+
+        DropPanel {
+            id: mapClickDropPanel
+
+            property var mapClickCoord
+
+            sourceComponent: Component {
+                ColumnLayout {
+                    spacing: ScreenTools.defaultFontPixelWidth / 2
+
+                    QGCButton {
+                        Layout.fillWidth:   true
                         text:               "Редактировать позицию дрона" //! qsTr
                         visible:            globals.guidedControllerFlyView.showGpsEditLocation
                         onClicked: {
@@ -715,7 +749,7 @@ FlightMap {
                             globals.guidedControllerFlyView.executeAction(globals.guidedControllerFlyView.actionGpsEditLocation, mapClickCoord, 0, false)
                         }
                     }
-			
+
                     // QGCButton {
                     //     Layout.fillWidth:   true
                     //     text:               qsTr("Go to location")

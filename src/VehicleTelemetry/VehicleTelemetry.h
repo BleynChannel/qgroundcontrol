@@ -7,7 +7,6 @@
 #include <QJsonObject>
 #include <QtPositioning/QGeoCoordinate>
 
-#include "QGCToolbox.h"
 #include "MqttSettings.h"
 
 Q_DECLARE_LOGGING_CATEGORY(VehicleTelemetryLog)
@@ -35,7 +34,7 @@ Q_DECLARE_LOGGING_CATEGORY(VehicleTelemetryLog)
 #define VEHICLE_SLOW_TOPIC      "esp/rx/telem2"
 #define NOTHING_TOPIC           "nothing"
 
-class VehicleTelemetry : public QGCTool
+class VehicleTelemetry : public QObject
 {
 	Q_OBJECT
 
@@ -66,10 +65,10 @@ class VehicleTelemetry : public QGCTool
 
     enum TopicType { VFR = 0, VEHICLE_FAST, VEHICLE_SLOW, NOTHING };
 public:
-	VehicleTelemetry(QGCApplication* app, QGCToolbox* toolbox);
-	virtual ~VehicleTelemetry();
+	explicit VehicleTelemetry(QObject *parent = nullptr);
+	~VehicleTelemetry();
 
-	void setToolbox(QGCToolbox *toolbox) override;
+	static VehicleTelemetry* instance();
 
 	Q_INVOKABLE void 	connect			(const QString& host, quint16 port, const QString& username = "", const QString& password = "");
 	Q_INVOKABLE void 	disconnect		();

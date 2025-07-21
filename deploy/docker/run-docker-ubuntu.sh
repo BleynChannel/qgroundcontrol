@@ -20,6 +20,7 @@ docker run \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
   --security-opt apparmor:unconfined \
+  -e BUILD_TYPE=${BUILD_TYPE} \
   -v "${SOURCE_DIR}:/project/source" \
   -v "${BUILD_DIR}:/project/build" \
   "${IMAGE_NAME}"

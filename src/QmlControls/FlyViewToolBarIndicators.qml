@@ -17,9 +17,9 @@ import QGroundControl.Toolbar
 //-- Toolbar Indicators
 Row {
     id:                 indicatorRow
-    anchors.top:        parent.top
-    anchors.bottom:     parent.bottom
-    anchors.margins:    _toolIndicatorMargins
+    // anchors.top:        parent.top
+    // anchors.bottom:     parent.bottom
+    // anchors.margins:    _toolIndicatorMargins
     spacing:            ScreenTools.defaultFontPixelWidth * 1.75
 
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle

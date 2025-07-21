@@ -58,11 +58,6 @@ QGCCorePlugin::QGCCorePlugin(QObject *parent)
 QGCCorePlugin::~QGCCorePlugin()
 {
     // qCDebug(QGCCorePluginLog) << Q_FUNC_INFO << this;
-
-    if (_devilspieProcess != nullptr) {
-        _devilspieProcess->close();
-        delete _devilspieProcess;
-    }
 }
 
 QGCCorePlugin *QGCCorePlugin::instance()
@@ -373,11 +368,4 @@ void QGCCorePlugin::_setShowAdvancedUI(bool show)
         _showAdvancedUI = show;
         emit showAdvancedUIChanged(show);
     }
-}
-
-void QGCCorePlugin::startDevilspie()
-{
-    // _devilspieProcess = new QProcess(this);
-    // _devilspieProcess->start("bash");
-    // _devilspieProcess->write("devilspie ~/qground.ds\n");
 }
