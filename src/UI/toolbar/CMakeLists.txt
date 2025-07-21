@@ -5,6 +5,9 @@ qt_add_qml_module(ToolbarModule
     VERSION 1.0
     RESOURCE_PREFIX /qml
     QML_FILES
+        APMBatteryIndicator.qml
+        APMFlightModeIndicator.qml
+        APMMainStatusIndicatorContentItem.qml
         APMSupportForwardingIndicator.qml
         ArmedIndicator.qml
         GCSControlIndicator.qml
@@ -18,4 +21,5 @@ qt_add_qml_module(ToolbarModule
         RTKGPSIndicator.qml
         TelemetryRSSIIndicator.qml
         VehicleGPSIndicator.qml
+    NO_PLUGIN # Required by Qt 6.6.3. TODO: Remove when no longer supported.
 )

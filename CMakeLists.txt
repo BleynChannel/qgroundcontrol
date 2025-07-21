@@ -31,8 +31,6 @@ endif()
 #                   Project Info
 #######################################################
 
-# include(Prechecks)
-
 # set(CMAKE_OSX_ARCHITECTURES "arm64")
 # set(CMAKE_OSX_SYSROOT "iphoneos")
 if(APPLE)
@@ -99,28 +97,25 @@ if(QGC_USE_CACHE)
     if(CMAKE_HOST_UNIX)
         find_program(CCACHE_PROGRAM ccache)
         if(CCACHE_PROGRAM)
-            message(STATUS "Using CCache")
-            set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
-            set(CMAKE_C_LINKER_LAUNCHER "${CCACHE_PROGRAM}")
-            set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
-            set(CMAKE_CXX_LINKER_LAUNCHER "${CCACHE_PROGRAM}")
-            if(IOS)
-                set(CMAKE_OBJC_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
-                set(CMAKE_OBJC_LINKER_LAUNCHER "${CCACHE_PROGRAM}")
+            set(CCACHE_CMD
+                CCACHE_BASEDIR=${CMAKE_BINARY_DIR}
+                CCACHE_COMPRESSLEVEL=6
+                CCACHE_SLOPPINESS=pch_defines,time_macros,include_file_mtime,include_file_ctime
+                ${CCACHE_PROGRAM}
+            )
+            message(STATUS "QGC: Using ccache cmd - ${CCACHE_CMD}")
+            set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_CMD}")
+            set(CMAKE_C_LINKER_LAUNCHER "${CCACHE_CMD}")
+            set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_CMD}")
+            set(CMAKE_CXX_LINKER_LAUNCHER "${CCACHE_CMD}")
+            if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+                add_compile_options(-Xclang -fno-pch-timestamp)
             endif()
-
-            # set(ENV{CCACHE_SLOPPINESS} pch_defines,time_macros,include_file_mtime,include_file_ctime)
-            # set(ENV{CCACHE_BASEDIR} ${CMAKE_SOURCE_DIR})
-            # if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-            #     add_compile_options(-Xclang -fno-pch-timestamp)
-            # elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-            #     add_compile_options(-fpch-preprocess)
-            # endif()
         endif()
     elseif(CMAKE_HOST_WIN32)
         find_program(SCCACHE_PROGRAM sccache)
         if(SCCACHE_PROGRAM)
-            message(STATUS "Using SCCache")
+            message(STATUS "QGC: Using sccache ${SCCACHE_PROGRAM}")
             set(CMAKE_C_COMPILER_LAUNCHER "${SCCACHE_PROGRAM}")
             # set(CMAKE_C_LINKER_LAUNCHER "${SCCACHE_PROGRAM}")
             set(CMAKE_CXX_COMPILER_LAUNCHER "${SCCACHE_PROGRAM}")
@@ -419,21 +414,24 @@ elseif(APPLE)
         qt_add_ios_ffmpeg_libraries(${CMAKE_PROJECT_NAME})
     endif()
 elseif(ANDROID)
-    CPMAddPackage(
-        NAME android_openssl
-        URL https://github.com/KDAB/android_openssl/archive/refs/heads/master.zip
-    )
-    include(${android_openssl_SOURCE_DIR}/android_openssl.cmake)
-    add_android_openssl_libraries(${CMAKE_PROJECT_NAME})
+    if(${Qt6_VERSION} VERSION_EQUAL 6.6.3)
+        if(NOT ${CMAKE_ANDROID_NDK_VERSION} VERSION_EQUAL 25.1)
+            message(FATAL_ERROR "Invalid NDK Version: ${CMAKE_ANDROID_NDK_VERSION}, Use Version 25B instead.")
+        endif()
+    elseif(${Qt6_VERSION} VERSION_EQUAL 6.8.3)
+        if(NOT ${CMAKE_ANDROID_NDK_VERSION} VERSION_EQUAL 26.1)
+            message(FATAL_ERROR "Invalid NDK Version: ${CMAKE_ANDROID_NDK_VERSION}, Use Version 26B instead.")
+        endif()
+    endif()
 
     # Generation of android version numbers must be consistent release to release such that they are always increasing
-    if(${PROJECT_VERSION_MAJOR} GREATER 9)
+    if(${CMAKE_PROJECT_VERSION_MAJOR} GREATER 9)
         message(FATAL_ERROR "Major version larger than 1 digit: ${CMAKE_PROJECT_VERSION_MAJOR}")
     endif()
-    if(${PROJECT_VERSION_MINOR} GREATER 9)
+    if(${CMAKE_PROJECT_VERSION_MINOR} GREATER 9)
         message(FATAL_ERROR "Minor version larger than 1 digit: ${CMAKE_PROJECT_VERSION_MINOR}")
     endif()
-    if(${PROJECT_VERSION_PATCH} GREATER 99)
+    if(${CMAKE_PROJECT_VERSION_PATCH} GREATER 99)
         message(FATAL_ERROR "Patch version larger than 2 digits: ${CMAKE_PROJECT_VERSION_PATCH}")
     endif()
 
@@ -479,6 +477,13 @@ elseif(ANDROID)
     # endif()
 
     list(APPEND QT_ANDROID_MULTI_ABI_FORWARD_VARS QGC_STABLE_BUILD QT_HOST_PATH)
+
+    CPMAddPackage(
+        NAME android_openssl
+        URL https://github.com/KDAB/android_openssl/archive/refs/heads/master.zip
+    )
+    include(${android_openssl_SOURCE_DIR}/android_openssl.cmake)
+    add_android_openssl_libraries(${CMAKE_PROJECT_NAME})
 endif()
 
 target_compile_definitions(${CMAKE_PROJECT_NAME}
@@ -497,23 +502,32 @@ set_target_properties(${CMAKE_PROJECT_NAME}
         OUTPUT_NAME ${CMAKE_PROJECT_NAME}
 )
 
+target_precompile_headers(${CMAKE_PROJECT_NAME}
+    PRIVATE
+        <QtCore/QLoggingCategory>
+        <QtCore/QObject>
+        <QtCore/QString>
+        <QtCore/QTimer>
+)
+
+qt_add_qml_module(${CMAKE_PROJECT_NAME}
+    URI QGroundControl
+    VERSION 1.0
+    RESOURCE_PREFIX /qml
+    NO_PLUGIN
+)
+
 add_subdirectory(src)
 if(QGC_BUILD_TESTING)
     add_subdirectory(test)
 endif()
 
 if(QGC_CUSTOM_BUILD)
+    find_package(Qt6 REQUIRED COMPONENTS ${CUSTOM_QT_COMPONENTS})
     target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${CUSTOM_SOURCES})
     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${CUSTOM_LIBRARIES})
-    target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CUSTOM_DIRECTORIES})
+    target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CUSTOM_INCLUDE_DIRECTORIES})
 endif()
-
-target_precompile_headers(${CMAKE_PROJECT_NAME}
-    PRIVATE
-        <QtCore/QObject>
-        <QtNetwork/QNetworkReply>
-        <QtPositioning/QGeoCoordinate>
-)
 
 file(GLOB TS_SOURCES ${CMAKE_SOURCE_DIR}/translations/qgc_*.ts)
 set_source_files_properties(${TS_SOURCES} PROPERTIES OUTPUT_LOCATION "${CMAKE_BINARY_DIR}/i18n")
@@ -536,6 +550,7 @@ qt_add_resources(${CMAKE_PROJECT_NAME} "qgcresources_cmake"
     FILES
         resources/qtquickcontrols2.conf
         ${SDL_GAMECONTROLLERDB_PATH}
+        ${QGC_GSTREAMER_SHADER_RESOURCES}
 )
 
 # cmake_print_variables(QT_ALL_PLUGIN_TYPES_FOUND_VIA_FIND_PACKAGE)
