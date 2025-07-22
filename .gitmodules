@@ -7,4 +7,4 @@
 [submodule "qtmqtt"]
 	path = libs/qtmqtt
 	url = https://github.com/qt/qtmqtt.git
-	branch = 6.6.3
+	branch = 6.8.3
