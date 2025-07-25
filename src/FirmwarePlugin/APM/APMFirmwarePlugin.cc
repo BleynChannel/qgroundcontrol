@@ -664,12 +664,12 @@ const QVariantList& APMFirmwarePlugin::vehicleToolIndicators(const Vehicle* vehi
         _vehicleToolIndicatorList = FirmwarePlugin::vehicleToolIndicators(vehicle);
 
 		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/Camera.qml")));
-		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/LightControl.qml")));
-		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/EngineControl.qml")));
-		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/WeightControl.qml")));
-		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/ResetControl.qml")));
-		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/FanControl.qml")));
-		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/ValveControl.qml")));
+		// _vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/LightControl.qml")));
+		// _vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/EngineControl.qml")));
+		// _vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/WeightControl.qml")));
+		// _vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/ResetControl.qml")));
+		// _vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/FanControl.qml")));
+		// _vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/ValveControl.qml")));
 		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/VehicleBatteryIndicator.qml")));
 		// _vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/APMBatteryIndicator.qml")));
 		_vehicleToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Vehicle/TemperatureIndicator.qml")));
@@ -690,9 +690,9 @@ const QVariantList& APMFirmwarePlugin::droneToolIndicators(const Vehicle* vehicl
 
 		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/TakeoffControl.qml")));
 		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/LandControl.qml")));
-		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/Calibration.qml")));
-		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/WindingControl.qml")));
-		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/ControlMode.qml")));
+		// _droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/Calibration.qml")));
+		// _droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/WindingControl.qml")));
+		// _droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/ControlMode.qml")));
 		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/HeightIndicator.qml")));
 		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/LinkPowerIndicator.qml")));
 		// _droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/BatteryIndicator.qml")));

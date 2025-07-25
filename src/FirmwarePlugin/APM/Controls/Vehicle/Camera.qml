@@ -18,7 +18,7 @@ Item {
 
 	Connections {
 		target: _telemetry
-		function onVehicleSlowTopicChanged() {
+		function onVEHICLE_SLOWChanged() {
 			QGroundControl.videoManager.changeCurrentUri(_telemetry.vehicleCameraSelect)
 		}
 	}

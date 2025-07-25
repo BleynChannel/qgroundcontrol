@@ -24,11 +24,6 @@ VehicleTelemetry::VehicleTelemetry(QObject *parent)
 	QObject::connect(_mqttClient, &QMqttClient::errorChanged, this, &VehicleTelemetry::_errorChanged);
 	QObject::connect(_mqttClient, &QMqttClient::messageReceived, this, &VehicleTelemetry::_messageReceived);
 
-    QObject::connect(this, &VehicleTelemetry::vfrTopicChanged, this, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VFR]); }, Qt::AutoConnection);
-    QObject::connect(this, &VehicleTelemetry::vehicleFastTopicChanged, this, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VEHICLE_FAST]); }, Qt::AutoConnection);
-    QObject::connect(this, &VehicleTelemetry::vehicleSlowTopicChanged, this, [this]() { _updateTelemetry(_topics[VehicleTelemetry::VEHICLE_SLOW]); }, Qt::AutoConnection);
-    QObject::connect(this, &VehicleTelemetry::nothingTopicChanged, this, [this]() { _updateTelemetry(_topics[VehicleTelemetry::NOTHING]); }, Qt::AutoConnection);
-
 	_mqttSettings = SettingsManager::instance()->mqttSettings();
 	QObject::connect(_mqttSettings,   &MqttSettings::mqttConfiguredChanged, this, &VehicleTelemetry::_configChanged);
 
@@ -75,43 +70,6 @@ VehicleTelemetry::restart(const QString& host, quint16 port, const QString& user
 	this->connect(host, port, username, password);
 }
 
-void
-VehicleTelemetry::_initTopics()
-{
-    // VFR Topic
-    _topics[VehicleTelemetry::VFR].name = QString(VFR_HUD_TOPIC);
-    _topics[VehicleTelemetry::VFR].message["heading"] = 0.f;
-
-    // Vehicle Fast Topic
-    _topics[VehicleTelemetry::VEHICLE_FAST].name = QString(VEHICLE_FAST_TOPIC);
-    _topics[VehicleTelemetry::VEHICLE_FAST].message["engine"] = false;
-    _topics[VehicleTelemetry::VEHICLE_FAST].message["weight"] = false;
-    _topics[VehicleTelemetry::VEHICLE_FAST].message["reset"] = false;
-    _topics[VehicleTelemetry::VEHICLE_FAST].message["fan"] = false;
-    _topics[VehicleTelemetry::VEHICLE_FAST].message["power"] = 0;
-    _topics[VehicleTelemetry::VEHICLE_FAST].message["rssi_rc"] = 0;
-    _topics[VehicleTelemetry::VEHICLE_FAST].message["valve"] = false;
-    _topics[VehicleTelemetry::VEHICLE_FAST].message["speed_motorL"] = 0;
-    _topics[VehicleTelemetry::VEHICLE_FAST].message["speed_motorR"] = 0;
-
-    // Vehicle Slow Topic
-    _topics[VehicleTelemetry::VEHICLE_SLOW].name = QString(VEHICLE_SLOW_TOPIC);
-    _topics[VehicleTelemetry::VEHICLE_SLOW].message["beam"] = 0;
-    _topics[VehicleTelemetry::VEHICLE_SLOW].message["battery_perc"] = 0;
-    _topics[VehicleTelemetry::VEHICLE_SLOW].message["temp_motor"] = 0.f;
-	_topics[VehicleTelemetry::VEHICLE_SLOW].message["camera_select"] = 0;
-	_topics[VehicleTelemetry::VEHICLE_SLOW].message["ant_pos"] = 0;
-
-    // Nothing Topic
-    _topics[VehicleTelemetry::NOTHING].name = QString(NOTHING_TOPIC);
-    _topics[VehicleTelemetry::NOTHING].message["winding"] = false;
-    _topics[VehicleTelemetry::NOTHING].message["controlMode"] = 0;
-    _topics[VehicleTelemetry::NOTHING].message["height"] = 0.f;
-    _topics[VehicleTelemetry::NOTHING].message["linkPower"] = false;
-    _topics[VehicleTelemetry::NOTHING].message["battery"] = 0;
-	_topics[VehicleTelemetry::NOTHING].message["gpsLocation"] = _setDataCoordinate(QGeoCoordinate());
-}
-
 QGeoCoordinate
 VehicleTelemetry::_getDataCoordinate(const QJsonObject& obj) const
 {
@@ -152,22 +110,12 @@ VehicleTelemetry::_stateChanged(QMqttClient::ClientState state)
 	case QMqttClient::Connected:
 		qCDebug(VehicleTelemetryLog) << "Connected";
 
-        if (!_mqttClient->subscribe(QString(VFR_HUD_TOPIC))) {
-            qCWarning(VehicleTelemetryLog) << "Failed to subscribe to '" << VFR_HUD_TOPIC << "'";
-        }
-
-        if (!_mqttClient->subscribe(QString(VEHICLE_FAST_TOPIC))) {
-            qCWarning(VehicleTelemetryLog) << "Failed to subscribe to '" << VEHICLE_FAST_TOPIC << "'";
+		for (auto& topic : _topics) {
+			if (!_mqttClient->subscribe(topic.path)) {
+				qCWarning(VehicleTelemetryLog) << "Failed to subscribe to '" << topic.path << "'";
+			}
 		}
 
-        if (!_mqttClient->subscribe(QString(VEHICLE_SLOW_TOPIC))) {
-            qCWarning(VehicleTelemetryLog) << "Failed to subscribe to '" << VEHICLE_SLOW_TOPIC << "'";
-        }
-
-        if (!_mqttClient->subscribe(QString(NOTHING_TOPIC))) {
-            qCWarning(VehicleTelemetryLog) << "Failed to subscribe to '" << NOTHING_TOPIC << "'";
-		}
-		
 		break;
 	case QMqttClient::Disconnected:
 		qCDebug(VehicleTelemetryLog) << "Disconnected";
@@ -215,42 +163,30 @@ VehicleTelemetry::_errorChanged(QMqttClient::ClientError error)
 void
 VehicleTelemetry::_messageReceived(const QByteArray &message, const QMqttTopicName &topicName)
 {
-	VehicleTelemetry::Topic *topic = nullptr;
-	for (int i = 0; i < MAX_COUNT_TOPICS; i++) {
-		if (_topics[i].name == topicName) {
-			topic = &_topics[i];
-			break;
-		}
-	}
-
-	if (topic) {
-		if (topic->isChanged) {
-			topic->isChanged = false;
-			return;
-		}
-
-		// Parsing Json message to propertys
-		QJsonDocument doc = QJsonDocument::fromJson(message);
-		
-		if (!doc.isNull()) {
-			QJsonObject json = doc.object();
-
-			topic->message = json;
-			topic->isChanged = true;
-
-			// Emit signals
-            if (topic->name == VFR_HUD_TOPIC) {
-                emit vfrTopicChanged();
-            } else if (topic->name == VEHICLE_FAST_TOPIC) {
-                emit vehicleFastTopicChanged();
-            } else if (topic->name == VEHICLE_SLOW_TOPIC) {
-                emit vehicleSlowTopicChanged();
-            } else if (topic->name == NOTHING_TOPIC) {
-                emit nothingTopicChanged();
+	for (int i = 0; i < static_cast<int>(TopicType::_COUNT); i++) {
+		if (_topics[i].path == topicName) {
+			if (_topics[i].isChanged) {
+				_topics[i].isChanged = false;
+				return;
 			}
-		} else {
-			// Handle the case when the JSON document is null (i.e., the message is not valid JSON)
-			qCWarning(VehicleTelemetryLog) << "Invalid JSON message: " << message;
+	
+			// Parsing Json message to propertys
+			QJsonDocument doc = QJsonDocument::fromJson(message);
+			
+			if (!doc.isNull()) {
+				QJsonObject json = doc.object();
+	
+				_topics[i].message = json;
+				_topics[i].isChanged = true;
+	
+				// Emit signals
+				_emitTopic(static_cast<TopicType>(i));
+			} else {
+				// Handle the case when the JSON document is null (i.e., the message is not valid JSON)
+				qCWarning(VehicleTelemetryLog) << "Invalid JSON message: " << message;
+			}
+
+			break;
 		}
 	}
 }
@@ -268,8 +204,8 @@ VehicleTelemetry::_updateTelemetry(Topic &topic)
 		doc.setObject(topic.message);
 
 		//TODO: add qos and retain
-		if (_mqttClient->publish(QMqttTopicName(topic.name), doc.toJson()) == -1) {
-			qCWarning(VehicleTelemetryLog) << "Failed to publish message from '" << topic.name << "'";
+		if (_mqttClient->publish(QMqttTopicName(topic.path), doc.toJson()) == -1) {
+			qCWarning(VehicleTelemetryLog) << "Failed to publish message from '" << topic.path << "'";
 		}
 
 		topic.isChanged = true;

@@ -267,10 +267,6 @@ ApplicationWindow {
         id:                     flyView
         anchors.fill:           parent
         utmspSendActTrigger:    _utmspSendActTrigger
-
-        Component.onCompleted: {
-            QGroundControl.corePlugin.startDevilspie()
-        }
     }
 
     PlanView {
