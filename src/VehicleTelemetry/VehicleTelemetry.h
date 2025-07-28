@@ -50,7 +50,7 @@ class VehicleTelemetry : public QObject
 
 signals:
     //? Here we announce the topics
-    DECLARE_TOPICS(VFR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING, /* CUSTOM_TOPIC */)
+    DECLARE_TOPICS(VFR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING /*, CUSTOM_TOPIC */)
 
 private:
     void _initTopics() {
