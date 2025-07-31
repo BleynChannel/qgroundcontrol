@@ -18,8 +18,6 @@ VehicleTelemetry::VehicleTelemetry(QObject *parent)
 	: QObject(parent)
 	, _mqttClient(new QMqttClient())
 {
-	(void) qmlRegisterUncreatableType<VehicleTelemetry>("QGroundControl.VehicleTelemetry", 1, 0, "VehicleTelemetry", "Reference only");
-
 	QObject::connect(_mqttClient, &QMqttClient::stateChanged, this, &VehicleTelemetry::_stateChanged);
 	QObject::connect(_mqttClient, &QMqttClient::errorChanged, this, &VehicleTelemetry::_errorChanged);
 	QObject::connect(_mqttClient, &QMqttClient::messageReceived, this, &VehicleTelemetry::_messageReceived);
@@ -45,6 +43,11 @@ VehicleTelemetry::~VehicleTelemetry()
 VehicleTelemetry *VehicleTelemetry::instance()
 {
 	return _vehicleTelemetryInstance();
+}
+
+void VehicleTelemetry::registerQmlTypes()
+{
+	(void) qmlRegisterUncreatableType<VehicleTelemetry>("QGroundControl.VehicleTelemetry", 1, 0, "VehicleTelemetry", "Reference only");
 }
 
 void

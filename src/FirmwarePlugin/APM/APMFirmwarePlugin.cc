@@ -696,9 +696,9 @@ const QVariantList& APMFirmwarePlugin::droneToolIndicators(const Vehicle* vehicl
 		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/HeightIndicator.qml")));
 		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/LinkPowerIndicator.qml")));
 		// _droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/BatteryIndicator.qml")));
-		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/RotateControl.qml")));
+		// _droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/RotateControl.qml")));
         _droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/APMBatteryIndicator.qml")));
-		_droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/UploadROI.qml")));
+		// _droneToolIndicatorList.append(QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/Drone/UploadROI.qml")));
 	}
 
 	return _droneToolIndicatorList;

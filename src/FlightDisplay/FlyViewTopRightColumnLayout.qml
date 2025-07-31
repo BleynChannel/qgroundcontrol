@@ -19,6 +19,26 @@ import QGroundControl.ScreenTools
 
 ColumnLayout {
     width: _rightPanelWidth
+    spacing: ScreenTools.defaultFontPixelWidth / 2
+
+	QGCPalette { id: qgcPal }
+
+	Rectangle {
+		Layout.preferredWidth:  _rightPanelWidth
+        height:					ScreenTools.defaultFontPixelHeight * 5
+		visible: 				globals.guidedControllerFlyView.editChangeHeading
+		color: 					qgcPal.windowShade
+		radius: 				6
+
+		QGCLabel {
+			anchors.verticalCenter: parent.verticalCenter
+			width:					_rightPanelWidth - ScreenTools.defaultFontPixelWidth
+			wrapMode:           	Text.WordWrap
+			horizontalAlignment:	Text.AlignHCenter
+			
+			text:               "Установите две точки на карте чтобы задать направление" //! qsTr
+		}
+	}
 
     TerrainProgress {
         Layout.alignment:       Qt.AlignTop

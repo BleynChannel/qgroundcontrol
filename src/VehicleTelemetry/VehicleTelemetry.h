@@ -16,6 +16,22 @@ class VehicleTelemetry : public QObject
 {
 	Q_OBJECT
 
+signals:
+    //? Here we announce the topics
+    DECLARE_TOPICS(OPERATOR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING /*, CUSTOM_TOPIC */)
+
+private:
+    void _initTopics() {
+        INIT_TOPIC(OPERATOR, "operator")
+        INIT_TOPIC(VEHICLE_FAST, "esp/rx/telem")
+        INIT_TOPIC(VEHICLE_SLOW, "esp/rx/telem2")
+        INIT_TOPIC(NOTHING, "nothing")
+        
+        //? Template initialize topic
+        //? 1. Topic name; 2. Topic path (MQTT)
+        // INIT_TOPIC(CUSTOM_TOPIC, "custom")
+    }
+
     // Vehicle Fast topic parameters
     DECLARE_TOPIC_PARAM(int, vehiclePower, "power", 0, VEHICLE_FAST, Int)
     DECLARE_TOPIC_PARAM(int, vehicleSignal, "rssi_rc", 0, VEHICLE_FAST, Int)
@@ -30,7 +46,7 @@ class VehicleTelemetry : public QObject
     DECLARE_TOPIC_PARAM(int, vehicleAntennaPosition, "ant_pos", 0, VEHICLE_SLOW, Int)
 
     // VFR topic parameters
-    DECLARE_TOPIC_PARAM(float, droneRotate, "heading", 0.0f, VFR, Double)
+    DECLARE_TOPIC_PARAM(int, droneRotate, "droneToVehicleHeading", 0, OPERATOR, Int)
 
     // Nothing topic parameters
     DECLARE_TOPIC_PARAM(bool, vehicleEngine, "engine", false, NOTHING, Bool)
@@ -48,22 +64,6 @@ class VehicleTelemetry : public QObject
     //? 1. Type; 2. Name; 3. JSON name; 4. Default value; 5. Topic; 6. To type (The type to convert the json object)
     // DECLARE_TOPIC_PARAM(int, customParam, "customParam", 0, CUSTOM_TOPIC, Int)
 
-signals:
-    //? Here we announce the topics
-    DECLARE_TOPICS(VFR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING /*, CUSTOM_TOPIC */)
-
-private:
-    void _initTopics() {
-        INIT_TOPIC(VFR, "dron/VFR_HUD")
-        INIT_TOPIC(VEHICLE_FAST, "esp/rx/telem")
-        INIT_TOPIC(VEHICLE_SLOW, "esp/rx/telem2")
-        INIT_TOPIC(NOTHING, "nothing")
-        
-        //? Template initialize topic
-        //? 1. Topic name; 2. Topic path (MQTT)
-        // INIT_TOPIC(CUSTOM_TOPIC, "custom")
-    }
-
 private:
     Q_PROPERTY(QGeoCoordinate droneEditLocation READ droneEditLocation WRITE setDroneEditLocation NOTIFY NOTHINGChanged)
 
@@ -74,6 +74,7 @@ public:
 	~VehicleTelemetry();
 
 	static VehicleTelemetry* instance();
+    static void registerQmlTypes();
 
 	Q_INVOKABLE void connect(const QString& host, quint16 port, const QString& username = "", const QString& password = "");
 	Q_INVOKABLE void disconnect();

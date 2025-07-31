@@ -20,6 +20,7 @@ import QGroundControl.Controls
 import QGroundControl.Palette
 import QGroundControl.Vehicle
 import QGroundControl.FlightMap
+import QGroundControl.VehicleTelemetry
 
 /// This provides the smarts behind the guided mode commands, minus the user interface. This way you can change UI
 /// without affecting the underlying functionality.
@@ -165,7 +166,7 @@ Item {
     property bool showSetHome:              _guidedActionsEnabled
     property bool showGripper:              _initialConnectComplete ? _activeVehicle.hasGripper : false
     property bool showSetEstimatorOrigin:   _activeVehicle && !(_activeVehicle.sensorsPresentBits & Vehicle.SysStatusSensorGPS)
-    property bool showChangeHeading:        _guidedActionsEnabled && _vehicleFlying
+    property bool showChangeHeading:        _guidedActionsEnabled
 	property bool showGpsEditLocation:		_guidedActionsEnabled
 
     property string changeSpeedTitle:   _vehicleInFwdFlight ? changeAirspeedTitle : changeCruiseSpeedTitle
@@ -175,6 +176,8 @@ Item {
     property bool showResumeMission:    _activeVehicle && !_vehicleArmed && _vehicleWasFlying && _missionAvailable && _resumeMissionIndex > 0 && (_resumeMissionIndex < _missionItemCount - 2)
 
     property bool guidedUIVisible:          confirmDialog.visible
+
+    property bool editChangeHeading:		false
 
     property var    _corePlugin:            QGroundControl.corePlugin
     property var    _corePluginOptions:     QGroundControl.corePlugin.options
@@ -201,6 +204,7 @@ Item {
     property bool   _vehicleInFwdFlight:    _activeVehicle ? _activeVehicle.inFwdFlight : false
     property bool  _speedLimitsAvailable:   _activeVehicle && ((_vehicleInFwdFlight && _activeVehicle.haveFWSpeedLimits) || (!_vehicleInFwdFlight && _activeVehicle.haveMRSpeedLimits))
     property var   _gripperFunction:        undefined
+    property var   _telemetry:				QGroundControl.vehicleTelemetry
 
     // You can turn on log output for GuidedActionsController by turning on GuidedActionsControllerLog category
     property bool __guidedModeSupported:    _activeVehicle ? _activeVehicle.guidedModeSupported : false
@@ -742,7 +746,10 @@ Item {
             _activeVehicle.flightMode = actionData
             break
         case actionChangeHeading:
-            _activeVehicle.guidedModeChangeHeading(actionData)
+            // _activeVehicle.guidedModeChangeHeading(actionData)
+			
+			_telemetry.droneRotate = actionData
+			console.log("telemetry.droneRotate", actionData) //TODO: remove
             break
 		case actionSecurityVehicleSetup:
 			if (formNumber === "5325") {
