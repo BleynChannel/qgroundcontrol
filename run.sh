@@ -72,17 +72,17 @@ if [ "$action" = "init" ]; then
     # Therefore, Qt Creator is used for Linux.
 
     # If you know how to set the working path for CMake, you can uncomment the following code
-    # if ! cmake -B build/$build_type -G Ninja -DCMAKE_BUILD_TYPE=$build_type; then
-    #     echo "Error: CMake failed to configure the build."
-    #     exit 1
-    # fi
+    if ! cmake -B build/$build_type -G Ninja -DCMAKE_BUILD_TYPE=$build_type; then
+        echo "Error: CMake failed to configure the build."
+        exit 1
+    fi
 
     exit 0
 fi
 
 # Build project if action is init or run
 if [ "$action" = "init" ] || [ "$action" = "run" ]; then
-    if ! cmake --build build/$build_type --config $build_type; then
+    if ! cmake --build build/$build_type --target all --config $build_type; then
         echo "Error: CMake failed to build QGroundControl."
         exit 1
     fi
@@ -92,7 +92,7 @@ if [ "$action" = "run" ]; then
     # Run QGroundControl
     echo "Running QGroundControl..."
     # export QT_QPA_PLATFORM=xcb
-    # exec "./build/${build_type}/QGroundControl"
+    exec "./build/${build_type}/${build_type}/QGroundControl"
 fi
 
 if [ "$action" = "deploy" ]; then
