@@ -749,7 +749,6 @@ Item {
             // _activeVehicle.guidedModeChangeHeading(actionData)
 			
 			_telemetry.droneRotate = actionData
-			console.log("telemetry.droneRotate", actionData) //TODO: remove
             break
 		case actionSecurityVehicleSetup:
 			if (formNumber === "5325") {

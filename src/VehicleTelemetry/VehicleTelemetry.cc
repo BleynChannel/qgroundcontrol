@@ -206,8 +206,18 @@ VehicleTelemetry::_updateTelemetry(Topic &topic)
 		QJsonDocument doc = QJsonDocument();
 		doc.setObject(topic.message);
 
-		//TODO: add qos and retain
-		if (_mqttClient->publish(QMqttTopicName(topic.path), doc.toJson()) == -1) {
+		// Add QoS and retain options for MQTT publishing
+		QMqttPublishOptions options;
+		options.setQos(1);  // Set Quality of Service to 1 (at least once)
+		options.setRetain(true);  // Set retain flag to true
+
+		QByteArray payload = doc.toJson();
+		if (payload.isEmpty()) {
+			qCWarning(VehicleTelemetryLog) << "Failed to serialize message for topic '" << topic.path << "'";
+			return;
+		}
+
+		if (_mqttClient->publish(QMqttTopicName(topic.path), payload, options) == -1) {
 			qCWarning(VehicleTelemetryLog) << "Failed to publish message from '" << topic.path << "'";
 		}
 
