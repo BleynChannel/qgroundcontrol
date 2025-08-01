@@ -12,6 +12,9 @@
 
 Q_DECLARE_LOGGING_CATEGORY(VehicleTelemetryLog)
 
+#define MQTT_QOS 0
+#define MQTT_RETAINT false
+
 class VehicleTelemetry : public QObject
 {
 	Q_OBJECT
