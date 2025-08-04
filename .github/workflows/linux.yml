@@ -92,7 +92,7 @@ jobs:
         uses: ./.github/actions/install-qtmqtt-action
         with:
           version: ${{ env.QT_VERSION }}
-          qt-dir: ${{ runner.temp }}
+          qt-dir: ${{ env.QT_ROOT_DIR }}
           dir: ${{ github.workspace }}/libs/qtmqtt
 
       # - name: Build GStreamer

@@ -25,11 +25,14 @@ runs:
     - name: Configure
       working-directory: ${{ inputs.dir }}
       run: ${{ inputs.qt-dir }}/bin/qt-configure-module .
+      shell: bash
 
     - name: Build
       working-directory: ${{ inputs.dir }}
       run: cmake --build .
+      shell: bash
 
     - name: Install
       working-directory: ${{ inputs.dir }}
       run: cmake --install . --verbose
+      shell: bash
