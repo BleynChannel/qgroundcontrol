@@ -1,6 +1,10 @@
 # Find libssh library
-find_library(SSH_LIBRARY NAMES ssh libssh REQUIRED)
-find_path(SSH_INCLUDE_DIR NAMES libssh/libssh.h REQUIRED)
+find_library(SSH_LIBRARY
+    NAMES ssh libssh
+    PATHS ${CMAKE_SOURCE_DIR}/../libs/libssh/build/src
+    NO_DEFAULT_PATH
+    REQUIRED
+)
 
 # Add include directories
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${SSH_INCLUDE_DIR})
