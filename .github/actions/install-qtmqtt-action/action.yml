@@ -24,7 +24,7 @@ runs:
 
     - name: Configure
       working-directory: ${{ inputs.dir }}
-      run: ${{ inputs.qt-dir }}/bin/qt-configure-module .
+      run: "${{ inputs.qt-dir }}/bin/qt-configure-module ."
       shell: bash
 
     - name: Build
