@@ -26,14 +26,7 @@ runs:
       id: configure
       shell: bash
       working-directory: ${{ inputs.dir }}
-      run: |
-        # Normalize paths for Windows
-        if [[ "${{ runner.os }}" == "Windows" ]]; then
-          QT_DIR=$(cygpath -u "${{ inputs.qt-dir }}")
-        else
-          QT_DIR="${{ inputs.qt-dir }}"
-        fi
-        "$QT_DIR/bin/qt-configure-module" .
+      run: ${{ env.QT_ROOT_DIR }}/../msvc2022_64/bin/qt-configure-module .
 
     - name: Build
       working-directory: ${{ inputs.dir }}
