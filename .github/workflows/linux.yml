@@ -87,6 +87,13 @@ jobs:
           dir: ${{ runner.temp }}
           modules: qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtconnectivity qtquick3d qtsensors
           cache: true
+          
+      - name: "Install QtMqtt"
+        uses: ./.github/actions/install-qtmqtt-action
+        with:
+          version: ${{ env.QT_VERSION }}
+          qt-dir: ${{ runner.temp }}
+          dir: ${{ github.workspace }}/libs/qtmqtt
 
       # - name: Build GStreamer
       #   uses: ./.github/actions/gstreamer
