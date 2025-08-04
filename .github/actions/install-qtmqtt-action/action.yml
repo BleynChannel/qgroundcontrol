@@ -22,11 +22,39 @@ runs:
         ref: ${{ inputs.version }}
         path: ${{ inputs.dir }}
 
+    - name: Debug - List Qt directory
+      shell: bash
+      run: |
+        echo "Current directory: $(pwd)"
+        echo "Input Qt directory: ${{ inputs.qt-dir }}"
+        echo "Runner OS: ${{ runner.os }}"
+        if [[ "${{ runner.os }}" == "Windows" ]]; then
+          QT_DIR=$(cygpath -u "${{ inputs.qt-dir }}")
+          echo "Converted Qt directory (cygpath): $QT_DIR"
+        else
+          QT_DIR="${{ inputs.qt-dir }}"
+        fi
+        echo "Using Qt directory: $QT_DIR"
+        ls -la "$QT_DIR/bin/" || echo "Failed to list bin directory"
+        echo "Checking for qt-configure-module: $(ls -la "$QT_DIR/bin/qt-configure-module" 2>/dev/null || echo 'Not found')"
+
     - name: Configure
       id: configure
       shell: bash
+      continue-on-error: true
       working-directory: ${{ inputs.dir }}
-      run: ${{ env.QT_ROOT_DIR }}/../msvc2022_64/bin/qt-configure-module .
+      run: |
+        # Normalize paths for Windows
+        if [[ "${{ runner.os }}" == "Windows" ]]; then
+          QT_DIR=$(cygpath -u "${{ inputs.qt-dir }}")
+        else
+          QT_DIR="${{ inputs.qt-dir }}"
+        fi
+        echo "Running: $QT_DIR/bin/qt-configure-module ."
+        "$QT_DIR/bin/qt-configure-module" . || {
+          echo "Failed to run qt-configure-module"
+          exit 1
+        }
 
     - name: Build
       working-directory: ${{ inputs.dir }}
