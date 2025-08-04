@@ -47,14 +47,19 @@ runs:
         # Normalize paths for Windows
         if [[ "${{ runner.os }}" == "Windows" ]]; then
           QT_DIR=$(cygpath -u "${{ inputs.qt-dir }}")
+          echo "Running: $QT_DIR/bin/qt-configure-module.bat ."
+          "$QT_DIR/bin/qt-configure-module.bat" . || {
+            echo "Failed to run qt-configure-module.bat"
+            exit 1
+          }
         else
           QT_DIR="${{ inputs.qt-dir }}"
+          echo "Running: $QT_DIR/bin/qt-configure-module ."
+          "$QT_DIR/bin/qt-configure-module" . || {
+            echo "Failed to run qt-configure-module"
+            exit 1
+          }
         fi
-        echo "Running: $QT_DIR/bin/qt-configure-module ."
-        "$QT_DIR/bin/qt-configure-module" . || {
-          echo "Failed to run qt-configure-module"
-          exit 1
-        }
 
     - name: Build
       working-directory: ${{ inputs.dir }}
