@@ -20,33 +20,24 @@ CPMAddPackage(
         "${ZLIB_EXTRA_OPTIONS}"
 )
 
-# Get the actual target that ZLIB::ZLIBSTATIC is aliasing to
-get_target_property(zlib_static_type ZLIB::ZLIBSTATIC TYPE)
-if(zlib_static_type STREQUAL "ALIAS_LIBRARY")
-    # If it's an alias, get the actual target name
-    get_target_property(zlib_actual_target ZLIB::ZLIBSTATIC ALIASED_TARGET)
-    # Create an alias from ZLIB::ZLIB to the actual target
-    if(NOT TARGET ZLIB::ZLIB)
-        add_library(ZLIB::ZLIB ALIAS ${zlib_actual_target})
-    endif()
-    set(zlib_target ${zlib_actual_target})
-else()
-    # If it's not an alias, use it directly
-    if(NOT TARGET ZLIB::ZLIB)
-        add_library(ZLIB::ZLIB ALIAS ZLIB::ZLIBSTATIC)
-    endif()
-    set(zlib_target ZLIB::ZLIBSTATIC)
-endif()
+# Use the zlib target provided by CPM
+# CPM uses zlibstatic as the target name when ZLIB_BUILD_STATIC is ON
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE zlibstatic)
 
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${zlib_target})
+# Create ZLIB::ZLIB alias if it doesn't exist
+if(NOT TARGET ZLIB::ZLIB)
+    add_library(ZLIB::ZLIB ALIAS zlibstatic)
+endif()
 
 #===========================================================================#
 
 # Use local libssh library
 set(LIBSSH_ROOT_DIR ${CMAKE_SOURCE_DIR}/libs/libssh)
 
-# Set ZLIB_ROOT to help libssh find our zlib
-set(ZLIB_ROOT ${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
+# Help libssh find our zlib
+set(ZLIB_ROOT ${zlib_SOURCE_DIR})
+set(ZLIB_INCLUDE_DIRS ${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
+set(ZLIB_LIBRARIES zlibstatic)
 
 # Add libssh as a subdirectory to build it as part of the project
 add_subdirectory(${LIBSSH_ROOT_DIR} ${CMAKE_CURRENT_BINARY_DIR}/libssh EXCLUDE_FROM_ALL)
