@@ -14,6 +14,7 @@
 #include <QtCore/QSet>
 #include <QtCore/QTimer>
 #include <QtCore/QTranslator>
+#include <QProcess>
 
 #include <QtWidgets/QApplication>
 

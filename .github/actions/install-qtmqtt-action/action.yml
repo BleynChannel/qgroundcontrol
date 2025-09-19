@@ -1,0 +1,44 @@
+name: Install QtMqtt
+description: Installs QtMqtt
+inputs:
+  version:
+    description: Version of QtMqtt to install
+    required: true
+  qt-dir:
+    description: Directory where Qt is installed
+    required: true
+    default: ${{ runner.temp }}
+  dir:
+    description: Directory to install QtMqtt
+    required: true
+    default: ${{ github.workspace }}/libs/qtmqtt
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+      with:
+        repository: qt/qtmqtt
+        ref: ${{ inputs.version }}
+        path: ${{ inputs.dir }}
+
+    - name: Configure
+      id: configure
+      shell: bash
+      working-directory: ${{ inputs.dir }}
+      run: |
+        if [[ "${{ runner.os }}" == "Windows" ]]; then
+          "${{ inputs.qt-dir }}/bin/qt-configure-module.bat" .
+        else
+          "${{ inputs.qt-dir }}/bin/qt-configure-module" .
+        fi
+
+    - name: Build
+      working-directory: ${{ inputs.dir }}
+      run: cmake --build .
+      shell: bash
+
+    - name: Install
+      working-directory: ${{ inputs.dir }}
+      run: cmake --install . --verbose
+      shell: bash

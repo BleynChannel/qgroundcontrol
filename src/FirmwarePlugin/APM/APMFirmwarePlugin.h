@@ -73,6 +73,8 @@ public:
     QString getHobbsMeter(Vehicle *vehicle) const override;
     bool hasGripper(const Vehicle *vehicle) const override;
     const QVariantList &toolIndicators(const Vehicle *vehicle) override;
+    const QVariantList &vehicleToolIndicators(const Vehicle *vehicle) override;
+    const QVariantList &droneToolIndicators(const Vehicle *vehicle) override;
     double maximumEquivalentAirspeed(Vehicle *vehicle) const override;
     double minimumEquivalentAirspeed(Vehicle *vehicle) const override;
     bool fixedWingAirSpeedLimitsAvailable(Vehicle *vehicle) const override;
@@ -129,6 +131,8 @@ private:
     // Vehicle specific data should go into APMFirmwarePluginInstanceData
 
     QVariantList _toolIndicatorList;
+    QVariantList _vehicleToolIndicatorList;
+    QVariantList _droneToolIndicatorList;
     QList<APMCustomMode> _supportedModes;
     QMap<int /* vehicle id */, QMap<int /* componentId */, bool /* true: component is part of ArduPilot stack */>> _ardupilotComponentMap;
 

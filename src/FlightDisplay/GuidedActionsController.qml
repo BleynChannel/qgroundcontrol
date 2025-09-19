@@ -20,6 +20,7 @@ import QGroundControl.Controls
 import QGroundControl.Palette
 import QGroundControl.Vehicle
 import QGroundControl.FlightMap
+import QGroundControl.VehicleTelemetry
 
 /// This provides the smarts behind the guided mode commands, minus the user interface. This way you can change UI
 /// without affecting the underlying functionality.
@@ -62,6 +63,7 @@ Item {
     readonly property string setEstimatorOriginTitle:       qsTr("Set Estimator origin")
     readonly property string setFlightMode:                 qsTr("Set Flight Mode")
     readonly property string changeHeadingTitle:            qsTr("Change Heading")
+    readonly property string securityVehicleSetupTitle:		"Настройки безопасности транспорта" //! qsTr
 
     readonly property string armMessage:                        qsTr("Arm the vehicle.")
     readonly property string mvArmMessage:                      qsTr("Arm selected vehicles.")
@@ -94,6 +96,7 @@ Item {
     readonly property string setEstimatorOriginMessage:         qsTr("Make the specified location the estimator origin.")
     readonly property string setFlightModeMessage:              qsTr("Set the vehicle flight mode to %1").arg(_actionData)
     readonly property string changeHeadingMessage:              qsTr("Set the vehicle heading towards the specified location.")
+	readonly property string securityVehicleSetupMessage: 		"Заполните пароль для деактивации безопасности при настройке транспортного средства" //! qsTr
 
     readonly property int actionRTL:                        1
     readonly property int actionLand:                       2
@@ -127,8 +130,8 @@ Item {
     readonly property int actionMVArm:                      31
     readonly property int actionMVDisarm:                   32
     readonly property int actionChangeLoiterRadius:         33
-
-
+    readonly property int actionSecurityVehicleSetup: 		34
+    readonly property int actionGpsEditLocation:			35
 
     readonly property int customActionStart:                10000 // Custom actions ids should start here so that they don't collide with the built in actions
 
@@ -163,7 +166,8 @@ Item {
     property bool showSetHome:              _guidedActionsEnabled
     property bool showGripper:              _initialConnectComplete ? _activeVehicle.hasGripper : false
     property bool showSetEstimatorOrigin:   _activeVehicle && !(_activeVehicle.sensorsPresentBits & Vehicle.SysStatusSensorGPS)
-    property bool showChangeHeading:        _guidedActionsEnabled && _vehicleFlying
+    property bool showChangeHeading:        _guidedActionsEnabled
+	property bool showGpsEditLocation:		_guidedActionsEnabled
 
     property string changeSpeedTitle:   _vehicleInFwdFlight ? changeAirspeedTitle : changeCruiseSpeedTitle
     property string changeSpeedMessage: _vehicleInFwdFlight ? changeAirspeedMessage : changeCruiseSpeedMessage
@@ -172,6 +176,8 @@ Item {
     property bool showResumeMission:    _activeVehicle && !_vehicleArmed && _vehicleWasFlying && _missionAvailable && _resumeMissionIndex > 0 && (_resumeMissionIndex < _missionItemCount - 2)
 
     property bool guidedUIVisible:          confirmDialog.visible
+
+    property bool editChangeHeading:		false
 
     property var    _corePlugin:            QGroundControl.corePlugin
     property var    _corePluginOptions:     QGroundControl.corePlugin.options
@@ -198,6 +204,7 @@ Item {
     property bool   _vehicleInFwdFlight:    _activeVehicle ? _activeVehicle.inFwdFlight : false
     property bool  _speedLimitsAvailable:   _activeVehicle && ((_vehicleInFwdFlight && _activeVehicle.haveFWSpeedLimits) || (!_vehicleInFwdFlight && _activeVehicle.haveMRSpeedLimits))
     property var   _gripperFunction:        undefined
+    property var   _telemetry:				QGroundControl.vehicleTelemetry
 
     // You can turn on log output for GuidedActionsController by turning on GuidedActionsControllerLog category
     property bool __guidedModeSupported:    _activeVehicle ? _activeVehicle.guidedModeSupported : false
@@ -399,6 +406,10 @@ Item {
         confirmAction(actionVtolTransitionToMRFlight)
     }
 
+	function securityVehicleSetupRequest() {
+		confirmAction(actionSecurityVehicleSetup)
+	}
+
     function closeAll() {
         confirmDialog.visible = false
         guidedValueSlider.visible = false
@@ -587,6 +598,11 @@ Item {
             confirmDialog.title = changeHeadingTitle
             confirmDialog.message = changeHeadingMessage
             break
+		case actionSecurityVehicleSetup:
+			confirmDialog.title = securityVehicleSetupTitle
+			confirmDialog.message = securityVehicleSetupMessage
+			confirmDialog.formNumberFieldEnable = true
+			break
         default:
             if (!customController.customConfirmAction(actionCode, actionData, mapIndicator, confirmDialog)) {
                 console.warn("Unknown actionCode", actionCode)
@@ -597,7 +613,7 @@ Item {
     }
 
     // Executes the specified action
-    function executeAction(actionCode, actionData, sliderOutputValue, optionChecked) {
+    function executeAction(actionCode, actionData, sliderOutputValue, formNumber, optionChecked) {
         var i;
         var selectedVehicles;
         switch (actionCode) {
@@ -703,6 +719,7 @@ Item {
             _activeVehicle.vtolInFwdFlight = false
             break
         case actionROI:
+			// _activeVehicle.setPointROI(actionData)
             _activeVehicle.guidedModeROI(actionData)
             break
         case actionChangeSpeed:
@@ -729,8 +746,19 @@ Item {
             _activeVehicle.flightMode = actionData
             break
         case actionChangeHeading:
-            _activeVehicle.guidedModeChangeHeading(actionData)
+            // _activeVehicle.guidedModeChangeHeading(actionData)
+			
+			_telemetry.droneRotate = actionData
             break
+		case actionSecurityVehicleSetup:
+			if (formNumber === "5325") {
+				mainWindow.showVehicleSetupTool()
+			} else {
+				mainWindow.showMessageDialog("Неверный пароль", "Вход в систему запрещен. Попробуйте другой пароль") //! qsTr
+			}
+			break
+		case actionGpsEditLocation:
+			_activeVehicle.guidedModeGPS(actionData)
         default:
             if (!customController.customExecuteAction(actionCode, actionData, sliderOutputValue, optionChecked)) {
                 console.warn(qsTr("Internal error: unknown actionCode"), actionCode)

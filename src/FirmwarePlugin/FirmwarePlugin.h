@@ -348,6 +348,16 @@ public:
     /// @return A list of QUrl with the indicators
     virtual const QVariantList &toolIndicators(const Vehicle *vehicle);
 
+	/// Returns the list of toolbar another tool indicators associated with a vehicle
+	///     signals vehicleToolIndicatorsChanged
+	/// @return A list of QUrl with the indicators
+    virtual const QVariantList &vehicleToolIndicators(const Vehicle *vehicle);
+
+	/// Returns the list of toolbar another tool indicators associated with a vehicle
+	///     signals droneToolIndicatorsChanged
+	/// @return A list of QUrl with the indicators
+    virtual const QVariantList &droneToolIndicators(const Vehicle *vehicle);
+
     /// Returns the list of toolbar mode indicators associated with a vehicle
     ///     signals modeIndicatorsChanged
     /// @return A list of QUrl with the indicators
@@ -408,6 +418,8 @@ public:
 
 signals:
     void toolIndicatorsChanged();
+	void vehicleToolIndicatorsChanged();
+	void droneToolIndicatorsChanged();
     void modeIndicatorsChanged();
 
 protected:
@@ -442,6 +454,8 @@ protected:
     FlightModeCustomModeMap _modeEnumToString;
 
     QVariantList _toolIndicatorList;
+	QVariantList _vehicleToolIndicatorList;
+	QVariantList _droneToolIndicatorList;
     QVariantList _modeIndicatorList;
 };
 

@@ -22,7 +22,7 @@ import QGroundControl.Controllers
 Rectangle {
     id:     _root
     width:  parent.width
-    height: ScreenTools.toolbarHeight
+    height: column.height + column.anchors.margins * 2 + 1
     color:  qgcPal.toolbarBackground
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
@@ -31,6 +31,8 @@ Rectangle {
 
     function dropMainStatusIndicatorTool() {
         mainStatusIndicator.dropMainStatusIndicator();
+        vehicleIndicatorFlow.dropMessageIndicatorTool();
+		droneIndicatorFlow.dropMessageIndicatorTool();
     }
 
     QGCPalette { id: qgcPal }
@@ -45,113 +47,227 @@ Rectangle {
         visible:        qgcPal.globalTheme === QGCPalette.Light
     }
 
-    Rectangle {
-        anchors.fill: viewButtonRow
+    // Rectangle {
+    //     anchors.fill: toolIndicators
         
-        gradient: Gradient {
-            orientation: Gradient.Horizontal
-            GradientStop { position: 0;                                     color: _mainStatusBGColor }
-            GradientStop { position: currentButton.x + currentButton.width; color: _mainStatusBGColor }
-            GradientStop { position: 1;                                     color: _root.color }
+    //     gradient: Gradient {
+    //         orientation: Gradient.Horizontal
+    //         GradientStop { position: 0;                                     color: _mainStatusBGColor }
+    //         GradientStop { position: currentButton.x + currentButton.width; color: _mainStatusBGColor }
+    //         GradientStop { position: 1;                                     color: _root.color }
+    //     }
+    // }
+
+    Column {
+		id:     				column
+        anchors.margins:        ScreenTools.defaultFontPixelWidth / 2
+		anchors.top:            parent.top
+		anchors.left:           parent.left
+		anchors.right:          parent.right
+		spacing:        		ScreenTools.defaultFontPixelWidth / 2
+
+		property int itemHeight: ScreenTools.toolbarHeight - column.padding
+
+        Item {
+            anchors.left:   parent.left
+            anchors.right:  parent.right
+            height:         column.itemHeight
+
+            RowLayout {
+                id:                     viewButtonRow
+                anchors.top:            parent.top
+                anchors.bottom:         parent.bottom
+                spacing:                ScreenTools.defaultFontPixelWidth / 2
+
+                QGCToolBarButton {
+                    id:                     currentButton
+                    Layout.preferredHeight: viewButtonRow.height
+                    icon.source:            "/res/QGCLogoFull.svg"
+                    logo:                   true
+                    onClicked:              mainWindow.showToolSelectDialog()
+                }
+
+                MainStatusIndicator {
+                    id: mainStatusIndicator
+                    Layout.preferredHeight: viewButtonRow.height
+                }
+
+                QGCButton {
+                    id:                 disconnectButton
+                    text:               qsTr("Disconnect")
+                    onClicked:          _activeVehicle.closeVehicle()
+                    visible:            _activeVehicle && _communicationLost
+                }
+            }
+
+            FlyViewToolBarIndicators {
+                id: toolIndicators
+                anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
+                anchors.rightMargin:    ScreenTools.defaultFontPixelWidth / 2
+                anchors.left:           viewButtonRow.right
+                anchors.right:          parent.right
+                anchors.verticalCenter: viewButtonRow.verticalCenter
+                height:                 column.itemHeight * 0.7
+            }
         }
+
+        Flow {
+            id: 			vehicleToolindicatorsFlow
+            anchors.left:   parent.left
+            anchors.right:  parent.right
+            spacing:        ScreenTools.defaultFontPixelWidth / 2
+
+            Repeater {
+				id:     vehicleIndicatorFlow
+                model:  _activeVehicle ? _activeVehicle.vehicleToolIndicators : []
+
+				function dropMessageIndicatorTool() {
+					for (var i=0; i<count; i++) {
+						var thisTool = itemAt(i);
+						if (thisTool.item.dropMessageIndicator) {
+							thisTool.item.dropMessageIndicator();
+						}
+					}
+				}
+
+				Loader {
+					height: 	column.itemHeight
+					source:     modelData
+				}
+			}
+        }
+
+        // Divider
+		Rectangle {
+			color:              qgcPal.globalTheme === QGCPalette.Light ? "black" : "white"
+			anchors.left:       parent.left
+			anchors.right:      parent.right
+			height:             1
+		}
+
+		Flow {
+			id: 			    droneToolindicatorsFlow
+			anchors.left:       parent.left
+			anchors.right:      parent.right
+			spacing:            ScreenTools.defaultFontPixelWidth / 2
+
+			Repeater {
+				id:		droneIndicatorFlow
+                model:  _activeVehicle ? _activeVehicle.droneToolIndicators : []
+
+				function dropMessageIndicatorTool() {
+					for (var i=0; i<count; i++) {
+						var thisTool = itemAt(i);
+						if (thisTool.item.dropMessageIndicator) {
+							thisTool.item.dropMessageIndicator();
+						}
+					}
+				}
+
+				Loader {
+					height: 			column.itemHeight
+					source:             modelData
+				}
+			}
+		}
     }
 
-    RowLayout {
-        id:                     viewButtonRow
-        anchors.bottomMargin:   1
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        spacing:                ScreenTools.defaultFontPixelWidth / 2
+    // RowLayout {
+    //     id:                     viewButtonRow
+    //     anchors.bottomMargin:   1
+    //     anchors.top:            parent.top
+    //     anchors.bottom:         parent.bottom
+    //     spacing:                ScreenTools.defaultFontPixelWidth / 2
 
-        QGCToolBarButton {
-            id:                     currentButton
-            Layout.preferredHeight: viewButtonRow.height
-            icon.source:            "/res/QGCLogoFull.svg"
-            logo:                   true
-            onClicked:              mainWindow.showToolSelectDialog()
-        }
+    //     QGCToolBarButton {
+    //         id:                     currentButton
+    //         Layout.preferredHeight: viewButtonRow.height
+    //         icon.source:            "/res/QGCLogoFull.svg"
+    //         logo:                   true
+    //         onClicked:              mainWindow.showToolSelectDialog()
+    //     }
 
-        MainStatusIndicator {
-            id: mainStatusIndicator
-            Layout.preferredHeight: viewButtonRow.height
-        }
+    //     MainStatusIndicator {
+    //         id: mainStatusIndicator
+    //         Layout.preferredHeight: viewButtonRow.height
+    //     }
 
-        QGCButton {
-            id:                 disconnectButton
-            text:               qsTr("Disconnect")
-            onClicked:          _activeVehicle.closeVehicle()
-            visible:            _activeVehicle && _communicationLost
-        }
-    }
+    //     QGCButton {
+    //         id:                 disconnectButton
+    //         text:               qsTr("Disconnect")
+    //         onClicked:          _activeVehicle.closeVehicle()
+    //         visible:            _activeVehicle && _communicationLost
+    //     }
+    // }
 
-    QGCFlickable {
-        id:                     toolsFlickable
-        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
-        anchors.rightMargin:    ScreenTools.defaultFontPixelWidth / 2
-        anchors.left:           viewButtonRow.right
-        anchors.bottomMargin:   1
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        anchors.right:          parent.right
-        contentWidth:           toolIndicators.width
-        flickableDirection:     Flickable.HorizontalFlick
+    // QGCFlickable {
+    //     id:                     toolsFlickable
+    //     anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
+    //     anchors.rightMargin:    ScreenTools.defaultFontPixelWidth / 2
+    //     anchors.left:           viewButtonRow.right
+    //     anchors.bottomMargin:   1
+    //     anchors.top:            parent.top
+    //     anchors.bottom:         parent.bottom
+    //     anchors.right:          parent.right
+    //     contentWidth:           toolIndicators.width
+    //     flickableDirection:     Flickable.HorizontalFlick
 
-        FlyViewToolBarIndicators { id: toolIndicators }
-    }
+    //     FlyViewToolBarIndicators { id: toolIndicators }
+    // }
 
     //-------------------------------------------------------------------------
     //-- Branding Logo
-    Image {
-        anchors.right:          parent.right
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
-        visible:                _activeVehicle && !_communicationLost && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
-        fillMode:               Image.PreserveAspectFit
-        source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
-        mipmap:                 true
+    // Image {
+    //     anchors.right:          parent.right
+    //     anchors.top:            parent.top
+    //     anchors.bottom:         parent.bottom
+    //     anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
+    //     visible:                _activeVehicle && !_communicationLost && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
+    //     fillMode:               Image.PreserveAspectFit
+    //     source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
+    //     mipmap:                 true
 
-        property bool   _outdoorPalette:        qgcPal.globalTheme === QGCPalette.Light
-        property bool   _corePluginBranding:    QGroundControl.corePlugin.brandImageIndoor.length != 0
-        property string _userBrandImageIndoor:  QGroundControl.settingsManager.brandImageSettings.userBrandImageIndoor.value
-        property string _userBrandImageOutdoor: QGroundControl.settingsManager.brandImageSettings.userBrandImageOutdoor.value
-        property bool   _userBrandingIndoor:    QGroundControl.settingsManager.brandImageSettings.visible && _userBrandImageIndoor.length != 0
-        property bool   _userBrandingOutdoor:   QGroundControl.settingsManager.brandImageSettings.visible && _userBrandImageOutdoor.length != 0
-        property string _brandImageIndoor:      brandImageIndoor()
-        property string _brandImageOutdoor:     brandImageOutdoor()
+    //     property bool   _outdoorPalette:        qgcPal.globalTheme === QGCPalette.Light
+    //     property bool   _corePluginBranding:    QGroundControl.corePlugin.brandImageIndoor.length != 0
+    //     property string _userBrandImageIndoor:  QGroundControl.settingsManager.brandImageSettings.userBrandImageIndoor.value
+    //     property string _userBrandImageOutdoor: QGroundControl.settingsManager.brandImageSettings.userBrandImageOutdoor.value
+    //     property bool   _userBrandingIndoor:    QGroundControl.settingsManager.brandImageSettings.visible && _userBrandImageIndoor.length != 0
+    //     property bool   _userBrandingOutdoor:   QGroundControl.settingsManager.brandImageSettings.visible && _userBrandImageOutdoor.length != 0
+    //     property string _brandImageIndoor:      brandImageIndoor()
+    //     property string _brandImageOutdoor:     brandImageOutdoor()
 
-        function brandImageIndoor() {
-            if (_userBrandingIndoor) {
-                return _userBrandImageIndoor
-            } else {
-                if (_userBrandingOutdoor) {
-                    return _userBrandImageOutdoor
-                } else {
-                    if (_corePluginBranding) {
-                        return QGroundControl.corePlugin.brandImageIndoor
-                    } else {
-                        return _activeVehicle ? _activeVehicle.brandImageIndoor : ""
-                    }
-                }
-            }
-        }
+    //     function brandImageIndoor() {
+    //         if (_userBrandingIndoor) {
+    //             return _userBrandImageIndoor
+    //         } else {
+    //             if (_userBrandingOutdoor) {
+    //                 return _userBrandImageOutdoor
+    //             } else {
+    //                 if (_corePluginBranding) {
+    //                     return QGroundControl.corePlugin.brandImageIndoor
+    //                 } else {
+    //                     return _activeVehicle ? _activeVehicle.brandImageIndoor : ""
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        function brandImageOutdoor() {
-            if (_userBrandingOutdoor) {
-                return _userBrandImageOutdoor
-            } else {
-                if (_userBrandingIndoor) {
-                    return _userBrandImageIndoor
-                } else {
-                    if (_corePluginBranding) {
-                        return QGroundControl.corePlugin.brandImageOutdoor
-                    } else {
-                        return _activeVehicle ? _activeVehicle.brandImageOutdoor : ""
-                    }
-                }
-            }
-        }
-    }
+    //     function brandImageOutdoor() {
+    //         if (_userBrandingOutdoor) {
+    //             return _userBrandImageOutdoor
+    //         } else {
+    //             if (_userBrandingIndoor) {
+    //                 return _userBrandImageIndoor
+    //             } else {
+    //                 if (_corePluginBranding) {
+    //                     return QGroundControl.corePlugin.brandImageOutdoor
+    //                 } else {
+    //                     return _activeVehicle ? _activeVehicle.brandImageOutdoor : ""
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     // Small parameter download progress bar
     Rectangle {

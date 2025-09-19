@@ -1,3 +1,10 @@
 [submodule "src/FirmwarePlugin/APM/ArduPilot-Parameter-Repository"]
 	path = src/FirmwarePlugin/APM/ArduPilot-Parameter-Repository
 	url = https://github.com/ArduPilot/ArduPilot-Parameter-Repository
+[submodule "libs/libssh"]
+	path = libs/libssh
+	url = https://git.libssh.org/projects/libssh.git
+[submodule "qtmqtt"]
+	path = libs/qtmqtt
+	url = https://github.com/qt/qtmqtt.git
+	branch = 6.8.3

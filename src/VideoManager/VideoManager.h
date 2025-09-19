@@ -12,6 +12,7 @@
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QObject>
 #include <QtCore/QRunnable>
+
 #include <QtCore/QSize>
 // #include <QtQmlIntegration/QtQmlIntegration>
 
@@ -30,25 +31,26 @@ class VideoManager : public QObject
     // QML_ELEMENT
     // QML_UNCREATABLE("")
     Q_MOC_INCLUDE("Vehicle.h")
-    Q_PROPERTY(bool     gstreamerEnabled        READ gstreamerEnabled                           CONSTANT)
-    Q_PROPERTY(bool     qtmultimediaEnabled     READ qtmultimediaEnabled                        CONSTANT)
-    Q_PROPERTY(bool     uvcEnabled              READ uvcEnabled                                 CONSTANT)
-    Q_PROPERTY(bool     autoStreamConfigured    READ autoStreamConfigured                       NOTIFY autoStreamConfiguredChanged)
-    Q_PROPERTY(bool     decoding                READ decoding                                   NOTIFY decodingChanged)
-    Q_PROPERTY(bool     fullScreen              READ fullScreen             WRITE setfullScreen NOTIFY fullScreenChanged)
-    Q_PROPERTY(bool     hasThermal              READ hasThermal                                 NOTIFY decodingChanged)
-    Q_PROPERTY(bool     hasVideo                READ hasVideo                                   NOTIFY hasVideoChanged)
-    Q_PROPERTY(bool     isStreamSource          READ isStreamSource                             NOTIFY isStreamSourceChanged)
-    Q_PROPERTY(bool     isUvc                   READ isUvc                                      NOTIFY isUvcChanged)
-    Q_PROPERTY(bool     recording               READ recording                                  NOTIFY recordingChanged)
-    Q_PROPERTY(bool     streaming               READ streaming                                  NOTIFY streamingChanged)
-    Q_PROPERTY(double   aspectRatio             READ aspectRatio                                NOTIFY aspectRatioChanged)
-    Q_PROPERTY(double   hfov                    READ hfov                                       NOTIFY aspectRatioChanged)
-    Q_PROPERTY(double   thermalAspectRatio      READ thermalAspectRatio                         NOTIFY aspectRatioChanged)
-    Q_PROPERTY(double   thermalHfov             READ thermalHfov                                NOTIFY aspectRatioChanged)
-    Q_PROPERTY(QSize    videoSize               READ videoSize                                  NOTIFY videoSizeChanged)
-    Q_PROPERTY(QString  imageFile               READ imageFile                                  NOTIFY imageFileChanged)
-    Q_PROPERTY(QString  uvcVideoSourceID        READ uvcVideoSourceID                           NOTIFY uvcVideoSourceIDChanged)
+    Q_PROPERTY(bool        gstreamerEnabled        READ gstreamerEnabled                           CONSTANT)
+    Q_PROPERTY(bool        qtmultimediaEnabled     READ qtmultimediaEnabled                        CONSTANT)
+    Q_PROPERTY(bool        uvcEnabled              READ uvcEnabled                                 CONSTANT)
+    Q_PROPERTY(bool        autoStreamConfigured    READ autoStreamConfigured                       NOTIFY autoStreamConfiguredChanged)
+    Q_PROPERTY(bool        decoding                READ decoding                                   NOTIFY decodingChanged)
+    Q_PROPERTY(bool        fullScreen              READ fullScreen             WRITE setfullScreen NOTIFY fullScreenChanged)
+    Q_PROPERTY(bool        hasThermal              READ hasThermal                                 NOTIFY decodingChanged)
+    Q_PROPERTY(bool        hasVideo                READ hasVideo                                   NOTIFY hasVideoChanged)
+    Q_PROPERTY(bool        isStreamSource          READ isStreamSource                             NOTIFY isStreamSourceChanged)
+    Q_PROPERTY(bool        isUvc                   READ isUvc                                      NOTIFY isUvcChanged)
+    Q_PROPERTY(bool        recording               READ recording                                  NOTIFY recordingChanged)
+    Q_PROPERTY(bool        streaming               READ streaming                                  NOTIFY streamingChanged)
+    Q_PROPERTY(double      aspectRatio             READ aspectRatio                                NOTIFY aspectRatioChanged)
+    Q_PROPERTY(double      hfov                    READ hfov                                       NOTIFY aspectRatioChanged)
+    Q_PROPERTY(double      thermalAspectRatio      READ thermalAspectRatio                         NOTIFY aspectRatioChanged)
+    Q_PROPERTY(double      thermalHfov             READ thermalHfov                                NOTIFY aspectRatioChanged)
+    Q_PROPERTY(QSize       videoSize               READ videoSize                                  NOTIFY videoSizeChanged)
+    Q_PROPERTY(QString     imageFile               READ imageFile                                  NOTIFY imageFileChanged)
+    Q_PROPERTY(QString     uvcVideoSourceID        READ uvcVideoSourceID                           NOTIFY uvcVideoSourceIDChanged)
+	Q_PROPERTY(QStringList videoReceiverUris       READ videoReceiverUris                          NOTIFY videoReceiverUrisChanged)
 
 public:
     explicit VideoManager(QObject *parent = nullptr);
@@ -85,6 +87,9 @@ public:
     static bool gstreamerEnabled();
     static bool qtmultimediaEnabled();
     static bool uvcEnabled();
+    QStringList videoReceiverUris();
+
+	Q_INVOKABLE void changeCurrentUri(unsigned index);
 
 signals:
     void aspectRatioChanged();
@@ -100,6 +105,7 @@ signals:
     void recordingStarted(const QString &filename);
     void streamingChanged();
     void uvcVideoSourceIDChanged();
+	void videoReceiverUrisChanged();
     void videoSizeChanged();
 
 private slots:
@@ -112,6 +118,7 @@ private:
     bool _updateAutoStream(VideoReceiver *receiver);
     bool _updateUVC(VideoReceiver *receiver);
     bool _updateSettings(VideoReceiver *receiver);
+	bool _changeCurrentUri(VideoReceiver *receiver, unsigned index);
     bool _updateVideoUri(VideoReceiver *receiver, const QString &uri);
     void _restartAllVideos();
     void _restartVideo(VideoReceiver *receiver);

@@ -3,6 +3,8 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+BUILD_TYPE=$1
+
 # Define variables for better maintainability
 DOCKERFILE_PATH="./deploy/docker/Dockerfile-build-ubuntu"
 IMAGE_NAME="qgc-ubuntu-docker"
@@ -18,6 +20,7 @@ docker run \
   --cap-add SYS_ADMIN \
   --device /dev/fuse \
   --security-opt apparmor:unconfined \
+  -e BUILD_TYPE=${BUILD_TYPE} \
   -v "${SOURCE_DIR}:/project/source" \
   -v "${BUILD_DIR}:/project/build" \
   "${IMAGE_NAME}"

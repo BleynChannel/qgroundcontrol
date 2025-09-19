@@ -1,4 +1,31 @@
 <RCC>
+	<qresource prefix="/toolbar">
+		<file alias="Vehicle/Camera.qml">Controls/Vehicle/Camera.qml</file>
+		<file alias="Vehicle/EngineControl.qml">Controls/Vehicle/EngineControl.qml</file>
+		<file alias="Vehicle/FanControl.qml">Controls/Vehicle/FanControl.qml</file>
+		<file alias="Vehicle/LightControl.qml">Controls/Vehicle/LightControl.qml</file>
+		<file alias="Vehicle/ResetControl.qml">Controls/Vehicle/ResetControl.qml</file>
+		<file alias="Vehicle/ValveControl.qml">Controls/Vehicle/ValveControl.qml</file>
+		<file alias="Vehicle/WeightControl.qml">Controls/Vehicle/WeightControl.qml</file>
+		<file alias="Vehicle/VehicleBatteryIndicator.qml">Controls/Vehicle/VehicleBatteryIndicator.qml</file>
+		<file alias="Vehicle/TemperatureIndicator.qml">Controls/Vehicle/TemperatureIndicator.qml</file>
+		<file alias="Vehicle/PowerIndicator.qml">Controls/Vehicle/PowerIndicator.qml</file>
+		<file alias="Vehicle/SignalIndicator.qml">Controls/Vehicle/SignalIndicator.qml</file>
+		<file alias="Vehicle/FrequrenceIndicator.qml">Controls/Vehicle/FrequrenceIndicator.qml</file>
+		<file alias="Vehicle/AntennaControl.qml">Controls/Vehicle/AntennaControl.qml</file>
+		<file alias="Vehicle/AntennaControlPage.qml">Controls/Vehicle/AntennaControlPage.qml</file>
+		<file alias="Drone/TakeoffControl.qml">Controls/Drone/TakeoffControl.qml</file>
+		<file alias="Drone/LandControl.qml">Controls/Drone/LandControl.qml</file>
+		<file alias="Drone/Calibration.qml">Controls/Drone/Calibration.qml</file>
+		<file alias="Drone/WindingControl.qml">Controls/Drone/WindingControl.qml</file>
+		<file alias="Drone/ControlMode.qml">Controls/Drone/ControlMode.qml</file>
+		<file alias="Drone/HeightIndicator.qml">Controls/Drone/HeightIndicator.qml</file>
+		<file alias="Drone/LinkPowerIndicator.qml">Controls/Drone/LinkPowerIndicator.qml</file>
+		<file alias="Drone/BatteryIndicator.qml">Controls/Drone/BatteryIndicator.qml</file>
+		<file alias="Drone/RotateControl.qml">Controls/Drone/RotateControl.qml</file>
+		<file alias="Drone/RotateControlPage.qml">Controls/Drone/RotateControlPage.qml</file>
+		<file alias="Drone/UploadROI.qml">Controls/Drone/UploadROI.qml</file>
+	</qresource>
     <qresource prefix="/json">
         <file alias="APM-MavCmdInfoCommon.json">APM-MavCmdInfoCommon.json</file>
         <file alias="APM-MavCmdInfoFixedWing.json">APM-MavCmdInfoFixedWing.json</file>

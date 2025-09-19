@@ -77,6 +77,7 @@ public:
     } MissionFlightStatus_t;
 
     Q_PROPERTY(QmlObjectListModel*  visualItems                     READ visualItems                    NOTIFY visualItemsChanged)
+    Q_PROPERTY(QVariantList         headingPoints                   MEMBER _headingPoints               NOTIFY headingPointsChanged)            ///< Used by Fly view only for static display
     Q_PROPERTY(QmlObjectListModel*  simpleFlightPathSegments        READ simpleFlightPathSegments       CONSTANT)                               ///< Used by Plan view only for interactive editing
     Q_PROPERTY(QmlObjectListModel*  directionArrows                 READ directionArrows                CONSTANT)
     Q_PROPERTY(QmlObjectListModel*  incompleteComplexItemLines      READ incompleteComplexItemLines     CONSTANT)                               ///< Segments which are not yet completed.
@@ -270,6 +271,7 @@ public:
 
 signals:
     void visualItemsChanged                 (void);
+    void headingPointsChanged				(void);
     void splitSegmentChanged                (void);
     void newItemsFromVehicle                (void);
     void missionTotalDistanceChanged        (double missionTotalDistance);
@@ -380,6 +382,7 @@ private:
     QmlObjectListModel*         _visualItems =                  nullptr;
     MissionSettingsItem*        _settingsItem =                 nullptr;
     PlanViewSettings*           _planViewSettings =             nullptr;
+    QVariantList                _headingPoints;
     QmlObjectListModel          _simpleFlightPathSegments;
     QmlObjectListModel          _directionArrows;
     QmlObjectListModel          _incompleteComplexItemLines;

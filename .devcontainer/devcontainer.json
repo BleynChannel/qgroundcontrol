@@ -1,0 +1,10 @@
+{
+	"name": "QGroundControl",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": ".."
+	},
+	"runArgs": [
+		"--device=/dev/dri"
+	]
+}

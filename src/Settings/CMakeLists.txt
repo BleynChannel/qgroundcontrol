@@ -44,6 +44,8 @@ target_sources(${CMAKE_PROJECT_NAME}
         MapsSettings.h
         Viewer3DSettings.cc
         Viewer3DSettings.h
+	    MqttSettings.cc
+	    MqttSettings.h
 )
 
 if(NOT QGC_DISABLE_APM_MAVLINK)

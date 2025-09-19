@@ -89,6 +89,13 @@ jobs:
           p12-file-base64: ${{ secrets.MACOS_SIGNING_CERTS_P12 }}
           p12-password: ${{ secrets.MACOS_SIGNING_CERTS_PASS }}
 
+      - name: "Install QtMqtt"
+        uses: ./.github/actions/install-qtmqtt-action
+        with:
+          version: ${{ env.QT_VERSION }}
+          qt-dir: ${{ env.QT_ROOT_DIR }}
+          dir: ${{ github.workspace }}/libs/qtmqtt
+
       - name: Configure
         working-directory: ${{ runner.temp }}/shadow_build_dir
         run: ${{ env.QT_ROOT_DIR }}/bin/qt-cmake -S ${{ github.workspace }} -B . -G Ninja

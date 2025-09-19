@@ -207,10 +207,10 @@ const QVariantList &FirmwarePlugin::toolIndicators(const Vehicle*)
     if (_toolIndicatorList.isEmpty()) {
         _toolIndicatorList = QVariantList({
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Controls/FlightModeIndicator.qml")),
-            QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/VehicleGPSIndicator.qml")),
+            // QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/VehicleGPSIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/TelemetryRSSIIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/RCRSSIIndicator.qml")),
-            QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Controls/BatteryIndicator.qml")),
+            // QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Controls/BatteryIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/RemoteIDIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/GimbalIndicator.qml")),
 // ControlIndicator is only available in debug builds for the moment
@@ -221,6 +221,16 @@ const QVariantList &FirmwarePlugin::toolIndicators(const Vehicle*)
     }
 
     return _toolIndicatorList;
+}
+
+const QVariantList &FirmwarePlugin::vehicleToolIndicators(const Vehicle*)
+{
+	return _vehicleToolIndicatorList;
+}
+
+const QVariantList &FirmwarePlugin::droneToolIndicators(const Vehicle*)
+{
+	return _droneToolIndicatorList;
 }
 
 const QVariantList &FirmwarePlugin::modeIndicators(const Vehicle*)
@@ -470,7 +480,8 @@ void FirmwarePlugin::_addNewFlightMode(FirmwareFlightMode &newFlightMode)
 {
     for (const FirmwareFlightMode &existingFlightMode : _flightModeList) {
         if (existingFlightMode.custom_mode == newFlightMode.custom_mode) {
-            // Already exists
+            qCDebug(FirmwarePluginLog) << "Flight Mode:" << newFlightMode.mode_name << " Custom Mode:" << newFlightMode.custom_mode
+                                       << " already exists, not adding again.";
             return;
         }
     }

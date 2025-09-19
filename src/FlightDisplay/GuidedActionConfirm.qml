@@ -28,13 +28,15 @@ Rectangle {
     property var    guidedController
     property var    guidedValueSlider
     property string title                                       // Currently unused
-    property alias  message:            messageText.text
+    property alias  message:            	messageText.text
     property int    action
     property var    actionData
-    property bool   hideTrigger:        false
+    property bool   hideTrigger:        	false
     property var    mapIndicator
-    property alias  optionText:         optionCheckBox.text
-    property alias  optionChecked:      optionCheckBox.checked
+	property bool 	formNumberFieldEnable: 	false
+	property alias 	formNumberFieldText: 	formNumberField.text
+    property alias  optionText:         	optionCheckBox.text
+    property alias  optionChecked:      	optionCheckBox.checked
 
     property real _margins:         ScreenTools.defaultFontPixelWidth / 2
     property bool _emergencyAction: action === guidedController.actionEmergencyStop
@@ -71,6 +73,8 @@ Rectangle {
         guidedValueSlider.visible = false
         visible = false
         hideTrigger = false
+		formNumberFieldEnable = false
+		formNumberFieldText = ""
         visibleTimer.stop()
         if (mapIndicator) {
             mapIndicator.actionCancelled()
@@ -102,6 +106,60 @@ Rectangle {
             font.bold:              true
         }
 
+		Column {
+			id: 				formNumberField
+			Layout.alignment:   Qt.AlignHCenter
+			visible: 			_root.formNumberFieldEnable
+			spacing: 			4
+
+			property alias text: formNumberFieldLabel.text
+
+			function appendNumber(number) {
+				text = text + number
+			}
+
+			function removeNumber() {
+				text = text.slice(0, -1)
+			}
+
+			function removeAll() {
+				text = ""
+			}
+
+			QGCLabel {
+				id: formNumberFieldLabel
+				anchors.horizontalCenter: parent.horizontalCenter
+			}
+
+			Grid {
+				columns: 3
+				spacing: 4
+
+				Repeater {
+					model: 9
+					QGCButton {
+						required property int index
+						text: index + 1
+						onClicked: formNumberField.appendNumber(index + 1)
+					}
+				}
+				QGCButton {
+					iconSource: "/InstrumentValueIcons/trash.svg"
+					_horizontalPadding: ScreenTools.defaultFontPixelWidth
+					onClicked: formNumberField.removeAll()
+				}
+				QGCButton {
+					text: "0"
+					onClicked: formNumberField.appendNumber(0)
+				}
+				QGCButton {
+					iconSource: "/InstrumentValueIcons/reply.svg"
+					_horizontalPadding: ScreenTools.defaultFontPixelWidth
+					onClicked: formNumberField.removeNumber()
+				}
+			}
+		}
+
         QGCCheckBox {
             id:                 optionCheckBox
             Layout.alignment:   Qt.AlignHCenter
@@ -128,8 +186,10 @@ Rectangle {
                         guidedValueSlider.visible = false
                     }
                     hideTrigger = false
-                    guidedController.executeAction(_root.action, _root.actionData, sliderOutputValue, _root.optionChecked)
-                    if (mapIndicator) {
+                    guidedController.executeAction(_root.action, _root.actionData, sliderOutputValue, _root.formNumberFieldText, _root.optionChecked)
+                    formNumberFieldEnable = false
+					formNumberFieldText = ""
+					if (mapIndicator) {
                         mapIndicator.actionConfirmed()
                         mapIndicator = undefined
                     }

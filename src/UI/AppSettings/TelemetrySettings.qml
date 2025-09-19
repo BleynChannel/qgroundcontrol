@@ -25,12 +25,14 @@ SettingsPage {
     property var    _settingsManager:           QGroundControl.settingsManager
     property var    _mavlinkSettings:           _settingsManager.mavlinkSettings
     property var    _appSettings:               _settingsManager.appSettings
+	property var	_mqttSettings:				_settingsManager.mqttSettings
     property bool   _disableAllDataPersistence: _appSettings.disableAllPersistence.rawValue
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property string _notConnectedStr:           qsTr("Not Connected")
     property bool   _isAPM:                     _activeVehicle ? _activeVehicle.apmFirmware : true
     property bool   _showAPMStreamRates:        QGroundControl.apmFirmwareSupported && _settingsManager.apmMavlinkStreamRateSettings.visible && _isAPM
     property var    _apmStartMavlinkStreams:    _mavlinkSettings.apmStartMavlinkStreams
+    property real   _urlFieldWidth:             ScreenTools.defaultFontPixelWidth * 25
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
@@ -48,6 +50,39 @@ SettingsPage {
             fact:               _mavlinkSettings.sendGCSHeartbeat
         }
     }
+
+	SettingsGroupLayout {
+        Layout.fillWidth:   true
+        heading:            "MQTT (WIP)" //! qsTr
+
+		LabelledFactTextField {
+			label:      				"MQTT Название хоста" //! qsTr
+			textFieldPreferredWidth:    _urlFieldWidth
+            fact:                       _mqttSettings.hostname
+            visible:                    _mqttSettings.hostname.visible
+		}
+
+		LabelledFactTextField {
+			label:      				"MQTT Порт" //! qsTr
+			textFieldPreferredWidth:    _urlFieldWidth
+			fact:                       _mqttSettings.port
+			visible:                    _mqttSettings.port.visible
+		}
+
+		LabelledFactTextField {
+			label:      				"MQTT Имя пользователя" //! qsTr
+			textFieldPreferredWidth:    _urlFieldWidth
+			fact:                       _mqttSettings.username
+			visible:                    _mqttSettings.username.visible
+		}
+
+		LabelledFactTextField {
+			label:      				"MQTT Пароль" //! qsTr
+			textFieldPreferredWidth:    _urlFieldWidth
+			fact:                       _mqttSettings.password
+			visible:                    _mqttSettings.password.visible
+		}
+	}
 
     SettingsGroupLayout {
         id:                 mavlink2SigningGroup

@@ -39,6 +39,8 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         Qt6::TextToSpeech
         Qt6::Widgets
         Qt6::Xml
+        # VehicleTelemetry
+        # Calibration
         # Explicitly link QML modules, needed by Qt 6.6.3
         # TODO: Remove when support for this version is dropped
         AnalyzeViewModule
@@ -100,5 +102,7 @@ add_subdirectory(UTMSP)
 add_subdirectory(Vehicle)
 add_subdirectory(VideoManager)
 add_subdirectory(Viewer3D)
+add_subdirectory(VehicleTelemetry)
+add_subdirectory(Calibration)
 
 add_subdirectory(QtLocationPlugin)

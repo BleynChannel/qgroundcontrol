@@ -201,6 +201,8 @@ public:
     Q_PROPERTY(int                  telemetryRNoise             READ telemetryRNoise                                                NOTIFY telemetryRNoiseChanged)
     Q_PROPERTY(QVariant          mainStatusIndicatorContentItem READ mainStatusIndicatorContentItem                                 CONSTANT)
     Q_PROPERTY(QVariantList         toolIndicators              READ toolIndicators                                                 NOTIFY toolIndicatorsChanged)
+    Q_PROPERTY(QVariantList         vehicleToolIndicators       READ vehicleToolIndicators                                          NOTIFY vehicleToolIndicatorsChanged)
+    Q_PROPERTY(QVariantList         droneToolIndicators       	READ droneToolIndicators                                          	NOTIFY droneToolIndicatorsChanged)
     Q_PROPERTY(QVariantList         modeIndicators              READ modeIndicators                                                 NOTIFY modeIndicatorsChanged)
     Q_PROPERTY(bool              initialPlanRequestComplete     READ initialPlanRequestComplete                                     NOTIFY initialPlanRequestCompleteChanged)
     Q_PROPERTY(QVariantList         staticCameraList            READ staticCameraList                                               CONSTANT)
@@ -216,6 +218,7 @@ public:
     Q_PROPERTY(GimbalController*    gimbalController            READ gimbalController                                               CONSTANT)
     Q_PROPERTY(bool                 hasGripper                  READ hasGripper                                                     CONSTANT)
     Q_PROPERTY(bool                 isROIEnabled                READ isROIEnabled                                                   NOTIFY isROIEnabledChanged)
+    Q_PROPERTY(QGeoCoordinate       roiCoord                    READ roiCoord                                                   	NOTIFY roiCoordChanged)
     Q_PROPERTY(CheckList            checkListState              READ checkListState             WRITE setCheckListState             NOTIFY checkListStateChanged)
     Q_PROPERTY(bool                 readyToFlyAvailable         READ readyToFlyAvailable                                            NOTIFY readyToFlyAvailableChanged)  ///< true: readyToFly signalling is available on this vehicle
     Q_PROPERTY(bool                 readyToFly                  READ readyToFly                                                     NOTIFY readyToFlyChanged)
@@ -224,6 +227,7 @@ public:
     Q_PROPERTY(bool                 requiresGpsFix              READ requiresGpsFix                                                 NOTIFY requiresGpsFixChanged)
     Q_PROPERTY(double               loadProgress                READ loadProgress                                                   NOTIFY loadProgressChanged)
     Q_PROPERTY(bool                 initialConnectComplete      READ isInitialConnectComplete                                       NOTIFY initialConnectComplete)
+	Q_PROPERTY(QGeoCoordinate       gpsEditCoord                READ gpsEditCoord                                                  	NOTIFY gpsEditCoordChanged)
 
     // The following properties relate to Orbit status
     Q_PROPERTY(bool             orbitActive     READ orbitActive        NOTIFY orbitActiveChanged)
@@ -340,8 +344,11 @@ public:
 
     /// Command vehicle to keep given point as ROI
     ///     @param centerCoord ROI coordinates
+	Q_INVOKABLE void setPointROI(const QGeoCoordinate& centerCoord);
     Q_INVOKABLE void guidedModeROI(const QGeoCoordinate& centerCoord);
     Q_INVOKABLE void stopGuidedModeROI();
+
+	Q_INVOKABLE void guidedModeGPS(const QGeoCoordinate& centerCoord);
 
     /// Command vehicle to pause at current location. If vehicle supports guide mode, vehicle will be left
     /// in guided mode after pause.
@@ -770,6 +777,8 @@ public:
 
     QVariant                    mainStatusIndicatorContentItem  ();
     const QVariantList&         toolIndicators                  ();
+	const QVariantList&			vehicleToolIndicators			();
+	const QVariantList&			droneToolIndicators				();
     const QVariantList&         modeIndicators                  ();
     const QVariantList&         staticCameraList                () const;
 
@@ -806,11 +815,14 @@ public:
     float       mavlinkLossPercent      () const{ return _mavlinkLossPercent; }      /// Running loss rate
 
     bool        isROIEnabled            () const{ return _isROIEnabled; }
+	QGeoCoordinate roiCoord             () const{ return _roiCoord; }
 
     CheckList   checkListState          () { return _checkListState; }
     void        setCheckListState       (CheckList cl)  { _checkListState = cl; emit checkListStateChanged(); }
 
     double loadProgress                 () const { return _loadProgress; }
+
+	QGeoCoordinate gpsEditCoord			() const { return _gpsEditCoord; }
 
     void setEventsMetadata(uint8_t compid, const QString& metadataJsonFileName);
     void setActuatorsMetadata(uint8_t compid, const QString& metadataJsonFileName);
@@ -818,6 +830,8 @@ public:
     HealthAndArmingCheckReport* healthAndArmingCheckReport() { return &_healthAndArmingCheckReport; }
 
     GimbalController* gimbalController  () { return _gimbalController; }
+
+	Q_INVOKABLE QGeoCoordinate calcRotateLocation(float angle, const QGeoCoordinate& origin = QGeoCoordinate());
 
 public slots:
     void setVtolInFwdFlight                 (bool vtolInFwdFlight);
@@ -849,6 +863,8 @@ signals:
     void initialPlanRequestCompleteChanged(bool initialPlanRequestComplete);
     void capabilityBitsChanged          (uint64_t capabilityBits);
     void toolIndicatorsChanged          ();
+	void vehicleToolIndicatorsChanged   ();
+	void droneToolIndicatorsChanged		();
     void modeIndicatorsChanged          ();
     void calibrationEventReceived       (int uasid, int componentid, int severity, QSharedPointer<events::parser::ParsedEvent> event);
     void checkListStateChanged          ();
@@ -918,6 +934,7 @@ signals:
     void logEntry                       (uint32_t time_utc, uint32_t size, uint16_t id, uint16_t num_logs, uint16_t last_log_num);
     void logData                        (uint32_t ofs, uint16_t id, uint8_t count, const uint8_t* data);
 
+	void gpsEditCoordChanged			(const QGeoCoordinate& centerCoord);
 private slots:
     void _mavlinkMessageReceived            (LinkInterface* link, mavlink_message_t message);
     void _sendMessageMultipleNext           ();
@@ -1294,6 +1311,9 @@ private:
     // We use this to limit above terrain altitude queries based on distance and altitude change
     QGeoCoordinate              _altitudeAboveTerrLastCoord;
     float                       _altitudeAboveTerrLastRelAlt = qQNaN();
+
+	QGeoCoordinate				_roiCoord;
+	QGeoCoordinate				_gpsEditCoord;
 
 public:
     int32_t getMessageRate(uint8_t compId, uint16_t msgId);

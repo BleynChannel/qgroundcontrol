@@ -119,7 +119,7 @@ RowLayout {
             id:                     vehicleMessagesIcon
             anchors.verticalCenter: parent.verticalCenter
             anchors.right:          parent.right
-            width:                  ScreenTools.defaultFontPixelWidth * 2
+            width:                  ScreenTools.defaultFontPixelWidth * 5
             height:                 width
             source:                 "/res/VehicleMessages.png"
             color:                  getIconColor()

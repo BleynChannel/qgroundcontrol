@@ -34,6 +34,7 @@
 #ifdef QGC_VIEWER3D
 #include "Viewer3DSettings.h"
 #endif
+#include "MqttSettings.h"
 
 #include <QtCore/qapplicationstatic.h>
 #include <QtQml/qqml.h>
@@ -91,6 +92,7 @@ void SettingsManager::init()
 #ifdef QGC_VIEWER3D
     _viewer3DSettings = new Viewer3DSettings(this);
 #endif
+    _mqttSettings = new MqttSettings(this);
 }
 
 ADSBVehicleManagerSettings *SettingsManager::adsbVehicleManagerSettings() const { return _adsbVehicleManagerSettings; }
@@ -118,3 +120,4 @@ MavlinkSettings *SettingsManager::mavlinkSettings() const { return _mavlinkSetti
 #ifdef QGC_VIEWER3D
 Viewer3DSettings *SettingsManager::viewer3DSettings() const { return _viewer3DSettings; }
 #endif
+MqttSettings *SettingsManager::mqttSettings() const { return _mqttSettings; }

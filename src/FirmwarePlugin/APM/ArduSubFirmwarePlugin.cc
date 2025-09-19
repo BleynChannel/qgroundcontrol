@@ -250,7 +250,7 @@ const QVariantList &ArduSubFirmwarePlugin::toolIndicators(const Vehicle *vehicle
     //-- Sub specific list of indicators (Enter your modified list here)
     if (_toolIndicators.isEmpty()) {
         _toolIndicators = QVariantList({
-            QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Controls/BatteryIndicator.qml")),
+            // QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Controls/BatteryIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/JoystickIndicator.qml")),
         });
     }

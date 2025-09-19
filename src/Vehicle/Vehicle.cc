@@ -58,6 +58,7 @@
 #include "GimbalController.h"
 #include "MavlinkSettings.h"
 #include "APM.h"
+#include "VehicleTelemetry.h"
 
 #ifdef QGC_UTM_ADAPTER
 #include "UTMSPVehicle.h"
@@ -68,6 +69,7 @@
 #endif
 
 #include <QtCore/QDateTime>
+#include <QtMath>
 
 QGC_LOGGING_CATEGORY(VehicleLog, "VehicleLog")
 
@@ -254,6 +256,8 @@ void Vehicle::_commonInit()
     _firmwarePlugin = FirmwarePluginManager::instance()->firmwarePluginForAutopilot(_firmwareType, _vehicleType);
 
     connect(_firmwarePlugin, &FirmwarePlugin::toolIndicatorsChanged, this, &Vehicle::toolIndicatorsChanged);
+    connect(_firmwarePlugin, &FirmwarePlugin::vehicleToolIndicatorsChanged, this, &Vehicle::vehicleToolIndicatorsChanged);
+    connect(_firmwarePlugin, &FirmwarePlugin::droneToolIndicatorsChanged, this, &Vehicle::droneToolIndicatorsChanged);
     connect(_firmwarePlugin, &FirmwarePlugin::modeIndicatorsChanged, this, &Vehicle::modeIndicatorsChanged);
 
     connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateDistanceHeadingToHome);
@@ -1317,6 +1321,13 @@ void Vehicle::setActuatorsMetadata([[maybe_unused]] uint8_t compid,
     _actuators->load(metadataJsonFileName);
 }
 
+QGeoCoordinate Vehicle::calcRotateLocation(float angle, const QGeoCoordinate& origin)
+{
+	double radian = qDegreesToRadians(angle);
+	QGeoCoordinate rotateVector = QGeoCoordinate(qCos(radian), qSin(radian));
+	return origin.isValid() ? QGeoCoordinate(origin.latitude() + rotateVector.latitude(), origin.longitude() + rotateVector.longitude()) : rotateVector;
+}
+
 void Vehicle::_handleHeartbeat(mavlink_message_t& message)
 {
     if (message.compid != _defaultComponentId) {
@@ -2226,6 +2237,14 @@ void Vehicle::guidedModeOrbit(const QGeoCoordinate& centerCoord, double radius, 
     }
 }
 
+void Vehicle::setPointROI(const QGeoCoordinate& centerCoord)
+{
+	_isROIEnabled = true;
+	emit isROIEnabledChanged();
+	_roiCoord = centerCoord;
+	emit roiCoordChanged(centerCoord);
+}
+
 void Vehicle::guidedModeROI(const QGeoCoordinate& centerCoord)
 {
     if (!centerCoord.isValid()) {
@@ -2303,6 +2322,14 @@ void Vehicle::stopGuidedModeROI()
                     static_cast<float>(qQNaN()),    // Empty
                     static_cast<float>(qQNaN()));   // Empty
     }
+}
+
+void Vehicle::guidedModeGPS(const QGeoCoordinate& centerCoord)
+{
+	_gpsEditCoord = centerCoord;
+	emit gpsEditCoordChanged(centerCoord);
+
+	VehicleTelemetry::instance()->setDroneEditLocation(centerCoord);
 }
 
 void Vehicle::guidedModeChangeHeading(const QGeoCoordinate &headingCoord)
@@ -3391,6 +3418,24 @@ const QVariantList& Vehicle::toolIndicators()
 {
     if(_firmwarePlugin) {
         return _firmwarePlugin->toolIndicators(this);
+    }
+    static QVariantList emptyList;
+    return emptyList;
+}
+
+const QVariantList& Vehicle::vehicleToolIndicators()
+{
+    if(_firmwarePlugin) {
+        return _firmwarePlugin->vehicleToolIndicators(this);
+    }
+    static QVariantList emptyList;
+    return emptyList;
+}
+
+const QVariantList& Vehicle::droneToolIndicators()
+{
+    if(_firmwarePlugin) {
+        return _firmwarePlugin->droneToolIndicators(this);
     }
     static QVariantList emptyList;
     return emptyList;
