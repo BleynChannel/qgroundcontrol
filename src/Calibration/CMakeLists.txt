@@ -1,3 +1,4 @@
+# Find or build ZLIB
 set(ZLIB_EXTRA_OPTIONS)
 if(WIN32)
     set(ZLIB_EXTRA_OPTIONS
@@ -19,12 +20,20 @@ CPMAddPackage(
         "${ZLIB_EXTRA_OPTIONS}"
 )
 
+# Make sure ZLIB::ZLIB is available as an alias for the static library
+if(TARGET ZLIB::ZLIBSTATIC AND NOT TARGET ZLIB::ZLIB)
+    add_library(ZLIB::ZLIB ALIAS ZLIB::ZLIBSTATIC)
+endif()
+
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ZLIB::ZLIBSTATIC)
 
 #===========================================================================#
 
 # Use local libssh library
 set(LIBSSH_ROOT_DIR ${CMAKE_SOURCE_DIR}/libs/libssh)
+
+# Set ZLIB_ROOT to help libssh find our zlib
+set(ZLIB_ROOT ${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
 
 # Add libssh as a subdirectory to build it as part of the project
 add_subdirectory(${LIBSSH_ROOT_DIR} ${CMAKE_CURRENT_BINARY_DIR}/libssh EXCLUDE_FROM_ALL)
