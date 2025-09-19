@@ -1,16 +1,14 @@
-# Find libssh library
-find_library(SSH_LIBRARY
-    NAMES ssh libssh
-    PATHS ${CMAKE_SOURCE_DIR}/../libs/libssh/build/src
-    NO_DEFAULT_PATH
-    REQUIRED
-)
+# Use local libssh library
+set(LIBSSH_ROOT_DIR ${CMAKE_SOURCE_DIR}/libs/libssh)
 
-# Add include directories
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${SSH_INCLUDE_DIR})
+# Add libssh as a subdirectory to build it as part of the project
+add_subdirectory(${LIBSSH_ROOT_DIR} ${CMAKE_CURRENT_BINARY_DIR}/libssh EXCLUDE_FROM_ALL)
 
-# Link against libssh library
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${SSH_LIBRARY})
+# Link against the local libssh library
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ssh)
+
+# Add include directories for libssh
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${LIBSSH_ROOT_DIR}/include)
 
 target_sources(${CMAKE_PROJECT_NAME}
     PRIVATE
