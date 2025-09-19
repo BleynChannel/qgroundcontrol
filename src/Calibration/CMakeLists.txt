@@ -20,12 +20,25 @@ CPMAddPackage(
         "${ZLIB_EXTRA_OPTIONS}"
 )
 
-# Make sure ZLIB::ZLIB is available as an alias for the static library
-if(TARGET ZLIB::ZLIBSTATIC AND NOT TARGET ZLIB::ZLIB)
-    add_library(ZLIB::ZLIB ALIAS ZLIB::ZLIBSTATIC)
+# Get the actual target that ZLIB::ZLIBSTATIC is aliasing to
+get_target_property(zlib_static_type ZLIB::ZLIBSTATIC TYPE)
+if(zlib_static_type STREQUAL "ALIAS_LIBRARY")
+    # If it's an alias, get the actual target name
+    get_target_property(zlib_actual_target ZLIB::ZLIBSTATIC ALIASED_TARGET)
+    # Create an alias from ZLIB::ZLIB to the actual target
+    if(NOT TARGET ZLIB::ZLIB)
+        add_library(ZLIB::ZLIB ALIAS ${zlib_actual_target})
+    endif()
+    set(zlib_target ${zlib_actual_target})
+else()
+    # If it's not an alias, use it directly
+    if(NOT TARGET ZLIB::ZLIB)
+        add_library(ZLIB::ZLIB ALIAS ZLIB::ZLIBSTATIC)
+    endif()
+    set(zlib_target ZLIB::ZLIBSTATIC)
 endif()
 
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ZLIB::ZLIBSTATIC)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${zlib_target})
 
 #===========================================================================#
 
