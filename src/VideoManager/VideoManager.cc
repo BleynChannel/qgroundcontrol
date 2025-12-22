@@ -26,6 +26,7 @@
 #endif
 #include "QtMultimediaReceiver.h"
 #include "UVCReceiver.h"
+#include "VehicleTelemetry.h"
 
 #include <QtCore/qapplicationstatic.h>
 #include <QtCore/QDir>
@@ -49,8 +50,6 @@ VideoManager::VideoManager(QObject *parent)
     , _subtitleWriter(new SubtitleWriter(this))
     , _videoSettings(SettingsManager::instance()->videoSettings())
 {
-    // qCDebug(VideoManagerLog) << this;
-
     (void) qRegisterMetaType<VideoReceiver::STATUS>("STATUS");
 
 #ifdef QGC_GST_STREAMING
@@ -62,13 +61,6 @@ VideoManager::VideoManager(QObject *parent)
 
 VideoManager::~VideoManager()
 {
-    // qCDebug(VideoManagerLog) << this;
-    for (VideoReceiver *receiver : std::as_const(_videoReceivers)) {
-        if (receiver->receiverProcess() != nullptr) {
-            receiver->receiverProcess()->kill();
-            receiver->removeReceiverProcess();
-        }
-    }
 }
 
 VideoManager *VideoManager::instance()
@@ -106,6 +98,8 @@ void VideoManager::init(QQuickWindow *window)
     (void) connect(MultiVehicleManager::instance(), &MultiVehicleManager::activeVehicleChanged, this, &VideoManager::_setActiveVehicle);
 
     (void) connect(this, &VideoManager::autoStreamConfiguredChanged, this, &VideoManager::_videoSourceChanged);
+
+    (void) connect(VehicleTelemetry::instance(), &VehicleTelemetry::VEHICLE_SLOWChanged, this, [this]() { changeActiveUri(VehicleTelemetry::instance()->vehicleCameraSelect()); });
 
     static const QStringList videoStreamList = {
         "videoContent",
@@ -227,9 +221,9 @@ void VideoManager::grabImage(const QString &imageFile)
 }
 
 void
-VideoManager::changeCurrentUri(unsigned index)
+VideoManager::changeActiveUri(uint32_t index)
 {
-    _changeCurrentUri(_videoReceivers[0], index);
+    _changeActiveUri(_videoReceivers[0], index);
 }
 
 //-----------------------------------------------------------------------------
@@ -353,11 +347,6 @@ bool VideoManager::isStreamSource() const
     };
     const QString videoSource = _videoSettings->videoSource()->rawValue().toString();
     return (videoSourceList.contains(videoSource) || autoStreamConfigured());
-}
-
-QStringList VideoManager::videoReceiverUris()
-{
-    return _videoReceivers[0]->uris(); //TODO: add multiple streams
 }
 
 void VideoManager::_videoSourceChanged()
@@ -496,17 +485,22 @@ bool VideoManager::_updateVideoUri(VideoReceiver *receiver, const QString &uri)
         return false;
     }
 
-    if ((uri == receiver->uri()) && !receiver->uri().isNull()) {
+    QStringList uris = uri.split(";", Qt::SkipEmptyParts);
+
+    if (uris == _uris) {
         return false;
     }
 
+    // if ((uri == receiver->uri()) && !receiver->uri().isNull()) {
+    //     return false;
+    // }
+
     qCDebug(VideoManagerLog) << "New Video URI" << uri;
 
-    receiver->setUri(uri);
-    receiver->setUris(uri.split(";", Qt::SkipEmptyParts));
-    receiver->setUriIndex(0); // Reset to first stream
+    _uris = uris;
+    emit urisChanged();
 
-    emit videoReceiverUrisChanged();
+    _changeActiveUri(receiver, 0);
 
     return true;
 }
@@ -569,13 +563,15 @@ bool VideoManager::_updateSettings(VideoReceiver *receiver)
 //-----------------------------------------------------------------------------
 
 bool
-VideoManager::_changeCurrentUri(VideoReceiver *receiver, unsigned index) {
-	if (index > (receiver->uris().size() - 1)) {
+VideoManager::_changeActiveUri(VideoReceiver *receiver, uint32_t index) {
+	if (index > (_uris.size() - 1)) {
 		qCDebug(VideoManagerLog) << "Unsupported stream index" << index;
 		return false;
 	}
 
-	receiver->setUriIndex(index);
+	_activeUri = index;
+    receiver->setUri(_uris.at(index));
+    emit activeUriChanged();
 
 	_restartVideo(receiver);
 
@@ -659,11 +655,6 @@ void VideoManager::_stopReceiver(VideoReceiver *receiver)
         qCDebug(VideoManagerLog) << "VideoReceiver is NULL";
         return;
     }
-
-    if (receiver->started()) {
-        receiver->stop();
-        receiver->receiverProcess()->close();
-    }
 }
 
 void VideoManager::stopVideo()
@@ -696,27 +687,27 @@ void VideoManager::_startReceiver(VideoReceiver *receiver)
 
     const uint32_t timeout = ((source == VideoSettings::videoSourceRTSP) ? _videoSettings->rtspTimeout()->rawValue().toUInt() : 3);
 
-    if (receiver->uri().isEmpty() || receiver->uris().isEmpty()) {
+    if (receiver->uri().isEmpty()) {
         qCDebug(VideoManagerLog) << "VideoUri is NULL" << receiver->name();
         return;
     }
 
-    QStringList arguments = QStringList();
-    arguments << "rtspsrc" << "*";
-    arguments << "latency=" + QString::number(receiver->lowLatency() ? 17 : 100);
-    arguments << "timeout=" + QString::number(500000);
-    arguments << "!" << "queue" << "!" << "rtph264depay" << "!" << "h264parse" << "!" << "avdec_h264" << "!" << "autovideosink";
-
-    arguments[1] = "location=" + receiver->uris()[receiver->uriIndex()];
-
-    // Example
     // QStringList arguments = QStringList();
-    // arguments << "videotestsrc" << "pattern=smpte" << "!" << "xvimagesink";
+    // arguments << "rtspsrc" << "*";
+    // arguments << "latency=" + QString::number(receiver->lowLatency() ? 17 : 100);
+    // arguments << "timeout=" + QString::number(500000);
+    // arguments << "!" << "queue" << "!" << "rtph264depay" << "!" << "h264parse" << "!" << "avdec_h264" << "!" << "autovideosink";
 
-	receiver->receiverProcess()->start("gst-launch-1.0", arguments);
-	qCDebug(VideoManagerLog) << "Active:" << receiver->receiverProcess()->waitForStarted() << "Process:" << receiver->receiverProcess()->processId();
+    // arguments[1] = "location=" + receiver->uris()[receiver->uriIndex()];
 
-    // receiver->start(timeout);
+    // // Example
+    // // QStringList arguments = QStringList();
+    // // arguments << "videotestsrc" << "pattern=smpte" << "!" << "xvimagesink";
+
+	// receiver->receiverProcess()->start("gst-launch-1.0", arguments);
+	// qCDebug(VideoManagerLog) << "Active:" << receiver->receiverProcess()->waitForStarted() << "Process:" << receiver->receiverProcess()->processId();
+
+    receiver->start(timeout);
 }
 
 void VideoManager::_initVideoReceiver(VideoReceiver *receiver, QQuickWindow *window)
@@ -724,8 +715,6 @@ void VideoManager::_initVideoReceiver(VideoReceiver *receiver, QQuickWindow *win
     if (_videoReceivers.contains(receiver)) {
         qCWarning(VideoManagerLog) << "Receiver already initialized";
     }
-
-    receiver->initReceiverProcess(this);
 
     QQuickItem *widget = window->findChild<QQuickItem*>(receiver->name());
     if (!widget) {

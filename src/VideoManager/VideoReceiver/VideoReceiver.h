@@ -12,7 +12,6 @@
 #include <QtCore/QObject>
 #include <QtCore/QSize>
 #include <QtCore/QTimer>
-#include <QtCore/QProcess>
 
 class QGCVideoStreamInfo;
 class QQuickItem;
@@ -32,27 +31,18 @@ public:
     QQuickItem *widget() { return _widget; }
     QString name() const { return _name; }
     QString uri() const { return _uri; }
-    QStringList uris() const { return _uris; }
-    uint32_t uriIndex() const { return _uriIndex; }
     bool started() const { return _started; }
     bool lowLatency() const { return _lowLatency; }
     QGCVideoStreamInfo *videoStreamInfo() { return _videoStreamInfo; }
     QString recordingOutput() const { return _recordingOutput; }
-    QProcess* receiverProcess() { return _receiverProcess; }
 
     virtual void setSink(void *sink) { if (sink != _sink) { _sink = sink; emit sinkChanged(_sink); } }
     virtual void setWidget(QQuickItem *widget) { if (widget != _widget) { _widget = widget; emit widgetChanged(_widget); } }
     void setName(const QString &name) { if (name != _name) { _name = name; emit nameChanged(_name); } }
     void setUri(const QString &uri) { if (uri != _uri) { _uri = uri; emit uriChanged(_uri); } }
-    void setUris(const QStringList &uris) { if (uris != _uris) { _uris = uris; emit urisChanged(_uris); } }
-    void setUriIndex(uint32_t uriIndex) { if (uriIndex != _uriIndex) { _uriIndex = uriIndex; emit uriIndexChanged(_uriIndex); } }
     void setStarted(bool started) { if (started != _started) { _started = started; emit startedChanged(_started); } }
     void setLowLatency(bool lowLatency) { if (lowLatency != _lowLatency) { _lowLatency = lowLatency; emit lowLatencyChanged(_lowLatency); } }
     void setVideoStreamInfo(QGCVideoStreamInfo *videoStreamInfo) { if (videoStreamInfo != _videoStreamInfo) { _videoStreamInfo = videoStreamInfo; emit videoStreamInfoChanged(); } }
-    void setReceiverProcess(QProcess* receiverProcess) { if (receiverProcess != _receiverProcess) { _receiverProcess = receiverProcess; } }
-
-    void initReceiverProcess(QObject *parent) { if (_receiverProcess == nullptr) { _receiverProcess = new QProcess(parent); } }
-    void removeReceiverProcess() { if (_receiverProcess != nullptr) { delete _receiverProcess; _receiverProcess = nullptr; } }
 
     // QMediaFormat::FileFormat
     enum FILE_FORMAT {
@@ -88,8 +78,6 @@ signals:
     void sinkChanged(void *sink);
     void nameChanged(const QString &name);
     void uriChanged(const QString &uri);
-    void urisChanged(const QStringList &uris);
-    void uriIndexChanged(uint32_t uriIndex);
     void startedChanged(bool started);
     void lowLatencyChanged(bool lowLatency);
     void videoStreamInfoChanged();
@@ -116,11 +104,8 @@ protected:
     void *_sink = nullptr;
     QQuickItem *_widget = nullptr;
     QGCVideoStreamInfo *_videoStreamInfo = nullptr;
-    QProcess* _receiverProcess = nullptr; // For multiple streams
     QString _name;
     QString _uri;
-    QStringList _uris; // For multiple streams
-    uint32_t _uriIndex = 0; // For multiple streams
     bool _started = false;
     bool _decoding = false;
     bool _recording = false;

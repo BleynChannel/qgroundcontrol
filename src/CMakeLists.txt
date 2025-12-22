@@ -103,6 +103,6 @@ add_subdirectory(Vehicle)
 add_subdirectory(VideoManager)
 add_subdirectory(Viewer3D)
 add_subdirectory(VehicleTelemetry)
-add_subdirectory(Calibration)
+# add_subdirectory(Calibration)
 
 add_subdirectory(QtLocationPlugin)

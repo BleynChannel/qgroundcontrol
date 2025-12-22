@@ -52,7 +52,7 @@ Q_MOC_INCLUDE("UTMSPManager.h")
 Q_MOC_INCLUDE("AirLinkManager.h")
 #endif
 Q_MOC_INCLUDE("VehicleTelemetry.h")
-Q_MOC_INCLUDE("Calibration.h")
+// Q_MOC_INCLUDE("Calibration.h")
 
 class QGroundControlQmlGlobal : public QObject
 {
@@ -91,7 +91,7 @@ public:
     Q_PROPERTY(AirLinkManager*      airlinkManager          READ    airlinkManager          CONSTANT)
 #endif
 	Q_PROPERTY(VehicleTelemetry*    vehicleTelemetry        READ    vehicleTelemetry        CONSTANT)
-	Q_PROPERTY(Calibration*         сalibration             READ    сalibration             CONSTANT)
+	// Q_PROPERTY(Calibration*         сalibration             READ    сalibration             CONSTANT)
     Q_PROPERTY(bool                 airlinkSupported        READ    airlinkSupported        CONSTANT)
     Q_PROPERTY(QGCPalette*          globalPalette           MEMBER  _globalPalette          CONSTANT)   ///< This palette will always return enabled colors
     Q_PROPERTY(QmlUnitsConversion*  unitsConversion         READ    unitsConversion         CONSTANT)
@@ -190,7 +190,7 @@ public:
     bool                    airlinkSupported    ()  { return false; }
 #endif
     VehicleTelemetry*       vehicleTelemetry	()  { return _vehicleTelemetry; }
-    Calibration*            сalibration     	()  { return _сalibration; }
+    // Calibration*            сalibration     	()  { return _сalibration; }
 
     qreal zOrderTopMost             () { return 1000; }
     qreal zOrderWidgets             () { return 100; }
@@ -263,7 +263,7 @@ private:
     UTMSPManager*           _utmspManager           = nullptr;
 #endif
     VehicleTelemetry*       _vehicleTelemetry       = nullptr;
-    Calibration*            _сalibration            = nullptr;
+    // Calibration*            _сalibration            = nullptr;
 
     double                  _flightMapInitialZoom   = 17.0;
     QmlUnitsConversion      _unitsConversion;

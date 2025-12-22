@@ -50,7 +50,8 @@ class VideoManager : public QObject
     Q_PROPERTY(QSize       videoSize               READ videoSize                                  NOTIFY videoSizeChanged)
     Q_PROPERTY(QString     imageFile               READ imageFile                                  NOTIFY imageFileChanged)
     Q_PROPERTY(QString     uvcVideoSourceID        READ uvcVideoSourceID                           NOTIFY uvcVideoSourceIDChanged)
-	Q_PROPERTY(QStringList videoReceiverUris       READ videoReceiverUris                          NOTIFY videoReceiverUrisChanged)
+	Q_PROPERTY(QStringList uris                    READ uris                                       NOTIFY urisChanged)
+	Q_PROPERTY(uint32_t    activeUri               READ activeUri                                  NOTIFY activeUriChanged)
 
 public:
     explicit VideoManager(QObject *parent = nullptr);
@@ -87,9 +88,10 @@ public:
     static bool gstreamerEnabled();
     static bool qtmultimediaEnabled();
     static bool uvcEnabled();
-    QStringList videoReceiverUris();
+    QStringList uris() const { return _uris; }
+    uint32_t activeUri() const { return _activeUri; }
 
-	Q_INVOKABLE void changeCurrentUri(unsigned index);
+	Q_INVOKABLE void changeActiveUri(uint32_t index);
 
 signals:
     void aspectRatioChanged();
@@ -105,7 +107,8 @@ signals:
     void recordingStarted(const QString &filename);
     void streamingChanged();
     void uvcVideoSourceIDChanged();
-	void videoReceiverUrisChanged();
+	void urisChanged();
+    void activeUriChanged();
     void videoSizeChanged();
 
 private slots:
@@ -118,7 +121,7 @@ private:
     bool _updateAutoStream(VideoReceiver *receiver);
     bool _updateUVC(VideoReceiver *receiver);
     bool _updateSettings(VideoReceiver *receiver);
-	bool _changeCurrentUri(VideoReceiver *receiver, unsigned index);
+	bool _changeActiveUri(VideoReceiver *receiver, uint32_t index);
     bool _updateVideoUri(VideoReceiver *receiver, const QString &uri);
     void _restartAllVideos();
     void _restartVideo(VideoReceiver *receiver);
@@ -127,6 +130,9 @@ private:
     static void _cleanupOldVideos();
 
     QList<VideoReceiver*> _videoReceivers;
+
+    QStringList _uris;
+    uint32_t _activeUri = 0;
 
     SubtitleWriter *_subtitleWriter = nullptr;
     VideoSettings *_videoSettings = nullptr;

@@ -11,17 +11,10 @@ Item {
     width:          controlsRow.width
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
-	visible: 		QGroundControl.videoManager.videoReceiverUris.length > 0
+	visible: 		QGroundControl.videoManager.uris.length > 0
 
     property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
 	property var 	_telemetry:	QGroundControl.vehicleTelemetry
-
-	Connections {
-		target: _telemetry
-		function onVEHICLE_SLOWChanged() {
-			QGroundControl.videoManager.changeCurrentUri(_telemetry.vehicleCameraSelect)
-		}
-	}
 
 	Rectangle {
 		anchors.fill: 	controlsRow
@@ -40,7 +33,7 @@ Item {
         spacing:        ScreenTools.defaultFontPixelWidth
 
 		Repeater {
-			model: QGroundControl.videoManager.videoReceiverUris.map((uri, index) => { return index })
+			model: QGroundControl.videoManager.uris.map((uri, index) => { return index })
 
 			APMIconButton {
 				required property int index
@@ -48,7 +41,7 @@ Item {
 				anchors.top:    parent.top
 				anchors.bottom: parent.bottom
 				iconSource: 	"/qmlimages/CameraIcon.svg"
-				iconColor: 		_telemetry.vehicleCameraSelect === index ? qgcPal.colorGreen : qgcPal.button
+				iconColor: 		QGroundControl.videoManager.activeUri === index ? qgcPal.colorGreen : qgcPal.button
 				border.width:	0
 
 				onClicked: _telemetry.vehicleCameraSelect = index
