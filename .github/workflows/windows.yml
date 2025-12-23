@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - rework/master
       - 'Stable*'
     tags:
       - 'v*'
