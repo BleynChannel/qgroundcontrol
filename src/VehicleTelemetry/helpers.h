@@ -24,8 +24,10 @@
 #define FOR_EACH_10(macro, a, b, c, d, e, f, g, h, i, j) macro(a) macro(b) macro(c) macro(d) macro(e) macro(f) macro(g) macro(h) macro(i) macro(j)
 
 // Основной макрос FOR_EACH
+#define EXPAND(...) __VA_ARGS__
+
 #define FOR_EACH(macro, ...) \
-    FOR_EACH_DISPATCH(macro, GET_ARG_COUNT(__VA_ARGS__), __VA_ARGS__)
+    FOR_EACH_DISPATCH(macro, GET_ARG_COUNT(EXPAND(__VA_ARGS__)), EXPAND(__VA_ARGS__))
 
 #define FOR_EACH_DISPATCH(macro, count, ...) \
     CONCAT(FOR_EACH_, count)(macro, __VA_ARGS__)
