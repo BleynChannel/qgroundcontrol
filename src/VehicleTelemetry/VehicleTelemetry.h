@@ -20,9 +20,11 @@ class VehicleTelemetry : public QObject
 	Q_OBJECT
 
     //? Here we announce the topics
+public:
     DECLARE_TOPIC_ENUM(OPERATOR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING)
 signals:
     DECLARE_TOPIC_SIGNALS(OPERATOR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING)
+private:
     DECLARE_TOPIC_EMIT(OPERATOR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING)
 
 private:
