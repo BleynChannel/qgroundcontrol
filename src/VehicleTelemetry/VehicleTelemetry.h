@@ -21,7 +21,7 @@ class VehicleTelemetry : public QObject
 
 signals:
     //? Here we announce the topics
-    DECLARE_TOPICS(OPERATOR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING /*, CUSTOM_TOPIC */)
+    DECLARE_TOPICS(OPERATOR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING) /*, CUSTOM_TOPIC */
 
 private:
     void _initTopics() {

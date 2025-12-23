@@ -11,6 +11,7 @@
 #define CONCAT_IMPL(a, b) a##b
 
 // Макросы для разного количества аргументов
+#define FOR_EACH_0(macro, ...)
 #define FOR_EACH_1(macro, a) macro(a)
 #define FOR_EACH_2(macro, a, b) macro(a) macro(b)
 #define FOR_EACH_3(macro, a, b, c) macro(a) macro(b) macro(c)
@@ -24,7 +25,10 @@
 
 // Основной макрос FOR_EACH
 #define FOR_EACH(macro, ...) \
-    CONCAT(FOR_EACH_, GET_ARG_COUNT(__VA_ARGS__))(macro, __VA_ARGS__)
+    FOR_EACH_DISPATCH(macro, GET_ARG_COUNT(__VA_ARGS__), __VA_ARGS__)
+
+#define FOR_EACH_DISPATCH(macro, count, ...) \
+    CONCAT(FOR_EACH_, count)(macro, __VA_ARGS__)
 
 //-------------------------------------------------------------------//
 
@@ -41,7 +45,6 @@
 #define DECLARE_TOPICS(...) \
     FOR_EACH(GENERATE_SIGNALS, __VA_ARGS__) \
     private: \
-    enum class TopicType { __VA_ARGS__, _COUNT }; \
     void _emitTopic(TopicType topic) { \
         switch (topic) { \
             FOR_EACH(GENERATE_EMIT, __VA_ARGS__) \
