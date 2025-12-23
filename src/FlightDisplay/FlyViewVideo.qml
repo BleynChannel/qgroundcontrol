@@ -59,6 +59,16 @@ Item {
         anchors.fill:   parent
         useSmallFont:   _root.pipState.state !== _root.pipState.fullState
         visible:        QGroundControl.videoManager.isStreamSource
+
+        Rectangle {
+            color: "red"
+            width: 200
+            height: 200
+            x: 100
+            y: 100
+            visible: _root.pipState.state === _root.pipState.fullState &&
+                        QGroundControl.videoManager.decoding
+        }
     }
     //-- UVC Video (USB Camera or Video Device)
     Loader {
