@@ -19,13 +19,35 @@ class VehicleTelemetry : public QObject
 {
 	Q_OBJECT
 
-    //? Here we announce the topics
+//     //? Here we announce the topics
+// public:
+//     DECLARE_TOPIC_ENUM(OPERATOR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING)
+// signals:
+//     DECLARE_TOPIC_SIGNALS(OPERATOR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING)
+// private:
+//     DECLARE_TOPIC_EMIT(OPERATOR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING)
+
+
+//! Будет исправлено позже
+
 public:
-    DECLARE_TOPIC_ENUM(OPERATOR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING)
+    enum class TopicType { OPERATOR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING, _COUNT };
+
 signals:
-    DECLARE_TOPIC_SIGNALS(OPERATOR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING)
+    void OPERATORChanged();
+    void VEHICLE_FASTChanged();
+    void VEHICLE_SLOWChanged();
+    void NOTHINGChanged();
+
 private:
-    DECLARE_TOPIC_EMIT(OPERATOR, VEHICLE_FAST, VEHICLE_SLOW, NOTHING)
+    void _emitTopic(TopicType topic) {
+        switch (topic) {
+            case TopicType::OPERATOR: emit OPERATORChanged(); break;
+            case TopicType::VEHICLE_FAST: emit VEHICLE_FASTChanged(); break;
+            case TopicType::VEHICLE_SLOW: emit VEHICLE_SLOWChanged(); break;
+            case TopicType::NOTHING: emit NOTHINGChanged(); break;
+        }
+    }
 
 private:
     void _initTopics() {
