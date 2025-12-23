@@ -42,14 +42,36 @@
 
 // Topic declaration macros
 
-#define DECLARE_TOPICS(...) \
-    FOR_EACH(GENERATE_SIGNALS, __VA_ARGS__) \
-    private: \
+// #define DECLARE_TOPICS(...) \
+//     FOR_EACH(GENERATE_SIGNALS, __VA_ARGS__) \
+//     private: \
+//     enum class TopicType { __VA_ARGS__, _COUNT }; \
+//     void _emitTopic(TopicType topic) { \
+//         switch (topic) { \
+//             FOR_EACH(GENERATE_EMIT, __VA_ARGS__) \
+//         } \
+//     }
+
+
+#define DECLARE_TOPIC_ENUM(...) \
+public: \
+    enum class TopicType { __VA_ARGS__, _COUNT };
+
+#define DECLARE_TOPIC_SIGNALS(...) \
+    FOR_EACH(GENERATE_SIGNALS, __VA_ARGS__)
+
+#define DECLARE_TOPIC_EMIT(...) \
+private: \
     void _emitTopic(TopicType topic) { \
         switch (topic) { \
             FOR_EACH(GENERATE_EMIT, __VA_ARGS__) \
         } \
     }
+
+#define DECLARE_TOPICS(...) \
+    DECLARE_TOPIC_SIGNALS(__VA_ARGS__) \
+    DECLARE_TOPIC_ENUM(__VA_ARGS__) \
+    DECLARE_TOPIC_EMIT(__VA_ARGS__)
 
 #define DECLARE_TOPIC_PARAM(type, name, jsonName, defaultValue, topic, toType) \
     private: \
